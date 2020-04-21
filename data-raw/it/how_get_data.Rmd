@@ -1,0 +1,653 @@
+---
+title: "Intersection COVID-19: Italy"
+date: "`r Sys.time()`"
+categories:
+  - covid-19
+tags: 
+  - covid-19
+  - Italy
+lastmod: "`r Sys.time()`"
+keywords: []
+description: ''
+output:
+  html_document:
+    df_print: kable
+    toc: true
+    theme: journal
+---
+
+
+# Italy
+
+## Influenza Vaccination Coverage
+
+Data of the influenza vaccination coverage in Italy can be found in the web site of ["Ministero della Salute"](http://www.salute.gov.it/imgs/C_17_tavole_19_allegati_iitemAllegati_0_fileAllegati_itemFile_3_file.pdf). Data are from 1999‐2000 to 2018‐2019. So... pretty cool.
+
+Data of the general population are in a `pdf` table in page 1. We can use `{tabulizer}` to get them. **Last data are 07-15-2019**
+
+```{r dropbox, include=FALSE}
+# this make it possible to get and write data directly on the cloud independently of the 
+# computer/operating  system and so on.
+# https://github.com/karthik/rdrop2
+
+library(rdrop2)
+# log in dropbox
+drop_auth()
+
+```
+
+```{r getting_it_im, warning=FALSE, message=FALSE}
+library(DT)
+library(Hmisc)
+library(rvest)
+library(htmltools)
+library(htmlwidgets)
+library(janitor)
+library(lubridate)
+library(lemon)
+library(miniUI)
+library(plotly)
+library(scales)
+library(tabulizer) # this library require specific version of Java and can be a pain to install
+library(tidyverse)
+library(xml2)
+library(vroom)
+
+web_page <- "http://www.salute.gov.it/imgs/C_17_tavole_19_allegati_iitemAllegati_0_fileAllegati_itemFile_3_file.pdf"
+
+area_sel <- c(
+  top = 92.6606873324687, left = 49.819066386841, bottom = 436.401946791649,
+  right = 772.17388698945
+) # got this using locate_areas()
+
+suppressWarnings(
+  fl_tab <- extract_tables(
+    web_page,
+    output = "data.frame",
+    pages = 1,
+    area =  list(area_sel),
+    guess = FALSE
+  )[[1]]
+)
+
+# inFLuenza coverage ITaly
+
+fl_it <- fl_tab %>%
+  rename(region = X) %>%
+  {
+    x <- .
+    x <- x[3:nrow(x), ]
+    names(x) <- str_remove_all(names(x), "[[:punct:]]|X")
+    x
+  } %>%
+  mutate_all(list(~ gsub(., pattern = ",", replacement = "."))) %>%
+  rename("2019" = ncol(.)) %>%
+  {
+    x <- .
+    x[x == ""] <- NA
+    x$region[x$region == "P. A. Trento"] <- "P.A. Trento"
+    x <- x[!is.na(x$region), ]
+    x
+  }
+
+
+# fl_it
+```
+
+Let's plot
+
+```{r plot_fl_it2019}
+fl_it_2019 <- fl_it %>%
+  rename(perc_imm = "2019") %>%
+  mutate(perc_imm = as.numeric(perc_imm)) %>%
+  select(region, perc_imm)
+
+fl_it_2019 %>%
+  ggplot(aes(reorder(region, perc_imm), perc_imm)) +
+  geom_col(fill = "grey") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  labs(x = NULL, y = NULL, title = "% of population that received influenza vaccination")
+```
+
+We actually have influenza vaccination coverage for people that are 65 > 
+It is in the same file but at page 3
+
+```{r fl65_it}
+area_sel2 <- c(
+  top = 75.63785, left = 51.12191, bottom = 434.73870 ,
+  right =   795.57018 
+) # got this using locate_areas()
+
+
+
+suppressWarnings(
+  fl65_tab <- extract_tables(
+    web_page,
+    output = "data.frame",
+    pages = 3,
+    area =  list(area_sel2),
+    guess = FALSE
+  )[[1]]
+)
+
+# inFLuenza coverage ITaly
+
+fl65_it <- fl65_tab %>%
+  rename(region = X) %>%
+  {
+    x <- .
+    x <- x[3:nrow(x), ]
+    names(x) <- str_remove_all(names(x), "[[:punct:]]|X")
+    x
+  } %>%
+  mutate_all(list(~ gsub(., pattern = ",", replacement = "."))) %>%
+  rename("2019" = ncol(.)) %>%
+  {
+    x <- .
+    x[x == ""] <- NA
+    x$region[x$region == "P. A. Trento"] <- "P.A. Trento"
+    x <- x[!is.na(x$region), ]
+    x
+  }
+
+fl65_it_2019 <- fl65_it %>%
+  rename(perc_imm65 = "2019") %>%
+  mutate(perc_imm65 = as.numeric(perc_imm65)) %>%
+  select(region, perc_imm65)
+```
+
+Let's put it together with the other flu data
+
+```{r fl_it_all}
+fl_it_2019 <- inner_join(fl65_it_2019, fl_it_2019, by = "region")
+```
+
+
+
+
+## Demographics
+
+Istat maintains a database of a variety of statistical indicators accessible from its [website](http://dati.istat.it/). 
+Info on the age of the population can be found going to `Popolazione famiglie` > `Popolazione resident al 1 gennaio` > `Per fascia d'eta`.
+
+Details about the dataset can be found [here](http://siqual.istat.it/SIQual/visualizza.do?id=0019900&refresh=true&language=IT)
+
+Let's check the demographic.
+
+```{r dem_it_p}
+dem_it_p <- vroom(
+  "data/italy/pop_it.csv",
+  col_types = cols(
+    ITTER107 = col_character(),
+    Territorio = col_character(),
+    TIPO_DATO15 = col_character(),
+    `Tipo di indicatore demografico` = col_character(),
+    SEXISTAT1 = col_double(),
+    Sesso = col_character(),
+    ETA1 = col_character(),
+    Età  = col_character(),
+    STATCIV2 = col_double(),
+    `Stato civile` = col_character(),
+    TIME = col_double(),
+    `Seleziona periodo` = col_double(),
+    Value = col_double(),
+    `Flag Codes` = col_character(),
+    Flags = col_character()
+  )
+) %>%
+  rename(
+    region = Territorio,
+    index = `Tipo di indicatore demografico`,
+    sex = Sesso,
+    age = `Età`,
+    marital_status = `Stato civile`,
+    year = `Seleziona periodo`,
+    value = Value
+  ) %>%
+  select(region, index, sex, age, marital_status, year, value) %>%
+  filter(age != "totale", sex != "totale", marital_status == "totale") %>%
+  mutate(
+    age = as.numeric(str_remove_all(age, "[[:alpha:]]")),
+    sex = recode(sex, femmine = "female", maschi = "male")
+  )
+
+dem_it_p$region <- recode(
+  dem_it_p$region,
+  "Valle d'Aosta / Vallée d'Aoste" = "Valle d'Aosta",
+  "Provincia Autonoma Bolzano / Bozen" = "P.A. Bolzano",
+  "Provincia Autonoma Trento"  = "P.A. Trento",
+  "Friuli-Venezia Giulia"  = "Friuli Venezia Giulia",
+  "Emilia-Romagna" = "Emilia Romagna"
+)
+```
+
+These data have `Trentino Alto Adige / Südtirol` but also `PA Trento` and `PA Bolazono`. Let's see if `Trentino Alto Adige` is the sum of the 2.
+
+```{r trentino}
+dem_it_p %>%
+  filter(region %in% list("P.A. Bolzano", "P.A. Trento", "Trentino Alto Adige / Südtirol")) %>%
+  group_by(region) %>%
+  summarize(tot = sum(value))
+```
+
+Yes, it is, we need to remove it.
+Let's do that and compute some percentage.
+
+```{r percent}
+dem_it_p <- dem_it_p %>%
+  filter(region != "Trentino Alto Adige / Südtirol") %>%
+  group_by(region) %>%
+  mutate(tot = sum(value)) %>% # this makes total for regions
+  ungroup() %>%
+  mutate(perc_pop = value / tot * 100)
+```
+
+```{r plot_dem, fig.height= 10, fig.width=10}
+dem_it_p %>%
+  ggplot(aes(age, perc_pop, group = sex, color = sex)) +
+  geom_line() +
+  facet_wrap(~region)
+```
+
+The Istituto Superiore Sanità (HHS) provides info regarding the mortality in different age groups fro patients positive for COVID-19 ([link](https://www.epicentro.iss.it/coronavirus/sars-cov-2-decessi-italia)). In an [initial report](https://www.epicentro.iss.it/coronavirus/sars-cov-2-decessi-italia) the age variable was in bin of 10 years (0-9, 10-19..), left closed and right closed; ages more than 90 were binned together. 
+
+If we want to consider some variables with modeling packages, we might need a wider format. Let's get that too.
+
+```{r dem_i_binned}
+dem_it_p <- dem_it_p %>%
+  mutate(age_bins = cut(age, seq(0, 100, 10), right = FALSE, include.lowest = TRUE)) %>%
+  mutate(age_bins = recode(age_bins, "[90,100]" = "[90,100+]")) %>%
+  group_by_at(vars(-age, -value, -marital_status, -index, -year, -perc_pop)) %>%
+  summarize(value = sum(value), perc_pop = sum(perc_pop)) %>%
+  ungroup()
+
+
+# if we want to use caret or any package for regression we need to have a variable age-sex bins as columns
+dem_it_wider <- dem_it_p %>%
+  mutate(sex_age_bin = paste0("perc_", sex, "_", age_bins)) %>% # now that we have the perc we create the new factor
+  select(region, tot, perc_pop, sex_age_bin) %>%
+  # now we do the magic
+  pivot_wider(names_from = sex_age_bin, values_from = perc_pop) %>%
+  rename(pop_tot = tot)
+
+
+glimpse(dem_it_p)
+```
+
+Let's check if the percentage adds up to 100
+
+```{r check}
+apply(dem_it_wider[, 3:ncol(dem_it_wider)], 1, sum)
+```
+
+We have the demographic data.
+
+**We might want to add the population for square kilometer.**
+
+We can get that from wikipedia.
+
+```{r regions_area}
+wiki <- xml2::read_html("https://it.wikipedia.org/wiki/Regioni_d%27Italia")
+
+
+regions_area_p <- wiki %>%
+  rvest::html_nodes("table") %>%
+  rvest::html_table(fill = TRUE) %>%
+  {
+    x <- .
+    x[[3]]
+  }
+
+# let's clean the names
+regions_area <- regions_area_p %>%
+  select(Regione, `Superficie (km²)`) %>%
+  rename(region = Regione, area_km2 = `Superficie (km²)`) %>%
+  mutate(region = str_replace(region, "-", " "), area_km2 = as.numeric(str_remove(area_km2, "[[:blank:]]"))) %>%
+  filter(!region %in% c("Trentino Alto Adige", "Italia"))
+
+#  we add those missing regions
+regions_area <- bind_rows(regions_area, tribble(
+  ~region, ~area_km2,
+  "P.A. Bolzano", 7398,
+  "P.A. Trento", 2397
+))
+```
+
+## Health
+
+### Chronic Conditions
+
+On the Istat [website](http://dati.istat.it/) in `Salute e Sanità` > `Stato di salute e consumo di farmaci` > `Stato di Salute in regioni e comuni`. Details on the datasets can be found [here](http://siqual.istat.it/SIQual/visualizza.do?id=0058000&refresh=true&language=IT)
+
+Data are of **2018**
+
+```{r healt_it}
+
+chronic_it_p <- vroom("data/italy/chronic_conditions.csv",
+  col_types = cols(
+    ITTER107 = col_character(),
+    Territorio = col_character(),
+    TIPO_DATO_AVQ = col_character(),
+    `Tipo dato` = col_character(),
+    MISURA_AVQ = col_character(),
+    Misura = col_character(),
+    TIME = col_double(),
+    `Seleziona periodo` = col_double(),
+    Value = col_double(),
+    `Flag Codes` = col_logical(),
+    Flags = col_logical()
+  )
+) %>%
+  clean_names() %>%
+  filter(misura == "valori in migliaia") %>% # we keep the absolute values
+  mutate(value = value * 1000) # values are in thousands
+
+
+# we do some cleaning and translations
+chronic_it <- chronic_it_p %>%
+  rename(region = territorio, ch_condition = tipo_dato_avq) %>%
+  mutate(region = str_replace(region, "-", " ")) %>%
+  filter(!region %in% c("Trentino Alto Adige / Südtirol", "Italia")) %>%
+  # make name consistent
+  mutate(region = recode(region,
+    "Valle d'Aosta / Vallée d'Aoste" = "Valle d'Aosta",
+    "Provincia Autonoma Bolzano / Bozen" =  "P.A. Bolzano",
+    "Provincia Autonoma Trento"   =  "P.A. Trento",
+    "Fiuli Venezia Giulia"  = "Friuli Venezia Giulia"
+  )) %>%
+  select(region, ch_condition, value) %>%
+  mutate(ch_condition = tolower(str_remove(ch_condition, "0_"))) %>%
+  # we make it wilder
+  pivot_wider(names_from = ch_condition, values_from = value) %>%
+  rename(chronic_aleast_2cron = aleast_2cron, chronic_aleast_1cron = aleast_1cron, chronic_good_h = good_h)
+```
+
+### Cigarette Smoking
+
+On the Istat [website](http://dati.istat.it/) in `Salute e Sanità` > `Stili di vita e fattori di rischio` > `Abitudini al fumo`, `Regioni`. Details on the datasets can be found [here](http://siqual.istat.it/SIQual/visualizza.do?id=0058000&refresh=true&language=IT).
+
+ **14 years old or more**
+
+```{r smoking_it, warning=FALSE, message=FALSE}
+smoking_it <- vroom("data/italy/smoking.csv",
+  col_types = cols(
+    ITTER107 = col_character(),
+    Territorio = col_character(),
+    TIPO_DATO_AVQ = col_character(),
+    `Tipo dato` = col_character(),
+    MISURA_AVQ = col_character(),
+    Misura = col_character(),
+    TIME = col_double(),
+    `Seleziona periodo` = col_double(),
+    Value = col_double(),
+    `Flag Codes` = col_logical(),
+    Flags = col_logical()
+  )
+) %>%
+  rename(
+    region = Territorio,
+    smoking_status = TIPO_DATO_AVQ,
+    value = Value
+  ) %>%
+  filter(Misura == "valori in migliaia") %>%
+  select(region, smoking_status, value) %>%
+  mutate(region = str_replace(region, "-", " ")) %>%
+  filter(!region %in% c("Trentino Alto Adige / Südtirol", "Italia")) %>%
+  # make name consistent
+  mutate(region = recode(region,
+    "Valle d'Aosta / Vallée d'Aoste" = "Valle d'Aosta",
+    "Provincia Autonoma Bolzano / Bozen" =  "P.A. Bolzano",
+    "Provincia Autonoma Trento"   =  "P.A. Trento",
+    "Fiuli Venezia Giulia"  = "Friuli Venezia Giulia"
+  )) %>%
+  mutate(smoking_status = recode(smoking_status,
+    "14_FUMO_SI" = "smoking_current",
+    "14_FUMO_EX" = "smoking_ex",
+    "14_FUMO_NO" = "smoking_no"
+  )) %>%
+  filter(smoking_status %in% c("smoking_current", "smoking_ex", "smoking_no")) %>%
+  # values are in thousands
+  mutate(value = value * 1000) %>%
+  pivot_wider(names_from = smoking_status, values_from = value)
+```
+
+### Obesity
+
+On the Istat [website](http://dati.istat.it/) in `Salute e Sanità` > `Stili di vita e fattori di rischio` > `Indici di Massa Corporea`, `Regioni`. Details on the datasets can be found [here](http://siqual.istat.it/SIQual/visualizza.do?id=0058000&refresh=true&language=IT).
+
+**18 years old or more**
+
+```{r obesity_it, warning=FALSE, message=FALSE}
+bweight_it <- vroom("data/italy/bweight_it.csv", col_types = cols(
+  ITTER107 = col_character(),
+  Territorio = col_character(),
+  TIPO_DATO_AVQ = col_character(),
+  `Tipo dato` = col_character(),
+  MISURA_AVQ = col_character(),
+  Misura = col_character(),
+  SEXISTAT1 = col_double(),
+  Sesso = col_character(),
+  TIME = col_double(),
+  `Seleziona periodo` = col_double(),
+  Value = col_double(),
+  `Flag Codes` = col_logical(),
+  Flags = col_logical()
+)) %>%
+  filter(TIME == 2018) %>%
+  rename(
+    region = Territorio,
+    bweight_status = TIPO_DATO_AVQ,
+    value = Value,
+    ses = Sesso
+  ) %>%
+  filter(Misura == "valori in migliaia") %>%
+  select(region, bweight_status, value) %>%
+  mutate(region = str_replace(region, "-", " ")) %>%
+  filter(!region %in% c("Trentino Alto Adige / Südtirol", "Italia")) %>%
+  # make name consistent
+  mutate(region = recode(region,
+    "Valle d'Aosta / Vallée d'Aoste" = "Valle d'Aosta",
+    "Provincia Autonoma Bolzano / Bozen" =  "P.A. Bolzano",
+    "Provincia Autonoma Trento"   =  "P.A. Trento",
+    "Fiuli Venezia Giulia"  = "Friuli Venezia Giulia"
+  )) %>%
+  mutate(bweight_status = recode(bweight_status,
+    "18_BMI_SOTTO" = "bweight_under",
+    "18_BMI_NORMO" = "bweight_normal",
+    "18_BMI_SOVRA" = "bweight_over",
+    "18_BMI_OBE" = "bweight_obese"
+  )) %>%
+  filter(bweight_status %in% c("bweight_under", "bweight_normal", "bweight_over", "bweight_obese")) %>%
+  # values are in thousands
+  mutate(value = value * 1000) %>%
+  pivot_wider(names_from = bweight_status, values_from = value)
+```
+
+
+### Cancer
+
+Data on tumor prevalence (year: ##2016##) can be found in the website of Istituto Superiore Sanità [tumors](http://www.registri-tumori.it/PDF/AIOM2016/I_numeri_del_cancro_2016.pdf). Tab is at pag 35.
+
+** year was 2016 **
+
+```{r cancer_it}
+web_page <- "http://www.registri-tumori.it/PDF/AIOM2016/I_numeri_del_cancro_2016.pdf"
+
+area_sel <- c(
+  top = 240.95886, left = 27.75322, bottom = 534.19809,
+  right = 436.61248
+) # got this using locate_areas()
+
+suppressWarnings(
+  cancer_tab <- extract_tables(
+    web_page,
+    output = "data.frame",
+    pages = 35,
+    area =  list(area_sel),
+    guess = FALSE
+  )[[1]]
+  %>%
+    na.omit()
+)
+
+names(cancer_tab) <-
+  c(
+    "region",
+    paste("cancer",
+      c(
+        "all",
+        "breast",
+        "colon",
+        "prostate",
+        "bladder",
+        "lymphoma",
+        "head_neck",
+        "uterus",
+        "lung"
+      ),
+      sep = "_"
+    )
+  )
+
+# clean names
+cancer_it <- cancer_tab %>%
+  mutate(region = recode(region,
+    "Trentino Alto" = "Trentino Alto Adige",
+    "Emilia" = "Emilia Romagna",
+    "Friuli Venezia" = "Friuli Venezia Giulia",
+    "Valle D’Aosta" = "Valle d'Aosta"
+  )) %>%
+  filter(region != "Trentino Alto Adige") %>%
+  # in italy . used as , in numbers
+  mutate_if(is.double, ~ . * 1000)
+
+# no data on those  but we want to include them anyway for the join
+
+cancer_it[20, "region"] <- "P.A. Bolzano"
+cancer_it[21, "region"] <- "P.A. Trento"
+```
+
+## COVID-19 Cases
+
+Data of COVID-19 cases and many more info can be found on the website of "protezione civile" ([here]("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-regioni/dpc-covid19-ita-regioni.csv")).
+
+```{r get_data_cases_it}
+get_cases_italy <- function() {
+  dat <- vroom(
+    file = "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-regioni/dpc-covid19-ita-regioni.csv",
+    col_types = cols(
+      data = col_datetime(format = ""),
+      stato = col_character(),
+      codice_regione = col_double(),
+      denominazione_regione = col_character(),
+      lat = col_double(),
+      long = col_double(),
+      ricoverati_con_sintomi = col_double(),
+      terapia_intensiva = col_double(),
+      totale_ospedalizzati = col_double(),
+      isolamento_domiciliare = col_double(),
+      totale_positivi = col_double(),
+      variazione_totale_positivi = col_double(),
+      nuovi_positivi = col_double(),
+      dimessi_guariti = col_double(),
+      deceduti = col_double(),
+      totale_casi = col_double(),
+      tamponi = col_double(),
+      note_it = col_character(),
+      note_en = col_character()
+    )
+  ) %>%
+    rename(region = denominazione_regione) %>%
+    mutate(region = str_replace(region, "-", " ")) %>%
+    select(-totale_positivi, -variazione_totale_positivi, -nuovi_positivi, -dimessi_guariti) %>% 
+      rename(
+    date = data,
+    state = stato,
+    region_cod = codice_regione,
+    hospitalized_with_symptoms = ricoverati_con_sintomi,
+    intensive_care_unit = terapia_intensiva,
+    total_hospitalized = totale_ospedalizzati,
+    home_quarantine = isolamento_domiciliare,
+    deaths = deceduti,
+    tests = tamponi,
+    total_cases = totale_casi
+  ) %>%
+  # select(!c("totale_attualmente_positivi", "nuovi_attualmente_positivi" )) %>%
+  mutate(
+    cmr = deaths / total_cases * 100,
+    chr = total_hospitalized / total_cases * 100,
+    cir = intensive_care_unit / total_cases * 100
+  ) %>%
+  pivot_longer(cols = c("cmr", "chr", "cir", "hospitalized_with_symptoms", "intensive_care_unit", "total_hospitalized", "home_quarantine", "deaths", "total_cases", "tests"), names_to = "COVID19_var", values_to = "value") 
+
+  dat
+}
+```
+
+## Join togheter and correlate
+
+Let's put together the datasets of influenza coverage and the all the others.
+
+```{r get_cmr}
+cmr_it <- get_cases_italy()
+```
+
+
+```{r join_all}
+# nuovi attualmente positivi not reliable...look at critiques in recent Italian news
+# Join fl with cmr
+fl_cmr_it <- inner_join(cmr_it, fl_it_2019, by = "region") %>%
+  mutate_at(vars("perc_imm65","perc_imm"), as.numeric)
+
+
+# join  with demographics
+fl_cmr_dem_it <- inner_join(fl_cmr_it, dem_it_wider, by = "region")
+
+
+# adding regions km2
+fl_cmr_dem_it <- inner_join(fl_cmr_dem_it, regions_area, by = "region") %>%
+  mutate(pop_km2 = pop_tot / area_km2) %>%
+  # reorder col
+  select(c(
+    "date", "state", "region_cod", "region", "lat", "long", "note_it", "note_en",
+    "perc_imm", "perc_imm65", "COVID19_var", "value", "pop_tot", "area_km2", "pop_km2", "perc_female_[0,10)",
+    "perc_female_[10,20)", "perc_female_[20,30)", "perc_female_[30,40)",
+    "perc_female_[40,50)", "perc_female_[50,60)", "perc_female_[60,70)",
+    "perc_female_[70,80)", "perc_female_[80,90)", "perc_female_[90,100+]",
+    "perc_male_[0,10)", "perc_male_[10,20)", "perc_male_[20,30)",
+    "perc_male_[30,40)", "perc_male_[40,50)", "perc_male_[50,60)",
+    "perc_male_[60,70)", "perc_male_[70,80)", "perc_male_[80,90)",
+    "perc_male_[90,100+]"
+  ))
+
+# join health data
+fl_cmr_dem_chronic_it <- inner_join(fl_cmr_dem_it, chronic_it, by = "region")
+
+# join cancer data
+fl_cmr_dem_health_cancer_it <- inner_join(fl_cmr_dem_chronic_it, cancer_it, by = "region")
+
+# join smoking data
+fl_cmr_dem_health_cancer_smoking_it <- inner_join(fl_cmr_dem_health_cancer_it, smoking_it, by = "region")
+
+# join bweight
+fl_cmr_dem_health_cancer_smoking_bweight_it <- inner_join(fl_cmr_dem_health_cancer_smoking_it, bweight_it, by = "region")
+
+# something wrong with bweight
+
+
+all_dat <- fl_cmr_dem_health_cancer_smoking_bweight_it
+
+# make cancer and health as percentage
+all_dat <- all_dat %>%
+  mutate_at(vars(chronic_osteo:bweight_obese), list(~ (. / pop_tot * 100))) %>% 
+  mutate(date = as.Date(date, "%Y-%m-%d"))
+
+
+# all data are as percentage so we remove the perc_ from names
+names(all_dat) <- str_remove(names(all_dat), "perc_")
+
+glimpse(all_dat)
+```
+
+Now we have our datasets ready for being analyzed...what we need to do is just filter for the `COVID19_var` and date of interest and then run the stats.

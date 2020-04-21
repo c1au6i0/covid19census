@@ -18,7 +18,8 @@ Imports:
     dplyr (>= 0.8.5),
     tidyr (>= 1.0.2),
     plyr (>= 1.8.6),
-    janitor (>= 2.0.1)
+    janitor (>= 2.0.1),
+    stringr (>= 1.4.0)
 Depends: 
     R (>= 2.10)
 Suggests: 
