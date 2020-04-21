@@ -10,7 +10,7 @@
 #' A good description of pitfalls and caveats associated with the use of case-mortality rate metric has been made on
 #' \href{ https://ourworldindata.org/covid-mortality-risk }{Our World in Data}.
 #' @export
-get_covid <- function() {
+getus_covid <- function() {
   dat <- vroom("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv",
     col_types = cols(
       date = col_date(format = ""),
@@ -45,7 +45,7 @@ get_covid <- function() {
 #' @importFrom magrittr %>%
 #' @import vroom
 #' @export
-get_dex <- function() {
+getus_dex <- function() {
   dat <- vroom("https://raw.githubusercontent.com/COVIDExposureIndices/COVIDExposureIndices/master/dex_data/county_dex.csv",
     skip = 1,
     col_names = c(
@@ -106,7 +106,7 @@ get_dex <- function() {
 #' Other details regarding the score system used are reported in the \href{https://covidtracking.com/about-data}{maintainers webpage}
 #'  @import vroom
 #'  @export
-get_tests <- function() {
+getus_tests <- function() {
   dat <- vroom::vroom("https://covidtracking.com/api/states/daily.csv",
     col_types = cols(
       date = col_date(format = "%Y%m%d"),
@@ -142,11 +142,11 @@ get_tests <- function() {
 
   message(paste0("Data of tests up to ", max(dat$date, na.rm = TRUE), " successfully imported!"))
 
-  # we don't have unincorporated territories in get_all()
+  # we don't have unincorporated territories in getus_all()
   dat2 <- dat[dat$abbr %in% state_abbr$abbr, ]
 
   # we use the function recode_col from the current package to recode the state abbr to state names
-  # that are exactly the same of those generate by get_all()
+  # that are exactly the same of those generate by getus_all()
   dat2$state <- recode_col(dat2$abbr, state_abbr$state)
 
   dat2 <- dat2[, c(
@@ -331,14 +331,14 @@ get_tests <- function() {
 #' @importFrom rlang .data
 #' @importFrom magrittr %>%
 #' @import vroom
-#' @seealso \code{\link{get_covid}},\code{\link{get_tests}}, \code{\link{get_dex}},
+#' @seealso \code{\link{getus_covid}},\code{\link{getus_tests}}, \code{\link{getus_dex}},
 #' @export
-get_all <- function() {
-  covid19_us <- get_covid()
-  dex_us <- get_dex() %>%
+getus_all <- function() {
+  covid19_us <- getus_covid()
+  dex_us <- getus_dex() %>%
     dplyr::select(.data$fips, .data$date, .data$dex_a)
 
-  tests_us <- get_tests() %>%
+  tests_us <- getus_tests() %>%
     dplyr::select(-.data$death, -.data$death_increase, -.data$abbr, -.data$hash, -.data$fips)
 
   # we keep only fips and vars

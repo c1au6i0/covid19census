@@ -1,16 +1,16 @@
 library(dplyr)
 
 test_that("get_all executes", {
-  expect_error(get_all(), NA)
+  expect_error(getus_all(), NA)
 })
 
 test_that("get_covid executes", {
-  expect_error(get_covid(), NA)
+  expect_error(getus_covid(), NA)
 })
 
-y <- get_all()
+y <- getus_all()
 
-x <- get_covid()
+x <- getus_covid()
 
 test_that("get_all and get_covid have same fips", {
   expect_equal(length(unique(y$fips)), length(unique(x$fips)))
@@ -20,7 +20,7 @@ test_that("get_all and get_covid have same fips", {
 ###################################
 
 test_that("get_dex executes", {
-  expect_error(get_dex(), NA)
+  expect_error(getus_dex(), NA)
 })
 
 ##################################
@@ -47,13 +47,13 @@ expected_states <- structure(list(state = c(
 )), class = c("tbl_df", "tbl", "data.frame"), row.names = c(NA, -51L))
 
 test_that("get_test executes", {
-  expect_error(get_tests(), NA)
+  expect_error(getus_tests(), NA)
 })
 
-tests <- get_tests() %>%
+tests <- getus_tests() %>%
   select(state, abbr) %>%
   distinct()
 
-test_that("get_tests states abbr ", {
+test_that("getus_tests states abbr ", {
   expect_equal(tests, expected_states)
 })
