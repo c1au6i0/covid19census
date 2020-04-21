@@ -1,0 +1,363 @@
+#' get COVID-19 updated cases
+#'
+#' extracts time series from the git repository of the \href{ https://github.com/nytimes/covid-19-data }{NYT}
+#'
+#' @return a tibble
+#' @importFrom rlang .data
+#' @importFrom magrittr %>%
+#' @import vroom
+#' @details `cases` represents the number of confirmed cases, while `cmr` the case-mortality rate (deaths / confirmed_case * 100).
+#' A good description of pitfalls and caveats associated with the use of case-mortality rate metric has been made on
+#' \href{ https://ourworldindata.org/covid-mortality-risk }{Our World in Data}.
+#' @export
+get_covid <- function() {
+  dat <- vroom("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv",
+    col_types = cols(
+      date = col_date(format = ""),
+      county = col_character(),
+      state = col_character(),
+      fips = col_double(),
+      cases = col_double(),
+      deaths = col_double()
+    )
+  ) %>%
+    dplyr::mutate(cmr = .data$deaths / .data$cases * 100) %>%
+    dplyr::filter(!is.na(.data$fips))
+
+
+  message(paste0("Data of COVID-19 up to ", max(dat$date), " successfully extracted!"))
+
+  dat
+}
+
+#' get device-exposure indexes (DEX)
+#'
+#' extracts DEX from the git repository of the
+#' \href{https://github.com/COVIDExposureIndices/COVIDExposureIndices}{COVID-19 exposure indeces}
+#'
+#' @return a tibble
+#' @details main metric is `dex_a`. In the \href{https://github.com/COVIDExposureIndices/COVIDExposureIndices}{repository}, they
+#' explains: \cite{In the context of the ongoing pandemic, the DEX measure may be biased if devices sheltering-in-place
+#' are not in the sample due to lack of movement. We report adjusted DEX values to help address this selection bias.
+#' DEX-adjusted is computed assuming that the number of devices has not declined since the early-2020 peak
+#' and that unobserved devices did not visit any commercial venues.} Datataset is updated by the mantainers every weekend.
+#' @importFrom rlang .data
+#' @importFrom magrittr %>%
+#' @import vroom
+#' @export
+get_dex <- function() {
+  dat <- vroom("https://raw.githubusercontent.com/COVIDExposureIndices/COVIDExposureIndices/master/dex_data/county_dex.csv",
+    skip = 1,
+    col_names = c(
+      "fips",
+      "date",
+      "dex",
+      "num_devices",
+      "dex_a",
+      "num_devices_a"
+    ),
+
+    col_types = cols(
+      fips = col_double(),
+      date = col_date(format = "%F"),
+      dex = col_double(),
+      num_devices = col_double(),
+      dex_a = col_double(),
+      num_devices_a = col_double(),
+      .delim = ","
+    )
+  )
+
+  message(paste0("Data of activity up to ", max(dat$date), " successfully imported!"))
+
+  dat
+}
+
+#' get number of tests and  hospitalizations
+#'
+#' extracts information on tests, hospitalizations and other metrics at the \strong{State level} maintained by the
+#' \href{https://covidtracking.com/api}{the COVID Tracking Project}
+#' @return a tibble with 15 variables
+#' @details a description of the variable can be found in the \href{https://covidtracking.com/api}{the COVID Tracking Project} and when possible
+#' was used verbatim for the description below
+#' \describe{
+#'     \item{date}{in `ISO 8601` format}
+#'     \item{state}{state name}]
+#'     \item{abbr}{abbreviation}
+#'     \item{positive}{total cumulative positive test results}
+#'     \item{negative}{total cumulative negative test results}
+#'     \item{pending}{tests that have been submitted to a lab but no results have been reported yet}
+#'     \item{hospitalized_curr}{current people hospitalized}
+#'     \item{hospitalized_cumul}{cumulative people hospitalized}
+#'     \item{icu_curr}{current people in ICU}
+#'     \item{icu_cumul}{cumulative people in ICU}
+#'     \item{ventilator_curr}{current people using ventilator}
+#'     \item{ventilator_cumul}{cumulativepeople using ventilator}
+#'     \item{recovered}{total people recoverd}
+#'     \item{hash}{unique ID changed every time the data updates}
+#'     \item{date_checked}{date of the time we last visited their website}
+#'     \item{death}{number of deaths}
+#'     \item{death_increase}{increase in deaths from day before}
+#'     \item{hospitalized_increase}{increase in hospitalization from day before}
+#'     \item{negative_increase}{increase in negative results from day before}
+#'     \item{positive_increase}{increase in positive results from day before}
+#'     \item{total_test_increase}{increase from the day before}
+#' }
+#' Other details regarding the score system used are reported in the \href{https://covidtracking.com/about-data}{maintainers webpage}
+#'  @import vroom
+#'  @export
+get_tests <- function() {
+  dat <- vroom::vroom("https://covidtracking.com/api/states/daily.csv",
+    col_types = cols(
+      date = col_date(format = "%Y%m%d"),
+      state = col_character(),
+      positive = col_double(),
+      negative = col_double(),
+      pending = col_double(),
+      hospitalizedCurrently = col_double(),
+      hospitalizedCumulative = col_double(),
+      inIcuCurrently = col_double(),
+      inIcuCumulative = col_double(),
+      onVentilatorCurrently = col_double(),
+      onVentilatorCumulative = col_double(),
+      recovered = col_double(),
+      hash = col_character(),
+      dateChecked = col_datetime(format = ""),
+      death = col_double(),
+      hospitalized = col_double(),
+      total = col_double(),
+      totalTestResults = col_double(),
+      posNeg = col_double(),
+      fips = col_character(),
+      deathIncrease = col_double(),
+      hospitalizedIncrease = col_double(),
+      negativeIncrease = col_double(),
+      positiveIncrease = col_double(),
+      totalTestResultsIncrease = col_double()
+    )
+  ) %>%
+    janitor::clean_names()
+
+  colnames(dat)[colnames(dat) == "state"] <- "abbr"
+
+  message(paste0("Data of tests up to ", max(dat$date, na.rm = TRUE), " successfully imported!"))
+
+  # we don't have unincorporated territories in get_all()
+  dat2 <- dat[dat$abbr %in% state_abbr$abbr, ]
+
+  # we use the function recode_col from the current package to recode the state abbr to state names
+  # that are exactly the same of those generate by get_all()
+  dat2$state <- recode_col(dat2$abbr, state_abbr$state)
+
+  dat2 <- dat2[, c(
+    "date", "state", "abbr", "positive", "negative", "pending", "hospitalized_currently",
+    "hospitalized_cumulative", "in_icu_currently", "in_icu_cumulative",
+    "on_ventilator_currently", "on_ventilator_cumulative", "recovered",
+    "hash", "date_checked", "death", "fips", "death_increase", "hospitalized_increase",
+    "negative_increase", "positive_increase", "total_test_results_increase"
+  )]
+
+  names(dat2) <- c(
+    "date", "state", "abbr", "positive", "negative", "pending", "hospitalized_curr",
+    "hospitalized_cumul", "icu_curr", "icu_cumul",
+    "ventilator_curr", "ventilator_cumul", "recovered",
+    "hash", "date_checked", "death", "fips", "death_increase", "hospitalized_increase",
+    "negative_increase", "positive_increase", "total_test_increase"
+  )
+  dat2
+}
+
+#' get COVID-19 and other metrics
+#'
+#' extracts/joins COVID-19 info with other demographic metrics at the county level and tests and hospitalizations from
+#' \href{https://covidtracking.com/api}{the COVID Tracking Project}
+#'
+#' @source \href{https://www.cms.gov/About-CMS/Agency-Information/OMH/Downloads/Mapping-Technical-Documentation.pdf}{Center for Medicare and Medicaid Services},
+#'  \href{https://hifld-geoplatform.opendata.arcgis.com/datasets/hospitals/data?page=18}{Homeland Infrastructure Foundation-Level Data},
+#'  \href{https://data.census.gov/cedsci/table?q=United%20States}{American Community Survey tables},
+#'  \href{https://data.cms.gov/mapping-medicare-disparities}{Mapping Medicare Disparities},
+#'  \href{https://github.com/COVIDExposureIndices/COVIDExposureIndices}{COVIDExposureIndices}
+#' @return A tibble with 309 variables. Data regarding the household composition, population age and poverty levels,  sex and extension
+#'  were scraped from the 2018 American Community Survey (ACS). Poverty was defined at the family level and not the household level in
+#'  the ACS. Medical conditions, tabacco use, cancer and, data relative to the number of medical and emergency visits
+#'  was obtained from the 2017 Mapping Medicare Disparities. From relative documentation listed in the source: "Prevalence rates are calculated by searching
+#'  for certain diagnosis codes in \strong{Medicare beneficiaries’ claims}. The admission rate by admission type is the frequency of a specific type of inpatient admission per 1,000 inpatient admissions in a year." The number of hospital beds per county was calculated from data of the
+#'  2020 Homeland Infrastructure Foundation. \cr
+#'  \strong{Note that data on test and hospitalizations are at the state level!}
+#'  \describe{
+#'   \item{date}{formatted `ISO 8601`}
+#'   \item{county}{county}
+#'   \item{state}{state}
+#'   \item{fips}{federal information processing standard, a unique numeric identifier of a county}
+#'   \item{urban}{urban or rural (not sure about the  definition)}
+#'   \item{\strong{COVID-19 vars}}{---------------}
+#'   \item{cases}{confirmed COVID-19 cases (cumulates with date)}
+#'   \item{deaths}{number of deaths attributed to COVID-19}
+#'   \item{cmr}{case-mortality rate (deaths / confirmed cases * 100)}
+#'   \item{\strong{HOUSEHOLDS MARITAL STATUS AND COMPOSITION}}{---------------}
+#'   \item{total_households}{total number of households (occupy a housing unit) in that county.People not
+#'       living in households are classified as living in group quarters)}
+#'  \item{perc_families}{percent of households that are defined as family. A family consists of a householder and one or more other people
+#'       living in the same household who are related to the householder by birth, marriage, or
+#'       adoption}
+#'   \item{perc_families_18childereen}{percentfamilies with at least a child <= 18 years old}
+#'   \item{perc_married_couples}{percent families consisting of married couples}
+#'   \item{perc_married_couples_u18ychildreen}{percent families consisting of married couples at least a child 18 years old or less}
+#'   \item{perc_families_only_male}{percent of family with a male householder
+#'        and no spouse of householder present}
+#'   \item{perc_families_only_male_18ychildreen}{percent families with male householder
+#'        and no spouse of householder present and with at least a child under 18 years old}
+#'   \item{perc_families_only_female}{percent families with female householder}
+#'   \item{perc_families_only_female_18ychildreen}{percent families with female householder with
+#'       at least a child under 18 years old}
+#'   \item{perc_non_families}{percent of non-family households. A family consists of a householder and one or more other people
+#'       living in the same household who are related to the householder by birth, marriage, or
+#'       adoption}
+#'   \item{perc_non_families_alone}{percent of non-family households with householder living alone}
+#'   \item{perc_non_families_alone65y}{percent of non-family households with householder living alone, age 65 years and older}}
+#'   \item{perc_non_families_u18y}{percent of non-family households with one or more people under 18 years}
+#'   \item{perc_non_families_65y}{percent of non-family households with with one or more people 65 years and older}
+#'   \item{total_relationship_in_households}{total number of people that responded to the question regarding relationship}
+#'   \item{perc_relationship_householder}{percent of family households (?) }
+#'   \item{perc_relationship_spouse}{households including person married to and living with the householder}
+#'   \item{perc_relationship_child}{households including a son or daughter by birth, a stepchild, or adopted child of the householder}
+#'   \item{perc_relationship_other_relatives}{percent households including other relatives}
+#'   \item{perc_relationship_other_nonrelatives}{percent households including foster children, not related to the householder by birth, marriage, or adoption}
+#'   \item{perc_relationship_other_unmaried_part}{percent households containing members other than a “married-couple household” that includes a householder and an “unmarried partner.” }
+#'   \item{total_marital_status_male}{total males that responded to the marital status question}
+#'   \item{perc_marital_status_male_nevermaried}{percent males never married}
+#'   \item{perc_marital_status_male_maried}{percent males married}
+#'   \item{perc_marital_status_male_separated}{percent of males separate}
+#'   \item{perc_marital_status_male_}{percent of males widowed}
+#'   \item{perc_marital_status_male_divorced}{percent of males divorced}
+#'   \item{perc_marital_status_female_nevermaried}{perent of female never married}
+#'   \item{perc_marital_status_female_maried}{perent of female married}
+#'   \item{perc_marital_status_female_separated}{perent of female separated}
+#'   \item{perc_marital_status_female_widowed}{perent of female widowed}
+#'   \item{perc_marital_status_female_divorced}{perent of female divorced}
+#'   \item{\strong{HOUSEHOLDS EDUCATION DEGREES}}{---------------}
+#'   \item{total_enrolled_school}{total people enrolled in school}
+#'   \item{perc_enrolled_preschool}{percent in preschool}
+#'   \item{perc_enrolled_kindergarden}{percent in kindergarden}
+#'   \item{perc_enrolled_elementary}{percent in elementary}
+#'   \item{perc_enrolled_highschool}{percent in highschool}
+#'   \item{perc_enrolled_college}{percent college}
+#'   \item{total_edu}{total number of people 25 years old or more that responded to the question regarding education (?)}
+#'   \item{perc_edu_9grade}{percent that went up to 9th grade}
+#'   \item{perc_edu_nodiploma}{percent that went up to 9th grade}
+#'   \item{perc_edu_highshool}{percent with highschool}
+#'   \item{perc_edu_somecollege}{percent with some college}
+#'   \item{perc_edu_associate}{percent that obtaibed an associate degree}
+#'   \item{perc_edu_bachelor}{percent with batchelor}
+#'   \item{perc_edu_gradprofess}{percent that graduated or with a professional degree}
+#'   \item{perc_edu_batchelor_higher}{percent with batchelor or higher}
+#'   \item{\strong{ANCESTRY}}{---------------}
+#'   \item{total_ancestry}{total population}
+#'   \item{perc_ \emph{anchestry}}{percent estimated specific ancestry (27)}
+#'   \item{\strong{COMPUTER OR INTERNET}}{---------------}
+#'   \item{total_withcomputer}{total that own or use a computer}
+#'   \item{perc_withcomputer}{percent that owns or use computer}
+#'   \item{perc_withinternet}{percet that has acces to internet}
+#'   \item{\strong{POPULATION AND SEX}}{---------------}
+#'   \item{tot_pop}{total population}
+#'   \item{tot_male}{total male}
+#'   \item{tot_female}{total female}
+#'   \item{tot_ \emph{age_sex}}{total population by age bin and sex}
+#'   \item{perc_ \emph{age_sex}}{percent population by age bin and sex}
+#'   \item{\strong{MEDICAL AND VACCINES}}{---------------}
+#'   \item{imm65}{percentage of fee-for-service (FFS) Medicare enrollees that had an annual flu vaccination.}
+#'   \item{tot_beds}{total number of hospital beds}
+#'   \item{acute_myocardial_infarction}{percent medicare with acute myocardial infarction}
+#'   \item{alzheimer_dementia}{percent medicare with Alzheimer’s Disease, Related Disorders, or Senile Dementia}
+#'   \item{asthma}{percent medicare with asthma}
+#'   \item{atrial_fibrillation}{percent medicare with Atrial Fibrillation}
+#'   \item{cancer_breast}{percent medicare with Breast Cancer}
+#'   \item{cancer_colorectal}{percent medicare with Colorectal Cancer}
+#'   \item{cancer_lung}{percent medicare withLung Cancer}
+#'   \item{cancer_all}{percent medicare with Cancer (breast, colorectal, lung, and/or prostate)}
+#'   \item{ch_obstructive_pulm}{percent medicare with Chronic Obstructive Pulmonary Disease (COPD)}
+#'   \item{chronic_kidney_disease}{percent medicare with Chronic Kidney Disease}
+#'   \item{depression}{percent medicare with Depression}
+#'   \item{diabetes}{percent  medicare beneficiaries with Diabetes}
+#'   \item{hypertension}{percent  medicare beneficiaries with Hypertension}
+#'   \item{ischemic_heart_disease}{percent  medicare beneficiaries with Ischemic Heart Disease}
+#'   \item{obesity}{percent  medicare beneficiaries with Obesity}
+#'   \item{osteoporosis}{percent  medicare beneficiaries with Osteoporosis}
+#'   \item{rheumatoid_arthritis}{percent  medicare beneficiaries with Rheumatoid Arthritis}
+#'   \item{schizophrenia_psychotic_dis}{percent  medicare beneficiaries with Schizophrenia/Other Psychotic Disorders}
+#'   \item{stroke}{percent  medicare beneficiaries with Stroke Transient Ischemic Attack }
+#'   \item{tobacco_use}{??}
+#'   \item{urgent_admission}{urgent care admission rate}
+#'   \item{annual_wellness_visit}{number of annual wellness visits}
+#'   \item{elective_admission}{elective admission rate}
+#'   \item{emergent_admission}{ER admission rate}
+#'   \item{other_admission}{other admission rates}
+#'   \item{pneumococcal_vaccine}{percent pneumococcal vaccine }
+#'   \item{\strong{POVERTY}}{---------------}
+#'   \item{total_poverty_determination}{number of people evaluated for poverty}
+#'   \item{total_poverty}{total people that met the definition of below poverty level}
+#'   \item{perc_poverty}{percent people that met the definition of below poverty level}
+#'   \item{total_determination \emph{age}}{total people evaluated in that age bin}
+#'   \item{total_poverty \emph{age}}{total people that met the definition of below poverty level in that age bin}
+#'   \item{perc_poverty \emph{age}}{percent people that met the definition of below poverty level in that age bin}
+#'   \item{total_determination \emph{sex}}{total people evaluated for poverty in that sex}
+#'   \item{total_poverty \emph{sex}}{total people that met the definition of below poverty level in that sex}
+#'   \item{perc_poverty \emph{sex}}{perc people that met the definition of below poverty level in that sex}
+#'   \item{total_determination \emph{race}}{total people evaluated for poverty in that race}
+#'   \item{total_poverty \emph{race}}{total people that met the definition of below poverty level in that race}
+#'   \item{perc_poverty \emph{race}}{perc people that met the definition of below poverty level in that race}
+#'   \item{\strong{STATE LEVEL TESTS AND HOSPITALIZATIONS}}{---------------}
+#'   \item{positive}{total cumulative positive test results}
+#'   \item{negative}{total cumulative negative test results}
+#'   \item{pending}{tests that have been submitted to a lab but no results have been reported yet}
+#'   \item{hospitalized_curr}{current people hospitalized}
+#'   \item{hospitalized_cumul}{cumulative people hospitalized}
+#'   \item{icu_curr}{current people in ICU}
+#'   \item{icu_cumul}{cumulative people in ICU}
+#'   \item{ventilator_curr}{current people using ventilator}
+#'   \item{ventilator_cumul}{cumulativepeople using ventilator}
+#'   \item{recovered}{total people recoverd}
+#'   \item{death_increase}{increase in deaths from day before}
+#'   \item{hospitalized_increase}{increase in hospitalization from day before}
+#'   \item{negative_increase}{increase in negative results from day before}
+#'   \item{positive_increase}{increase in positive results from day before}
+#'   \item{total_test_increase}{increase from the day before}
+#'   \item{\strong{ACTIVITY}}{---------------}
+#'   \item{dex_a}{activity index, see details in the repository of the \href{https://github.com/COVIDExposureIndices/COVIDExposureIndices}{authors}
+#'   }
+#' @details For details regarding some specific datasets refer to: \href{https://www2.census.gov/programs-surveys/acs/tech_docs/subject_definitions/2018_ACSSubjectDefinitions.pdf?#}{Subject Definitions of the American Community Survey},
+#' \href{https://www.cms.gov/About-CMS/Agency-Information/OMH/Downloads/Mapping-Technical-Documentation.pdf}{Medicare and Medicaid Medical Services Technical Documentation},
+#' \href{https://github.com/COVIDExposureIndices/COVIDExposureIndices}{COVIDExposureIndices}
+#' @importFrom rlang .data
+#' @importFrom magrittr %>%
+#' @import vroom
+#' @seealso \code{\link{get_covid}},\code{\link{get_tests}}, \code{\link{get_dex}},
+#' @export
+get_all <- function() {
+  covid19_us <- get_covid()
+  dex_us <- get_dex() %>%
+    dplyr::select(.data$fips, .data$date, .data$dex_a)
+
+  tests_us <- get_tests() %>%
+    dplyr::select(-.data$death, -.data$death_increase, -.data$abbr, -.data$hash, -.data$fips)
+
+  # we keep only fips and vars
+  to_join <- lapply(list(acm_househ_us, age_sex_us, fl65_us, hospbeds_us, mmd_us, poverty_us), function(x) {
+    x[, !names(x) %in% c("state_county", "county", "state", "year", "abbr")]
+  })
+
+
+  dem_metrics <- plyr::join_all(to_join,
+    by = "fips", type = "full"
+  )
+
+
+  dat <- dplyr::left_join(covid19_us, dem_metrics, by = "fips")
+
+  dat2 <- dplyr::left_join(dat, dex_us, by = c("fips", "date"))
+
+
+  dat2 <- dplyr::left_join(dat2, tests_us, by = c("state", "date"))
+
+  dat2
+}
