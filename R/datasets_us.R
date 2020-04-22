@@ -7,16 +7,15 @@
 #' @return  tibble wotj `fl_65` indicating the percentage of fee-for-service (FFS) Medicare enrollees that had an annual flu vaccination
 #' @usage data(fl65_us)
 "fl65_us"
+
 #' hospital beds
 #'
-#' beds of each hospital by county.
+#' beds of each hospital by county (2019).
 #' @docType data
 #' @source \href{https://hifld-geoplatform.opendata.arcgis.com/datasets/hospitals/data?page=18}{Homeland Infrastructure Foundation-Level Data}
 #' @return  a tibble
 #' @usage data(hospbeds_us)
 "hospbeds_us"
-
-
 
 #' household composition
 #'

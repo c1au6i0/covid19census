@@ -11,7 +11,15 @@
 #' \href{ https://ourworldindata.org/covid-mortality-risk }{Our World in Data}.
 #' @export
 getus_covid <- function() {
-  dat <- vroom("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv",
+
+  url_data <-  "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv"
+
+  if(RCurl::url.exists(url_data) == FALSE){
+    stop("Something wrong with the repository or your internet connection!")
+  }
+
+
+  dat <- vroom(url_data,
     col_types = cols(
       date = col_date(format = ""),
       county = col_character(),
@@ -46,7 +54,15 @@ getus_covid <- function() {
 #' @import vroom
 #' @export
 getus_dex <- function() {
-  dat <- vroom("https://raw.githubusercontent.com/COVIDExposureIndices/COVIDExposureIndices/master/dex_data/county_dex.csv",
+
+  url_data <-  "https://raw.githubusercontent.com/COVIDExposureIndices/COVIDExposureIndices/master/dex_data/county_dex.csv"
+
+  if(RCurl::url.exists(url_data) == FALSE){
+    stop("Something wrong with the repository or your internet connection!")
+  }
+
+
+  dat <- vroom(url_data,
     skip = 1,
     col_names = c(
       "fips",
@@ -107,7 +123,14 @@ getus_dex <- function() {
 #'  @import vroom
 #'  @export
 getus_tests <- function() {
-  dat <- vroom::vroom("https://covidtracking.com/api/states/daily.csv",
+  url_data <-  "https://covidtracking.com/api/states/daily.csv"
+
+  if(RCurl::url.exists(url_data) == FALSE){
+    stop("Something wrong with the repository or your internet connection!")
+  }
+
+
+  dat <- vroom::vroom(url_data,
     col_types = cols(
       date = col_date(format = "%Y%m%d"),
       state = col_character(),

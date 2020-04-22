@@ -17,6 +17,6 @@ data(hospbeds_us)
 a tibble
 }
 \description{
-beds of each hospital by county.
+beds of each hospital by county (2019).
 }
 \keyword{datasets}
