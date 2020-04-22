@@ -1,31 +1,8 @@
 library(stringr)
 
-test_that("get_all executes", {
-  expect_error(getit_all(), NA)
-})
-
-y <- getit_all()
-
-test_that("get_all returns regions_21", {
-  expect_equal(length(unique(y$region)), 21)
-})
-
-
-test_that("sum smoking is < 100 ", {
-  expect_equal(
-    sum(!unique(
-      apply(
-        y[, names(y)[str_detect(names(y), "smoking")]],
-        1, sum
-      )
-    ) <= 100),
-    0
-  )
-})
-
-
+# getit_covid --------------------
 test_that("getit_covid executes", {
-  expect_error(get_covid(), NA)
+  expect_error(getit_covid(), NA)
 })
 
 x <- getit_covid()
@@ -57,5 +34,29 @@ t_data <- lapply(list(
 
 test_that("all datasets and function have same regions", {
   expect_equal(sum(unlist(lapply(t_data, sum))), 252)
+})
+
+
+test_that("get_all executes", {
+  expect_error(getit_all(), NA)
+})
+
+y <- getit_all()
+
+test_that("get_all returns regions_21", {
+  expect_equal(length(unique(y$region)), 21)
+})
+
+
+test_that("sum smoking is < 100 ", {
+  expect_equal(
+    sum(!unique(
+      apply(
+        y[, names(y)[str_detect(names(y), "smoking")]],
+        1, sum
+      )
+    ) <= 100),
+    0
+  )
 })
 

@@ -2,23 +2,31 @@
 #'
 #' extracts and translates time series form the git repository of the \href{https://github.com/pcm-dpc/COVID-19}{protezione civile}
 #'
-#' @return a tibble with following columns:
+#' @return a tibble with following 19 variables:
 #' \describe{
-#'      \item{date}{date of data}
+#'      \item{date}{in `ISO 8601` format}
 #'      \item{state}{state}
 #'      \item{region_code}{region abbreviation}
 #'      \item{region}{full name of region}
 #'      \item{lat}{lat}
 #'      \item{long}{long}
-#'      \item {cmr}{case-mortality rate for that region and that date (deaths/total_cases * 100)}
-#'      \item {hospitalized_with_symptoms}{number of people hospitalized with symptoms}
-#'      \item {intensive_care_unit}{number of people in intensive care units}
-#'      \item {home_quarantine}{number of people COVID-19 positive in home quarantine}
-#'      \item {deaths}{number of deaths}
-#'      \item {total_cases}{number of COVID-19 positive cases detected}
-#'      \item {tests}{number of tests performed}
-#'      \item{value}{value relative to COVID19_var}
+#'      \item{cmr}{case-mortality rate for that region and that date (deaths/total_cases * 100)}
+#'      \item{total_cases}{number of COVID-19 positive cases detected}
+#'      \item{deaths}{number of deaths}
+#'      \item{tests}{number of tests performed}
+#'      \item{hospitalized_with_symptoms}{number of people hospitalized with symptoms, that day}
+#'      \item{intensive_care_unit}{number of people in intensive care units, that day}
+#'      \item{total_hospitalized}{hospitalized_with_symptoms + intensive_care_unit}
+#'      \item{home_quarantine}{number of people COVID-19 positive in home quarantine, that day}
+#'      \item{total_positives}{total currently positives: hospitalized_with_symptoms + intensive_care_unit + home_quarantine}
+#'      \item{change_positives}{change in the number of positive cases: total_positives that day - total_positives preceding day}
+#'      \item{new_positives}{number of new positive cases: total_cases that day - total_cases preceding day}
+#'      \item{recovered_released}{recovered - released from hospital}
+#'      \item{people_tested}{number of people tested}
 #' }
+#' @details caveats and problems related the calculation by the Protezione Civile of some variables  were rised by
+#' \href{https://www.gimbe.org/pagine/341/it/comunicati-stampa?pagina=2}{GIMBE fFoundation}. Unfortunately the page is in Italian...
+#' \emph{ buona lettura! }
 #' @importFrom rlang .data
 #' @importFrom magrittr %>%
 #' @import vroom
@@ -81,7 +89,8 @@ getit_covid <- function() {
   )  %>%
     dplyr::mutate(
       cmr = .data$deaths / .data$total_cases * 100
-    )
+    ) %>%
+    dplyr::mutate(region = stringr::str_replace(.data$region, "-", " "))
 
   # just reorder
   dat <- dat[,
@@ -119,7 +128,7 @@ getit_covid <- function() {
 #' extracts and translates time series form the git repository of the \href{https://github.com/pcm-dpc/COVID-19}{protezione civile} and
 #' combines them with other statistics related to italian population
 #'
-#' @return a tibble with following columns:
+#' @return a tibble with following 64 variables:
 #' \describe{
 #'      \item{date}{date of data}
 #'      \item{state}{state}
@@ -127,19 +136,21 @@ getit_covid <- function() {
 #'      \item{region}{full name of region}
 #'      \item{lat}{lat}
 #'      \item{long}{long}
-#'      \item{COVID19_var}{
-#'          \itemize{
-#'             \item cmr: case-mortality rate for that region and that date (deaths/total_cases * 100)
-#'             \item hospitalized_with_symptoms: number of people hospitalized with symptoms that day
-#'             \item intensive_care_unit: number of people in intensive care units that day
-#'             \item home_quarantine: number of people COVID-19 positive in home quarantine
-#'             \item deaths: number of deaths
-#'             \item total_cases: number of COVID-19 positive cases detected
-#'             \item recovered_released: recovered/released from hospital (\href{https://www.infodata.ilsole24ore.com/2020/04/10/la-regione-lombardia-sovrastima-guariti-covid-19-laccusa-della-fondazione-gimbe/}{caveates})
-#'             \item tests: number of tests performed
-#'          }
-#'      }
-#'      \item{value}{value relative to COVID19_var}
+#'      \item{imm}{influenza vaccination coverage in the general population}
+#'      \item{imm65}{influenza vaccination coverage in people age 65 or older}
+#'      \item{cmr}{case-mortality rate for that region and that date (deaths/total_cases * 100)}
+#'      \item{total_cases}{number of COVID-19 positive cases detected}
+#'      \item{deaths}{number of deaths}
+#'      \item{tests}{number of tests performed}
+#'      \item{hospitalized_with_symptoms}{number of people hospitalized with symptoms, that day}
+#'      \item{intensive_care_unit}{number of people in intensive care units, that day}
+#'      \item{total_hospitalized}{hospitalized_with_symptoms + intensive_care_unit}
+#'      \item{home_quarantine}{number of people COVID-19 positive in home quarantine, that day}
+#'      \item{total_positives}{total currently positives: hospitalized_with_symptoms + intensive_care_unit + home_quarantine}
+#'      \item{change_positives}{change in the number of positive cases: total_positives that day - total_positives preceding day}
+#'      \item{new_positives}{number of new positive cases: total_cases that day - total_cases preceding day}
+#'      \item{recovered_released}{recovered - released from hospital}
+#'      \item{people_tested}{number of people tested}
 #'      \item{p_house}{number of people per squared meter living in the same house}
 #'      \item{pop_tot}{total population}
 #'      \item{area_km2}{household crowding index (number of components of household per square meter)}
@@ -188,9 +199,30 @@ getit_all <- function() {
     dplyr::mutate(pop_km2 = .data$pop_tot / .data$area_km2)
 
   # reorder col, yes this is not elegant maybe use reorder when dplyr1.0.0
+
   col_order <- c(
-    "date", "state", "region_cod", "region", "lat", "long",
-    "perc_imm", "perc_imm65", "COVID19_var", "value", "p_house", "pop_tot", "area_km2", "pop_km2",
+    "date",
+    "state",
+    "region_cod",
+    "region",
+    "lat",
+    "long",
+    "perc_imm",
+    "perc_imm65",
+    "cmr",
+    "total_cases",
+    "deaths",
+    "tests",
+    "hospitalized_with_symptoms",
+    "intensive_care_unit",
+    "total_hospitalized",
+    "home_quarantine",
+    "total_positives",
+    "change_positives",
+    "new_positives",
+    "recovered_released",
+    "people_tested",
+    "p_house", "pop_tot", "area_km2", "pop_km2",
     "female_65m", "male_65m"
   )
 

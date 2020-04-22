@@ -7,29 +7,34 @@
 getit_covid()
 }
 \value{
-a tibble with following columns:
+a tibble with following 19 variables:
 \describe{
-\item{\strong{date}}{date of data}
-\item{\strong{state}}{state}
-\item{\strong{region_code}}{region abbreviation}
-\item{\strong{region}}{full name of region}
-\item{\strong{lat}}{lat}
-\item{\strong{long}}{long}
-\item{\strong{COVID19_var}}{
-\itemize{
-\item cmr: case-mortality rate for that region and that date (deaths/total_cases * 100)
-\item hospitalized_with_symptoms: number of people hospitalized with symptoms
-\item intensive_care_unit: number of people in intensive care units
-\item home_quarantine: number of people COVID-19 positive in home quarantine
-\item deaths: number of deaths
-\item total_cases: number of COVID-19 positive cases detected
-\item tests: number of tests performed
-}
-}
-\item{\strong{value}}{value relative to COVID19_var}
-
+\item{date}{in \verb{ISO 8601} format}
+\item{state}{state}
+\item{region_code}{region abbreviation}
+\item{region}{full name of region}
+\item{lat}{lat}
+\item{long}{long}
+\item{cmr}{case-mortality rate for that region and that date (deaths/total_cases * 100)}
+\item{total_cases}{number of COVID-19 positive cases detected}
+\item{deaths}{number of deaths}
+\item{tests}{number of tests performed}
+\item{hospitalized_with_symptoms}{number of people hospitalized with symptoms, that day}
+\item{intensive_care_unit}{number of people in intensive care units, that day}
+\item{total_hospitalized}{hospitalized_with_symptoms + intensive_care_unit}
+\item{home_quarantine}{number of people COVID-19 positive in home quarantine, that day}
+\item{total_positives}{total currently positives: hospitalized_with_symptoms + intensive_care_unit + home_quarantine}
+\item{change_positives}{change in the number of positive cases: total_positives that day - total_positives preceding day}
+\item{new_positives}{number of new positive cases: total_cases that day - total_cases preceding day}
+\item{recovered_released}{recovered - released from hospital}
+\item{people_tested}{number of people tested}
 }
 }
 \description{
 extracts and translates time series form the git repository of the \href{https://github.com/pcm-dpc/COVID-19}{protezione civile}
+}
+\details{
+caveats and problems related the calculation by the Protezione Civile of some variables  were rised by
+\href{https://www.gimbe.org/pagine/341/it/comunicati-stampa?pagina=2}{GIMBE fFoundation}. Unfortunately the page is in Italian...
+\emph{ buona lettura! }
 }
