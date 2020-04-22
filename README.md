@@ -36,25 +36,30 @@ devtools::install_github("c1au6i0/covid19census", auth_token = "355580fb57d57b58
 ## Usage
 
 A dataset that includes COVID-19 data and **all the other demographic
-variables** can be obtained executing `getus_all` (get-U.S-all) and
-`getit_all` (get-Italy-all)
+variables** can be obtained executing `getus_all` (get-U.S-all) to get
+U.S data, or `getit_all` (get-Italy-all) to get Italy data.
 
 ``` r
 library(covid19census)
 
-# to retrive u.s data
+# to retrieve u.s data
 all_us <- getus_all()
 
-# to retrive italy data
+# to retrieve italy data
 all_it <- getit_all()
 ```
 
+Details on the other functions and the datasets can be found in the
+Vignette of the package.
+
 ## U.S. Datasets and Sources
 
-The function `get all` executes
+Data regarding COVID-19 number of cases and deaths (at the county level)
+were obtained from the [New York Time git
+repository](https://github.com/nytimes/covid-19-data), whereas number of
+tests and hospitalizations from the \[the Covid Tracking Project\].
 
-`get covid` and joins the resulting `tibble` with datasets from the
-[Homeland Infrastructure
+The other datsets were obtained from the [Homeland Infrastructure
 Foundation](https://hifld-geoplatform.opendata.arcgis.com/datasets/hospitals/data?page=18),
 the [Census](https://data.census.gov/cedsci/table?q=United%20States),
 [Mapping Medicare
@@ -63,25 +68,20 @@ Disparities](https://data.cms.gov/mapping-medicare-disparities), and
 indexes](https://github.com/COVIDExposureIndices/COVIDExposureIndices)
 calculated by Victor Couture, Jonathan Dingel, Allison Green, Jessie
 Handbury, and Kevin Williams based on smartphone movement data provided
-by PlaceIQ.
+by `PlaceIQ`.
 
-In particular, this is a list of datasets included:
+This is a list of U.S. datasets that can be accessed directly or in a
+`tibble` containing also COVID-19 metrics:
 
   - `act_ind`: county-level device exposure index (DEX), an index of
     activity.
-
   - `acm_househ`: several metric regarding household composition (2018).
-
   - `age_sex`: age and sex distribution (2018).
-
   - `fl65`: percentage of fee-for-service (FFS) Medicare enrollees that
     had an annual flu vaccination (2017)
-
   - `hospbeds`: total hospital beds in each county (2019).
-
   - `mmd`: data of 2017 regarding the prevalence found in medicare
     beneficiaries of
-    
       - many medical and chronic conditions (Alzheimer, chronic kidney,
         obesity, depression, obstructive pulmonary, disease, arthritis,
         diabetes, osteoporosis, asthma, atrial fibrillation, ischemic
@@ -89,20 +89,28 @@ In particular, this is a list of datasets included:
       - several type of cancer.
       - emergency, medical admissions and annual visits.
       - pneumoccocal vaccine.
-      - tabacco use.
+      - tobacco use.
 
 *Note that* info for some counties are missing in some datasets. For
 example, `hospbeds` contains info on 2545 counties, `fl65` has 3224
-counties, whereas datasets from the Census have 3220 counties.
+counties, whereas datasets from the Census have 3220.
 
 ## Italy: Datasets and Sources
 
-The function `get_all` executes `get_covid` and aggregates the resulting
-`tibble` with some of the datasets below and, normalizes some of the
-variables:
+Data regarding COVID-19 deaths, confirmed cases, test and
+hospitalizations are extracted from the [Protezione Civile
+repository](https://github.com/pcm-dpc/COVID-19)
 
-  - `act_it`: Change in retail and recreation activity as reported by
-    google \[not joined with `get_all()` but accessible\].
+Demographic metrics and other stats regarding medical conditions and
+vaccinations were obtained from the
+[ISTAT](http://dati.istat.it/?lang=en), [Ministero della
+Salute](http://www.salute.gov.it/portale/home.html). Data regarding
+`pm2.5` were collected by [Istituto Superiore Per La protexione
+Ambientale](https://annuario.isprambiente.it/pon/basic/14)
+
+This is a list of Italy datasets that can be accessed directly or in a
+`tibble` containing also COVID-19 metrics:
+
   - `bweight_it`: Body mass index in regions of Italy, in the general
     population.
   - `cancer_it`: Number of cancer patients in each region by type.
@@ -124,9 +132,9 @@ variables:
   - `regions_area`: Area in square meters of each region. Used to
     calculate density per region.
   - `smoking_it`: Number of people aged 14 years and over that
-    self-refered as smoker, non smoker, or past smoker by region.
+    self-referred as smoker, non smoker, or past smoker by region.
 
-## Raw Data and other scripts
+## Raw Data and other Scripts
 
 Raw data and the code used to import it can be found in the
 [data-raw](https://github.com/c1au6i0/convid19census/tree/master/data-raw)

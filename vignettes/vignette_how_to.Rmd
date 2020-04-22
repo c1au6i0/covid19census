@@ -1,0 +1,100 @@
+---
+title: "covid19census Vignette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{vignette_how_to}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Objective and Overview
+
+The goal of `covid19census`is to facilitate the exploration of possible relationship between demographic, heath related, environmental and economic metrics and, health outcomes and spreading of COVID-19. 
+
+The package provide functions to extract updated information of COVID-19 tests, confirmed cases, hospitalization and, aggregates those info with datasets obtained from other government and institutional sources.  Moreover, detailed documentation regarding each variables and their sources is provided in the relative documentation.
+
+At the moment, `covid19census` extracts and contains data of U.S (county level) and Italy (region level).
+
+
+## Getting the Data
+
+A family of `get` functions is used to extract dynamically daily data and return them in a `tibble`.
+
+For *U.S* the prefix of the function is `getus_` follow by the specific metric of interest:
+
+  * `getus_covid`: extracts data of COVID-19 from the [New York Time git repository](https://github.com/nytimes/covid-19-data).
+  * `getus_dex`: extracts data of DEX, an activity index.
+  * `getus_tests`: extract info regarding number of tests performed and their results.
+  * `getus_all`: executes all the above function and join the results with other datasets statically contained in the package
+
+
+```{r setup}
+library(covid19census)
+
+dat_us <-  getus_all()
+
+dim(dat_us)
+```
+For *Italy" the prefix of the function is `getit_` follow by the specific metric of interest:
+
+  * `getit_covid`: extracts data of COVID-19 from the [Protezione Civle]( "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-regioni/dpc-covid19-ita-regioni.csv").
+  * `getit_all`: executes all the above function and join the results with other datasets statically contained in the package
+  
+```{r it}
+dat_it <-  getit_all()
+
+dim(dat_it)
+```
+
+
+## Accessing Specific Datasets
+
+
+Static U.S and Italy datasets can be accessed directly.
+
+```{r data}
+data(dem_us)
+```
+
+The country is generally specified in the last 2 letters of the object name. For example `dem_us` contains demographic info (sex age) of U.S counties, whereas `dem_it` of Italy. 
+
+Note that it was not always possible to obtain the same datasets/information for U.S and Italy.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

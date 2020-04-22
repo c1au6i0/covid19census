@@ -33,8 +33,8 @@
 #' @docType data
 #' @source \href{https://data.census.gov/cedsci/table?q=United%20States}{American Community Survey tables}
 #' @return  a tibble
-#' @usage data(age_sex_us)
-"age_sex_us"
+#' @usage data(dem_us)
+"dem_us"
 
 #' poverty
 #'

@@ -756,35 +756,35 @@ smoking_it <- vroom("data-raw/it/smoking.csv",
 # usethis -----
 
 # external data
-# usethis::use_data(
-#   # US data
-#   acm_househ_us,
-#   age_sex_us,
-#   fl65_us,
-#   hospbeds_us,
-#   mmd_us,
-#   poverty_us,
-#   # state_abbr,
-#   # italy
-#   bweight_it,
-#   cancer_it,
-#   chronic_it,
-#   # dem_65bin_fm,
-#   dem_it,
-#   firstaid_it,
-#   fl_it,
-#   fl65_it,
-#   hospbed_it,
-#   house_it,
-#   netinc_it,
-#   pm2.5_it,
-#   regions_area,
-#   smoking_it,
-#
-#
-#   # internal = TRUE,
-#   overwrite = TRUE
-# )
+
+dem_us <-   age_sex_us
+usethis::use_data(
+  # US data
+  acm_househ_us,
+  dem_us,
+  fl65_us,
+  hospbeds_us,
+  mmd_us,
+  poverty_us,
+  # state_abbr,
+  # italy
+  bweight_it,
+  cancer_it,
+  chronic_it,
+  # dem_65bin_fm,
+  dem_it,
+  firstaid_it,
+  fl_it,
+  fl65_it,
+  hospbed_it,
+  house_it,
+  netinc_it,
+  pm2.5_it,
+  regions_area,
+  smoking_it,
+  # internal = TRUE,
+  overwrite = TRUE
+)
 #
 # # internal data
 # usethis::use_data(
