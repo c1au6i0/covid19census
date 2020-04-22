@@ -30,7 +30,7 @@ Alternatively, you can install it directly from github.
 # don't share the token
 library(devtools)
 
-devtools::install_github("c1au6i0/covid19census", auth_token = "355580fb57d57b58228b4617c14c3f8234741715")
+devtools::install_github("c1au6i0/covid19census", auth_token = "673047b7073af2e3d3c92a7045ed6a2e819d7085")
 ```
 
 ## Usage
