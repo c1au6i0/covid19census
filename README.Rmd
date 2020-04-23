@@ -45,7 +45,7 @@ devtools::install_github("c1au6i0/covid19census")
 
 A dataset that includes COVID-19 data and **all the other demographic variables** can be obtained executing `getus_all` (get-U.S-all) to get U.S data, or `getit_all` (get-Italy-all) to get Italy data.
 
-```{r all, message=FALSE}
+```{r all, message=FALSE, eval=FALSE}
 library(covid19census)
 
 # to retrieve u.s data
