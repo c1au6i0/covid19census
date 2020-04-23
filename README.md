@@ -14,7 +14,7 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 The package `covid19census` provides functions to extract COVID-19
 cases, deaths, hospitalizations and test of U.S. and Italy at the county
 and regional level, respectively, and then combine them with other
-population metric (age, sex, prevalence of chronic conditions, income
+population metrics (age, sex, prevalence of chronic conditions, income
 indexes, access to health services and many others.)
 
 ## Installation
