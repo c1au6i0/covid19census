@@ -21,11 +21,11 @@ knitr::opts_chunk$set(
 
 ## Overview
 
-The package `covid19census` provides functions to extract COVID-19 cases, deaths, hospitalizations and test of U.S. and Italy at the county and regional level, respectively, and then combine them with other population metrics (age, sex, prevalence of chronic conditions, income indexes, access to health services and many others.)
+The package `covid19census` provides functions to extract COVID-19 cases, deaths, hospitalizations and test of U.S. and Italy at the county and regional level, respectively, and then combine them with other population metrics (age, sex, prevalence of chronic conditions, income indexes, access to health services and many others).
 
 ## Installation
 
-Download the package in a local folder and the run the following code.
+Download the package in a local folder and then run the following code.
 
 ```{r intallation, eval=FALSE, include=TRUE}
 devtools::install_local("path_to_package")
