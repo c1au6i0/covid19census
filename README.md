@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# covid19census
+# covid19census <img src='inst/img/hexsticker.png' align="right" height="139" /></a>
 
 <!-- badges: start -->
 
@@ -9,13 +9,15 @@
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 <!-- badges: end -->
 
+### Overview
+
 The package `covid19census` provides functions to extract COVID-19
 cases, deaths, hospitalizations and test of U.S. and Italy at the county
 and regional level, respectively, and then combine them with other
 population metric (age, sex, prevalence of chronic conditions, income
 indexes, access to health services and many others.)
 
-## Installation
+### Installation
 
 Download the package in a local folder and the run the following code.
 
@@ -33,7 +35,7 @@ library(devtools)
 devtools::install_github("c1au6i0/covid19census")
 ```
 
-## Usage
+### Usage
 
 A dataset that includes COVID-19 data and **all the other demographic
 variables** can be obtained executing `getus_all` (get-U.S-all) to get
@@ -52,7 +54,7 @@ all_it <- getit_all()
 Details on the other functions and the datasets can be found in the
 Vignette of the package.
 
-## U.S. Datasets and Sources
+### U.S. Datasets and Sources
 
 Data regarding COVID-19 number of cases and deaths (at the county level)
 were obtained from the [New York Time git
@@ -95,7 +97,7 @@ This is a list of U.S. datasets that can be accessed directly or in a
 example, `hospbeds` contains info on 2545 counties, `fl65` has 3224
 counties, whereas datasets from the Census have 3220.
 
-## Italy: Datasets and Sources
+### Italy: Datasets and Sources
 
 Data regarding COVID-19 deaths, confirmed cases, test and
 hospitalizations are extracted from the [Protezione Civile
@@ -134,7 +136,7 @@ This is a list of Italy datasets that can be accessed directly or in a
   - `smoking_it`: Number of people aged 14 years and over that
     self-referred as smoker, non smoker, or past smoker by region.
 
-## Raw Data and other Scripts
+### Raw Data and other Scripts
 
 Raw data and the code used to import it can be found in the
 [data-raw](https://github.com/c1au6i0/convid19census/tree/master/data-raw)

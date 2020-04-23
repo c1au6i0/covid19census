@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 ## Objective and Overview
 
-The goal of `covid19census`is to facilitate the exploration of possible relationship between demographic, heath related, environmental and economic metrics and, health outcomes and spreading of COVID-19. 
+The goal of `covid19census`is to facilitate the exploration of the possible relationship between demographic, heath related, environmental and economic metrics and, health outcomes and spreading of COVID-19. 
 
 The package provide functions to extract updated information of COVID-19 tests, confirmed cases, hospitalization and, aggregates those info with datasets obtained from other government and institutional sources.  Moreover, detailed documentation regarding each variables and their sources is provided in the relative documentation.
 
