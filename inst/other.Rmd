@@ -1,0 +1,62 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+```{r}
+library(covid19census)
+library(dplyr)
+library(tidyr)
+
+```
+
+
+```{r}
+t_us <-  covid19census::getus_tests()
+```
+
+```{r}
+glimpse(t_us)
+```
+
+
+```{r}
+t_us %>% 
+  pivot_longer(cols = vars(positive), names_to = "det_tests")
+  
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

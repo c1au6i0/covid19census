@@ -98,7 +98,7 @@ getus_dex <- function() {
 #' was used verbatim for the description below
 #' \describe{
 #'     \item{date}{in `ISO 8601` format}
-#'     \item{state}{state name}]
+#'     \item{state}{state name}
 #'     \item{abbr}{abbreviation}
 #'     \item{positive}{total cumulative positive test results}
 #'     \item{negative}{total cumulative negative test results}
@@ -108,7 +108,7 @@ getus_dex <- function() {
 #'     \item{icu_curr}{current people in ICU}
 #'     \item{icu_cumul}{cumulative people in ICU}
 #'     \item{ventilator_curr}{current people using ventilator}
-#'     \item{ventilator_cumul}{cumulativepeople using ventilator}
+#'     \item{ventilator_cumul}{cumulative people using ventilator}
 #'     \item{recovered}{total people recoverd}
 #'     \item{hash}{unique ID changed every time the data updates}
 #'     \item{date_checked}{date of the time we last visited their website}
@@ -120,8 +120,8 @@ getus_dex <- function() {
 #'     \item{total_test_increase}{increase from the day before}
 #' }
 #' Other details regarding the score system used are reported in the \href{https://covidtracking.com/about-data}{maintainers webpage}
-#'  @import vroom
-#'  @export
+#' @import vroom
+#' @export
 getus_tests <- function() {
   url_data <-  "https://covidtracking.com/api/states/daily.csv"
 
