@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# covid19census <img src='inst/img/hexsticker.png' align="right" height="139" >
+# covid19census <img src='inst/img/hexsticker2.png' align="right" height="139" >
 
 <!-- badges: start -->
 
