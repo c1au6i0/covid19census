@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# covid19census  <img src='inst/img/hexsticker.png' align="right" height="139" />
+# covid19census  <img src='inst/img/hexsticker.png' align="right" height="139" >
 
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
