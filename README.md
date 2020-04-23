@@ -52,7 +52,7 @@ all_it <- getit_all()
 ```
 
 Details on the other functions and the datasets can be found in the
-Vignette of the package.
+[vignette](vignette_how_to.html) of the package.
 
 ### U.S. Datasets and Sources
 
