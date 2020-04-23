@@ -1,0 +1,180 @@
+---
+title: "Checks on testing"
+output: html_notebook
+---
+
+
+```{r}
+library(covid19census)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(broom)
+library(psych)
+library(stringr)
+library(DataExplorer)
+library(plotly)
+theme_set(theme_bw())
+```
+
+
+```{r}
+t_us <-  covid19census::getus_tests()
+```
+
+```{r warning=FALSE}
+names(t_us)
+```
+
+
+```{r, warning=FALSE, fig.height=5, fig.width=5}
+t_us %>% 
+  select(date, state, positive, negative, pending) %>% 
+  pivot_longer(cols = c("positive", "negative", "pending"), names_to = "det_tests") %>% 
+  
+  ggplot(aes(date, log2(value), colour = det_tests)) +
+    geom_line() +
+    facet_wrap(vars(state)) +
+    scale_x_date(guide = guide_axis(check.overlap = TRUE, angle = 45)) +
+    theme(legend.position = "top",
+        legend.title = element_blank()) 
+  
+
+
+```
+
+
+
+```{r warning=FALSE, fig.height=5, fig.width=5}
+t_us %>%
+  select(date,
+         state,
+         hospitalized_curr,
+         hospitalized_cumul
+         # icu_curr,
+         # icu_cumul
+         
+         ) %>%
+  pivot_longer(
+    cols = c(
+      "hospitalized_curr",
+      "hospitalized_cumul"
+      # "icu_curr",
+      # "icu_cumul"
+    ),
+    names_to = "det_tests"
+  ) %>%
+  
+  ggplot(aes(date, log2(value), colour = det_tests)) +
+  geom_line() +
+  facet_wrap(vars(state)) +
+  scale_x_date(guide = guide_axis(check.overlap = TRUE, angle = 45)) +
+  theme(legend.position = "top",
+        legend.title = element_blank())
+
+```
+Same states have hospitalized current but not hospitalized cumulative and vicevera ????
+
+** Possible different meaning of variables depending on the state  **
+
+
+```{r warning=FALSE, fig.height=5, fig.width=5}
+t_us %>%
+  select(date,
+         state,
+         # hospitalized_curr,
+         # hospitalized_cumul
+         # icu_curr,
+         # icu_cumul
+         "ventilator_curr",
+         "ventilator_cumul"
+         
+         ) %>%
+  pivot_longer(
+    cols = c(
+      # "hospitalized_curr",
+      # "hospitalized_cumul"
+        "ventilator_curr",
+         "ventilator_cumul"
+    ),
+    names_to = "det_tests"
+  ) %>%
+  
+  ggplot(aes(date, log2(value), colour = det_tests)) +
+  geom_line() +
+  facet_wrap(vars(state)) +
+  scale_x_date(guide = guide_axis(check.overlap = TRUE, angle = 45)) +
+  theme(legend.position = "top",
+        legend.title = element_blank())
+
+```
+```{r warning=FALSE, fig.height=5, fig.width=5}
+t_us %>%
+  select(date,
+         state,
+         # hospitalized_curr,
+         # hospitalized_cumul
+         icu_curr,
+         icu_cumul
+         
+         ) %>%
+  pivot_longer(
+    cols = c(
+      # "hospitalized_curr",
+      # "hospitalized_cumul"
+      "icu_curr",
+      "icu_cumul"
+    ),
+    names_to = "det_tests"
+  ) %>%
+  
+  ggplot(aes(date, log2(value), colour = det_tests)) +
+  geom_line() +
+  facet_wrap(vars(state)) +
+  scale_x_date(guide = guide_axis(check.overlap = TRUE, angle = 45)) +
+  theme(legend.position = "top",
+        legend.title = element_blank())
+
+```
+
+
+
+Lets see some totals
+```{r warning=FALSE, fig.height=10, fig.width=6}
+ggplotly(
+t_us %>% 
+  filter(date == max(date)) %>% 
+  select(-hash, -date_checked, -fips) %>%
+  pivot_longer(cols = positive:total_test_increase, names_to = "metric", values_to = "value") %>% 
+  ggplot(aes(state, value)) +
+    geom_col() +
+    facet_wrap(vars(metric), scales = "free_y", ncol = 1) + 
+    scale_x_discrete(guide = guide_axis( angle = 90)),
+    height = 2000,
+    width = 600
+)
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

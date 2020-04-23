@@ -39,5 +39,11 @@ was used verbatim for the description below
 \item{positive_increase}{increase in positive results from day before}
 \item{total_test_increase}{increase from the day before}
 }
-Other details regarding the score system used are reported in the \href{https://covidtracking.com/about-data}{maintainers webpage}
+Other details regarding the score system used are reported in the \href{https://covidtracking.com/about-data}{maintainers webpage}.\cr
+\strong{Note for the use of some of some this variables by covidtracking authors:} \cr
+\emph{States are currently reporting two fundamentally unlike statistics: current hospital/ICU admissions and cumulative hospitalizations/ICU admissions.
+Across the country, this reporting is also sparse.
+In short: it is impossible to assemble anything resembling the real statistics for hospitalizations,
+ICU admissions, or ventilator usage across the United States. As a result, we will no longer provide
+national-level summary hospitalizations, ICU admissions, or ventilator usage statistics on our site.}
 }
