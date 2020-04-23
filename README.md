@@ -52,8 +52,7 @@ all_it <- getit_all()
 ```
 
 Details on the other functions and the datasets can be found in the
-[vignettes](https://github.com/c1au6i0/covid19census/vignettes/vignette_how_to.html)
-of the package.
+vignette of the package `vignette("v_covid19census")`.
 
 ### U.S. Datasets and Sources
 
@@ -142,3 +141,9 @@ This is a list of Italy datasets that can be accessed directly or in a
 Raw data and the code used to import it can be found in the
 [data-raw](https://github.com/c1au6i0/convid19census/tree/master/data-raw)
 folder.
+
+### Terms of Use
+
+Refer to the
+[License](https://github.com/c1au6i0/covid19census/blob/master/LICENSE.md)
+for details on the terms of use and copyrights.
