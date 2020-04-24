@@ -1,5 +1,5 @@
 ---
-title: "covid19census:  U.S. and Italy COVID-19 epidemiolagical data and, demographic and health related metrics"
+title: "covid19census:  U.S. and Italy COVID-19 epidemiolagical data with demographic and health related metrics"
 #date: "`r Sys.Date()`"
 authors:
   - name: Claudio Zanettini
@@ -64,29 +64,37 @@ In the mist of a virus pandemic, unraveling the constant flow of epidemiological
 Boom our package
 
 
-#  Implementation
+#  Alghorithm
 
-A family of `get` functions is employed by the package to extract updated time-series data dynamically from different on-line sources.
+A family of `get` functions is employed by the `R` package to extract updated time-series data dynamically from different on-line sources.
 
-For **U.S** the prefix of the function is `getus_` follow by the specific metric of interest:
+For **U.S** the prefix of the functions to extract data is `getus_`, and it is followed by the specific metric of interest:
 
   * `getus_covid`: extracts data of COVID-19 from the [New York Time git repository](https://github.com/nytimes/covid-19-data).
   * `getus_dex`: extracts data of DEX, an [activity indexes](https://github.com/COVIDExposureIndices/COVIDExposureIndices) calculated  by  Victor Couture, Jonathan Dingel, Allison Green, Jessie Handbury, and Kevin Williams based on smartphone movement data provided by `PlaceIQ`.
   * `getus_tests`: extract info regarding number of tests performed, their results and hospitalization from the repository of [the Covid Tracking Project](https://covidtracking.com/api}).
-  * `getus_all`: executes all the above functions and join the results with other datasets statically contained in the package.
+  * `getus_all`: executes all the above functions and join the results with other datasets statically contained in the package, and returns a `dataframe` with 304 variables.
+  
+Data regarding the household composition, population sex and age and poverty levels (2018), were retrieved from the [American Community Survey](https://data.census.gov/cedsci/table?q=United%20States). Medical conditions, tobacco use, cancer and, data relative to the number of medical and emergency visits (2017) of medicare beneficiaries were obtained from the [Mapping Medicare Disparities](https://data.cms.gov/mapping-medicare-disparities). The number of hospital beds per county (2020) was calculated from data of the  [Homeland Infrastructure Foundation](https://hifld-geoplatform.opendata.arcgis.com/datasets/hospitals/data?page=18).
 
 For **Italy**, the prefix of the function is `getit_` followed by `covid` or `all`.
 
   * `getit_covid`: extracts data of COVID-19 cases, deaths, hospitalizations and tests from the [Protezione Civle]( "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-regioni/dpc-covid19-ita-regioni.csv").
-  * `getit_all`: executes the above function and join the results with other datasets statically contained in the package.
+  * `getit_all`: executes the above function and join the results with other datasets statically contained in the package and returns a `dataframe` with 64 variables.
   
+Age and sex of the population (2019),  first aid and medical guard visits (2018), smoking status (2018),  prevalence of chronic conditions (2018), annual-household income (2017), household crowding index (2018) and body-mass index were dataset collect by [ISTAT](http://dati.istat.it/?lang=en). Prevalence of types of cancer patients (2016), influenza-vaccination coverage (2019) and the number of hospital beds per 1000 people (2017) were obtained from [Ministero della Salute](http://www.dati.salute.gov.it/). Data of particulate 2.5 (2017) comes from the [Istituto Superiore Per La protezione Ambientale](https://annuario.isprambiente.it/pon/basic/14).
+
+The documentation of the functions reports and describes each variable (`colnames`) and list data sources. Because of the large amount of variables, to facilitate exploration of the documentation, it was deemed more practical to create separate functions with separate documentation for each of the country, instead of creating a single function with an argument relative to the country.
+
   
-  
+#  Implementation
+
+Examples of use
 
 
 # Discussion
 
-For U.S.,data regarding COVID-19 number of cases and deaths (at the county level) were obtained from a repository mantained by the [New York Time](https://github.com/nytimes/covid-19-data), whereas number of tests and hospitalizations (at the state level) thefrom the [the Covid Tracking Project].
+
 
 
 <!-- rmarkdown::render("/Users/heverz/Documents/R_projects/covid19census/vignettes/draft/draft.Rmd", output_file= "draft.pdf") -->

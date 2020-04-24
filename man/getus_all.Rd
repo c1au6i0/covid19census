@@ -14,11 +14,13 @@
 getus_all()
 }
 \value{
-A tibble with 309 variables. Data regarding the household composition, population age and poverty levels,  sex and extension
+A tibble with 304 variables. Data regarding the household composition, population sex and age and poverty levels,
 were scraped from the 2018 American Community Survey (ACS). Poverty was defined at the family level and not the household level in
-the ACS. Medical conditions, tabacco use, cancer and, data relative to the number of medical and emergency visits
-was obtained from the 2017 Mapping Medicare Disparities. From relative documentation listed in the source: "Prevalence rates are calculated by searching
-for certain diagnosis codes in \strong{Medicare beneficiaries’ claims}. The admission rate by admission type is the frequency of a specific type of inpatient admission per 1,000 inpatient admissions in a year." The number of hospital beds per county was calculated from data of the
+the ACS. Medical conditions, tabaco use, cancer and, data relative to the number of medical and emergency visits
+was obtained from the 2017 Mapping Medicare Disparities. From relative documentation listed in the source: "Prevalence rates are calculated
+by searching for certain diagnosis codes in \strong{Medicare beneficiaries’ claims}. T
+he admission rate by admission type is the frequency of a specific type of inpatient admission per 1,000 inpatient admissions in a year."
+The number of hospital beds per county was calculated from data of the
 2020 Homeland Infrastructure Foundation. \cr
 \strong{Note that data on test and hospitalizations are at the state level!}
 \describe{

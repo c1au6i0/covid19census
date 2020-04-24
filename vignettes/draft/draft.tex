@@ -65,7 +65,7 @@
 
 \begin{document}
 
-\title{covid19census: U.S. and Italy COVID-19 epidemiolagical data and,
+\title{covid19census: U.S. and Italy COVID-19 epidemiolagical data with
 demographic and health related metrics}
 
 \author{%
@@ -124,8 +124,8 @@ clinical trial on BCG
 
 Boom our package
 
-\hypertarget{implementation}{%
-\section{Implementation}\label{implementation}}
+\hypertarget{alghorithm}{%
+\section{Alghorithm}\label{alghorithm}}
 
 A family of \texttt{get} functions is employed by the package to extract
 updated time-series data dynamically from different on-line sources.
@@ -151,10 +151,24 @@ by the specific metric of interest:
   \href{https://covidtracking.com/api\%7D}{the Covid Tracking Project}.
 \item
   \texttt{getus\_all}: executes all the above functions and join the
-  results with other datasets statically contained in the package.
+  results with other datasets statically contained in the package, and
+  returns a \texttt{dataframe} with 304 variables.
 \end{itemize}
 
+Data regarding the household composition, population sex and age and
+poverty levels (2018), were retrieved from the
+\href{https://data.census.gov/cedsci/table?q=United\%20States}{American
+Community Survey}. Medical conditions, tobacco use, cancer and, data
+relative to the number of medical and emergency visits (2017) of
+medicare beneficiaries were obtained from the
+\href{https://data.cms.gov/mapping-medicare-disparities}{Mapping
+Medicare Disparities}. The number of hospital beds per county (2020) was
+calculated from data of the
+\href{https://hifld-geoplatform.opendata.arcgis.com/datasets/hospitals/data?page=18}{Homeland
+Infrastructure Foundation}.
+
 For \textbf{Italy}, the prefix of the function is \texttt{getit\_}
+followed by \texttt{covid} or \texttt{all}.
 
 \begin{itemize}
 \tightlist
@@ -165,17 +179,29 @@ For \textbf{Italy}, the prefix of the function is \texttt{getit\_}
   Civle}.
 \item
   \texttt{getit\_all}: executes the above function and join the results
-  with other datasets statically contained in the package
+  with other datasets statically contained in the package and returns a
+  \texttt{dataframe} with 64 variables.
 \end{itemize}
+
+Age and sex of the population (2019), first aid and medical guard visits
+(2018), smoking status (2018), prevalence of chronic conditions (2018),
+annual-household income (2017), household crowding index (2018) and
+body-mass index were dataset collect by
+\href{http://dati.istat.it/?lang=en}{ISTAT}. Prevalence of types of
+cancer patients (2016), influenza-vaccination coverage (2019) and the
+number of hospital beds per 1000 people (2017) were obtained from
+\href{http://www.dati.salute.gov.it/}{Ministero della Salute}. Data of
+particulate 2.5 (2017) comes from the
+\href{https://annuario.isprambiente.it/pon/basic/14}{Istituto Superiore
+Per La protexione Ambientale}..
+
+\hypertarget{implementation}{%
+\section{Implementation}\label{implementation}}
+
+Examples of use
 
 \hypertarget{discussion}{%
 \section{Discussion}\label{discussion}}
-
-For U.S.,data regarding COVID-19 number of cases and deaths (at the
-county level) were obtained from a repository mantained by the
-\href{https://github.com/nytimes/covid-19-data}{New York Time}, whereas
-number of tests and hospitalizations (at the state level) thefrom the
-{[}the Covid Tracking Project{]}.
 
 --\textgreater{}
 

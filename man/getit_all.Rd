@@ -54,7 +54,7 @@ a tibble with following 64 variables:
 }
 \description{
 extracts and translates time series form the git repository of the \href{https://github.com/pcm-dpc/COVID-19}{protezione civile} and
-combines them with other statistics related to italian population
+combines them with other statistics related to italian population.
 }
 \details{
 Data regarding COVID-19 comes form the repository of the \href{https://github.com/pcm-dpc/COVID-19}{protezione civile} and it is updated daily.
@@ -63,7 +63,7 @@ household crowding index (2018) and body-mass index were dataset collect by  \hr
 Prevalence of types of cancer patients (2016), influenza-vaccination coverage (2019) and the number of hospital beds per 1000 people (2017) were obtained from
 \href{http://www.dati.salute.gov.it/}{Ministero della Salute}. Note that cancer patients prevalence was calculated using
 region population esitmates of 2019. Data of particulate 2.5 (2017) comes from the
-\href{https://annuario.isprambiente.it/pon/basic/14}{Istituto Superiore Per La protexione Ambientale}.
+\href{https://annuario.isprambiente.it/pon/basic/14}{Istituto Superiore Per La protezione Ambientale}.
 }
 \seealso{
 for details regarding  the methodology of specific datasets check  \code{\link{bweight_it}}, \code{\link{cancer_it}},

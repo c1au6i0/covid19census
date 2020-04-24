@@ -126,7 +126,7 @@ getit_covid <- function() {
 #' get COVID-19 cases and other statistics
 #'
 #' extracts and translates time series form the git repository of the \href{https://github.com/pcm-dpc/COVID-19}{protezione civile} and
-#' combines them with other statistics related to italian population
+#' combines them with other statistics related to italian population.
 #'
 #' @return a tibble with following 64 variables:
 #' \describe{
@@ -175,7 +175,7 @@ getit_covid <- function() {
 #' Prevalence of types of cancer patients (2016), influenza-vaccination coverage (2019) and the number of hospital beds per 1000 people (2017) were obtained from
 #' \href{http://www.dati.salute.gov.it/}{Ministero della Salute}. Note that cancer patients prevalence was calculated using
 #'  region population esitmates of 2019. Data of particulate 2.5 (2017) comes from the
-#' \href{https://annuario.isprambiente.it/pon/basic/14}{Istituto Superiore Per La protexione Ambientale}.
+#' \href{https://annuario.isprambiente.it/pon/basic/14}{Istituto Superiore Per La protezione Ambientale}.
 #' @source  \href{https://github.com/pcm-dpc/COVID-19}{protezione civile}, \href{http://dati.istat.it/?lang=en}{ISTAT}
 #' @importFrom rlang .data
 #' @importFrom magrittr %>%
