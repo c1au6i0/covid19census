@@ -117,7 +117,7 @@ getit_covid <- function() {
       )
    ]
 
-  message(paste0("Data till ", max(dat$date), " successfully extracted!"))
+  message(paste0("Italy COVID-19 data up to ", max(dat$date), " successfully retrived!"))
 
   dat
 }

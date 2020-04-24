@@ -19,8 +19,6 @@ abstract: |
   It consists of two paragraphs.
 acknowledgements: |
   *Funding* : C.Z. and L.M.were supported by XXXX.
-
-  It consists of two paragraphs.
 keywords:
   - covid19
   - R
@@ -79,17 +77,70 @@ Data regarding the household composition, population sex and age and poverty lev
 
 For **Italy**, the prefix of the function is `getit_` followed by `covid` or `all`.
 
-  * `getit_covid`: extracts data of COVID-19 cases, deaths, hospitalizations and tests from the [Protezione Civle]( "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-regioni/dpc-covid19-ita-regioni.csv").
+  * `getit_covid`: extracts data of COVID-19 cases, deaths, hospitalizations and tests from the [Protezione Civile]( "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-regioni/dpc-covid19-ita-regioni.csv").
   * `getit_all`: executes the above function and join the results with other datasets statically contained in the package and returns a `dataframe` with 64 variables.
   
-Age and sex of the population (2019),  first aid and medical guard visits (2018), smoking status (2018),  prevalence of chronic conditions (2018), annual-household income (2017), household crowding index (2018) and body-mass index were dataset collect by [ISTAT](http://dati.istat.it/?lang=en). Prevalence of types of cancer patients (2016), influenza-vaccination coverage (2019) and the number of hospital beds per 1000 people (2017) were obtained from [Ministero della Salute](http://www.dati.salute.gov.it/). Data of particulate 2.5 (2017) comes from the [Istituto Superiore Per La protezione Ambientale](https://annuario.isprambiente.it/pon/basic/14).
+Age and sex of the population (2019),  first aid and medical guard visits (2018), smoking status (2018),  prevalence of chronic conditions (2018), annual-household income (2017), household crowding index (2018) and body-mass index were collect from [ISTAT](http://dati.istat.it/?lang=en). Prevalence of types of cancer patients (2016), influenza-vaccination coverage (2019) and the number of hospital beds per 1000 people (2017) were obtained from [Ministero della Salute](http://www.dati.salute.gov.it/). Data of particulate 2.5 (2017) comes from the [Istituto Superiore Per La protezione Ambientale](https://annuario.isprambiente.it/pon/basic/14).
 
-The documentation of the functions reports and describes each variable (`colnames`) and list data sources. Because of the large amount of variables, to facilitate exploration of the documentation, it was deemed more practical to create separate functions with separate documentation for each of the country, instead of creating a single function with an argument relative to the country.
+The documentation of the functions reports and describes each variable (`colnames`) and list all the data sources. Because of the large amount of variables, to facilitate exploration of the documentation, it was deemed more practical to create separate functions with separate documentation for each of the country, instead of creating a single function with an argument relative to the country.
 
   
-#  Implementation
+#  Implementation and use
 
-Examples of use
+The package is current available on `github`. 
+
+```{r libraries, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(ggrepel)
+library(scales)
+theme_set(theme_bw())
+```
+
+
+```{r get, results="asis", echo=TRUE}
+library(covid19census)
+dat_it <- getit_all()
+dat_us <- getus_all()
+```
+
+
+
+
+
+```{r tab_info, results="asis", echo=FALSE}
+tab1 <- as.data.frame(tribble(
+   ~getus_all, ~getit_all,
+   "304",   "64",
+   "2790",  "21",
+   "2020-01-21", "2020-02-24"
+  
+))
+
+rownames(tab1) <- c("variables", "counties-regions", "from") 
+
+
+print(xtable(tab1, caption = "Info regarding dataframes", label="tab:tab1"), comment=FALSE)
+```
+
+```{r fig_corr, fig.cap="COVID-19 Mortality and Obesity in Italy", results="asis", echo=FALSE, fig.height=4, fig.width=4, warning=FALSE, message=FALSE}
+
+dat_it %>% 
+  filter(date == max(date)) %>% 
+  ggplot(aes(cmr, bweight_obese)) +
+      geom_smooth(method = "lm", formula = y~x, se = FALSE, lwd = 0.8, colour = "gray35", lty = 4) +
+        geom_label_repel(aes(label = region), label.size = 0.1, position = position_stack(vjust = 1), size = 3) +
+        scale_x_continuous(labels = percent_format(scale = 1, accuracy = 1)) +
+        scale_y_continuous(limits = c(6, 13), breaks = seq(6, 13, 1), labels = percent_format(scale = 1, accuracy = 1)) +
+        geom_point(size = 3) +
+
+    labs(
+          title = "COVID-19 Mortality and Obesity",
+          subtitle = paste0("date: ", max(dat_it$date)),
+          x = "Obesity (% of regional population)",
+          y = "Case-Mortality Rate"
+          ) 
+```
+
 
 
 # Discussion
@@ -138,13 +189,13 @@ Examples of use
 <!-- #  -->
 <!-- # Reference to second figure: Fig. \ref{fig:fig2} -->
 <!-- #  -->
-<!-- <!-- # Generate a table. --> -->
+<!-- <!-- # Generate a table. --> 
 
 <!-- ```{r tab1, results="asis", echo=TRUE} -->
 <!-- df = data.frame(ID=1:3,code=letters[1:3]) -->
 <!-- print(xtable(df,caption="This is the table caption",label="tab:tab1"), -->
 <!--       comment=FALSE) -->
-<!-- <!-- ``` --> -->
+<!-- <!-- ``` --> 
 
 <!-- You can reference this table as follows: Table \ref{tab:tab1}. -->
 

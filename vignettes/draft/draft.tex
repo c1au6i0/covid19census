@@ -177,7 +177,7 @@ followed by \texttt{covid} or \texttt{all}.
   \texttt{getit\_covid}: extracts data of COVID-19 cases, deaths,
   hospitalizations and tests from the
   \href{\%22https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-regioni/dpc-covid19-ita-regioni.csv\%22}{Protezione
-  Civle}.
+  Civile}.
 \item
   \texttt{getit\_all}: executes the above function and join the results
   with other datasets statically contained in the package and returns a
@@ -187,7 +187,7 @@ followed by \texttt{covid} or \texttt{all}.
 Age and sex of the population (2019), first aid and medical guard visits
 (2018), smoking status (2018), prevalence of chronic conditions (2018),
 annual-household income (2017), household crowding index (2018) and
-body-mass index were dataset collect by
+body-mass index were collect from
 \href{http://dati.istat.it/?lang=en}{ISTAT}. Prevalence of types of
 cancer patients (2016), influenza-vaccination coverage (2019) and the
 number of hospital beds per 1000 people (2017) were obtained from
@@ -197,29 +197,71 @@ particulate 2.5 (2017) comes from the
 Per La protezione Ambientale}.
 
 The documentation of the functions reports and describes each variable
-(\texttt{colnames}) and list data sources. Because of the large amount
-of variables, to facilitate exploration of the documentation, it was
-deemed more practical to create separate functions with separate
+(\texttt{colnames}) and list all the data sources. Because of the large
+amount of variables, to facilitate exploration of the documentation, it
+was deemed more practical to create separate functions with separate
 documentation for each of the country, instead of creating a single
 function with an argument relative to the country.
 
-\hypertarget{implementation}{%
-\section{Implementation}\label{implementation}}
+\hypertarget{implementation-and-use}{%
+\section{Implementation and use}\label{implementation-and-use}}
 
-Examples of use
+The package is current available on \texttt{github}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(covid19census)}
+\NormalTok{dat_it <-}\StringTok{ }\KeywordTok{getit_all}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Italy COVID-19 data up to 2020-04-24 17:00:00 successfully retrived!
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dat_us <-}\StringTok{ }\KeywordTok{getus_all}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## US COVID-19 data up to 2020-04-23 successfully retrived!
+\end{verbatim}
+
+\begin{verbatim}
+## US mobility data up to 2020-04-09 successfully retrived!
+\end{verbatim}
+
+\begin{verbatim}
+## US test data up to 2020-04-23 successfully retrived!
+\end{verbatim}
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rll}
+  \hline
+ & US & Italy \\ 
+  \hline
+variables & 304 & 64 \\ 
+  counties-regions & 2790 & 21 \\ 
+  from & 2020-01-21 & 2020-02-24 \\ 
+   \hline
+\end{tabular}
+\caption{Info regarding dataframes} 
+\label{tab:tab1}
+\end{table}
+
+\begin{figure}[p]
+\includegraphics[width=1\linewidth]{draft_files/figure-latex/fig_corr-1} \caption{COVID-19 Mortality and Obesity in Italy}\label{fig:fig_corr}
+\end{figure}
 
 \hypertarget{discussion}{%
 \section{Discussion}\label{discussion}}
 
---\textgreater{}
-
---\textgreater{}
-
 
 \begin{notes}[Acknowledgements]
 \emph{Funding} : C.Z. and L.M.were supported by XXXX.
-
-It consists of two paragraphs.
 \end{notes}
 
 

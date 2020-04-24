@@ -33,7 +33,7 @@ getus_covid <- function() {
     dplyr::filter(!is.na(.data$fips))
 
 
-  message(paste0("Data of COVID-19 up to ", max(dat$date), " successfully extracted!"))
+  message(paste0("US COVID-19 data up to ", max(dat$date), " successfully retrived!"))
 
   dat
 }
@@ -84,7 +84,7 @@ getus_dex <- function() {
     )
   )
 
-  message(paste0("Data of activity up to ", max(dat$date), " successfully imported!"))
+  message(paste0("US mobility data up to ", max(dat$date), " successfully retrived!"))
 
   dat
 }
@@ -169,7 +169,7 @@ getus_tests <- function() {
 
   colnames(dat)[colnames(dat) == "state"] <- "abbr"
 
-  message(paste0("Data of tests up to ", max(dat$date, na.rm = TRUE), " successfully imported!"))
+  message(paste0("US test data up to ", max(dat$date, na.rm = TRUE), " successfully retrived!"))
 
   # we don't have unincorporated territories in getus_all()
   dat2 <- dat[dat$abbr %in% state_abbr$abbr, ]
