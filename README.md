@@ -59,7 +59,8 @@ vignette of the package `vignette("v_covid19census")`.
 Data regarding COVID-19 number of cases and deaths (at the county level)
 were obtained from the [New York Time git
 repository](https://github.com/nytimes/covid-19-data), whereas number of
-tests and hospitalizations from the \[the Covid Tracking Project\].
+tests and hospitalizations from the [the Covid Tracking
+Project](https://covidtracking.com/api%7D).
 
 The other datsets were obtained from the [Homeland Infrastructure
 Foundation](https://hifld-geoplatform.opendata.arcgis.com/datasets/hospitals/data?page=18),

@@ -38,11 +38,25 @@ t_us %>%
     scale_x_date(guide = guide_axis(check.overlap = TRUE, angle = 45)) +
     theme(legend.position = "top",
         legend.title = element_blank()) 
-  
-
 
 ```
+WHO ratio positive/total to talk about reopening
 
+
+```{r, message=FALSE}
+t_us %>% 
+  mutate(ratio_pos = positive/(positive + negative)) %>% 
+  filter(date == max(date)) %>% 
+  
+  ggplot(aes(reorder(state, ratio_pos), ratio_pos)) +
+    geom_col() +
+    scale_x_discrete(guide = guide_axis(check.overlap = TRUE, angle = 90)) +
+    labs(x = NULL,
+         y = "positive/(positive + negative)",
+         title = "Probability of a positive test") +
+    theme(legend.position = "top",
+        legend.title = element_blank())
+```
 
 
 ```{r warning=FALSE, fig.height=5, fig.width=5}
