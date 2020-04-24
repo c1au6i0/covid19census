@@ -127,11 +127,12 @@ Boom our package
 \hypertarget{alghorithm}{%
 \section{Alghorithm}\label{alghorithm}}
 
-A family of \texttt{get} functions is employed by the package to extract
-updated time-series data dynamically from different on-line sources.
+A family of \texttt{get} functions is employed by the \texttt{R} package
+to extract updated time-series data dynamically from different on-line
+sources.
 
-For \textbf{U.S} the prefix of the function is \texttt{getus\_} follow
-by the specific metric of interest:
+For \textbf{U.S} the prefix of the functions to extract data is
+\texttt{getus\_}, and it is followed by the specific metric of interest:
 
 \begin{itemize}
 \tightlist
@@ -193,7 +194,14 @@ number of hospital beds per 1000 people (2017) were obtained from
 \href{http://www.dati.salute.gov.it/}{Ministero della Salute}. Data of
 particulate 2.5 (2017) comes from the
 \href{https://annuario.isprambiente.it/pon/basic/14}{Istituto Superiore
-Per La protexione Ambientale}..
+Per La protezione Ambientale}.
+
+The documentation of the functions reports and describes each variable
+(\texttt{colnames}) and list data sources. Because of the large amount
+of variables, to facilitate exploration of the documentation, it was
+deemed more practical to create separate functions with separate
+documentation for each of the country, instead of creating a single
+function with an argument relative to the country.
 
 \hypertarget{implementation}{%
 \section{Implementation}\label{implementation}}
