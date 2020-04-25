@@ -10,7 +10,7 @@
 getit_all()
 }
 \value{
-a tibble with following 64 variables:
+a dataframe with following 64 variables:
 \describe{
 \item{date}{date of data}
 \item{state}{state}

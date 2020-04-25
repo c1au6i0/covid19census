@@ -7,7 +7,7 @@
 getus_covid()
 }
 \value{
-a tibble
+a dataframe
 }
 \description{
 extracts time series from the git repository of the \href{ https://github.com/nytimes/covid-19-data }{NYT}

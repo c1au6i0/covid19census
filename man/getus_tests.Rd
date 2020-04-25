@@ -7,7 +7,7 @@
 getus_tests()
 }
 \value{
-a tibble with 15 variables
+a dataframe with 15 variables
 }
 \description{
 extracts information on tests, hospitalizations and other metrics at the \strong{State level} maintained by the

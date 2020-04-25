@@ -7,7 +7,7 @@
 getus_dex()
 }
 \value{
-a tibble
+a dataframe
 }
 \description{
 extracts DEX from the git repository of the

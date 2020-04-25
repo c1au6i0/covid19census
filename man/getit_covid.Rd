@@ -7,7 +7,7 @@
 getit_covid()
 }
 \value{
-a tibble with following 19 variables:
+a dataframe with following 19 variables:
 \describe{
 \item{date}{in \verb{ISO 8601} format}
 \item{state}{state}

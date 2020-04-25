@@ -14,7 +14,7 @@
 getus_all()
 }
 \value{
-A tibble with 304 variables. Data regarding the household composition, population sex and age and poverty levels,
+A dataframe with 304 variables. Data regarding the household composition, population sex and age and poverty levels,
 were scraped from the 2018 American Community Survey (ACS). Poverty was defined at the family level and not the household level in
 the ACS. Medical conditions, tabaco use, cancer and, data relative to the number of medical and emergency visits
 was obtained from the 2017 Mapping Medicare Disparities. From relative documentation listed in the source: "Prevalence rates are calculated
