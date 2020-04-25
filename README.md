@@ -74,7 +74,7 @@ Handbury, and Kevin Williams based on smartphone movement data provided
 by `PlaceIQ`.
 
 This is a list of U.S. datasets that can be accessed directly or in a
-`tibble` containing also COVID-19 metrics:
+`dataframe` containing also COVID-19 metrics:
 
   - `act_ind`: county-level device exposure index (DEX), an index of
     activity.
@@ -112,7 +112,7 @@ Salute](http://www.salute.gov.it/portale/home.html). Data regarding
 Ambientale](https://annuario.isprambiente.it/pon/basic/14)
 
 This is a list of Italy datasets that can be accessed directly or in a
-`tibble` containing also COVID-19 metrics:
+`dataframe` containing also COVID-19 metrics:
 
   - `bweight_it`: Body mass index in regions of Italy, in the general
     population.

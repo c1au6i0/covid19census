@@ -2,7 +2,7 @@
 #'
 #' extracts and translates time series form the git repository of the \href{https://github.com/pcm-dpc/COVID-19}{protezione civile}
 #'
-#' @return a tibble with following 19 variables:
+#' @return a dataframe with following 19 variables:
 #' \describe{
 #'      \item{date}{in `ISO 8601` format}
 #'      \item{state}{state}
@@ -128,7 +128,7 @@ getit_covid <- function() {
 #' extracts and translates time series form the git repository of the \href{https://github.com/pcm-dpc/COVID-19}{protezione civile} and
 #' combines them with other statistics related to italian population.
 #'
-#' @return a tibble with following 64 variables:
+#' @return a dataframe with following 64 variables:
 #' \describe{
 #'      \item{date}{date of data}
 #'      \item{state}{state}

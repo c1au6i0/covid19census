@@ -2,7 +2,7 @@
 #'
 #' extracts time series from the git repository of the \href{ https://github.com/nytimes/covid-19-data }{NYT}
 #'
-#' @return a tibble
+#' @return a dataframe
 #' @importFrom rlang .data
 #' @importFrom magrittr %>%
 #' @import vroom
@@ -43,7 +43,7 @@ getus_covid <- function() {
 #' extracts DEX from the git repository of the
 #' \href{https://github.com/COVIDExposureIndices/COVIDExposureIndices}{COVID-19 exposure indeces}
 #'
-#' @return a tibble
+#' @return a dataframe
 #' @details main metric is `dex_a`. In the \href{https://github.com/COVIDExposureIndices/COVIDExposureIndices}{repository}, they
 #' explains: \cite{In the context of the ongoing pandemic, the DEX measure may be biased if devices sheltering-in-place
 #' are not in the sample due to lack of movement. We report adjusted DEX values to help address this selection bias.
@@ -93,7 +93,7 @@ getus_dex <- function() {
 #'
 #' extracts information on tests, hospitalizations and other metrics at the \strong{State level} maintained by the
 #' \href{https://covidtracking.com/api}{the COVID Tracking Project}
-#' @return a tibble with 15 variables
+#' @return a dataframe with 15 variables
 #' @details a description of the variable can be found in the \href{https://covidtracking.com/api}{the COVID Tracking Project} and when possible
 #' was used verbatim for the description below
 #' \describe{
@@ -206,7 +206,7 @@ getus_tests <- function() {
 #'  \href{https://data.census.gov/cedsci/table?q=United%20States}{American Community Survey tables},
 #'  \href{https://data.cms.gov/mapping-medicare-disparities}{Mapping Medicare Disparities},
 #'  \href{https://github.com/COVIDExposureIndices/COVIDExposureIndices}{COVIDExposureIndices}
-#' @return A tibble with 304 variables. Data regarding the household composition, population sex and age and poverty levels,
+#' @return A dataframe with 304 variables. Data regarding the household composition, population sex and age and poverty levels,
 #'  were scraped from the 2018 American Community Survey (ACS). Poverty was defined at the family level and not the household level in
 #'  the ACS. Medical conditions, tabaco use, cancer and, data relative to the number of medical and emergency visits
 #'  was obtained from the 2017 Mapping Medicare Disparities. From relative documentation listed in the source: "Prevalence rates are calculated
@@ -390,5 +390,5 @@ getus_all <- function() {
 
   dat2 <- dplyr::left_join(dat2, tests_us, by = c("state", "date"))
 
-  dat2
+  as.data.frame(dat2)
 }

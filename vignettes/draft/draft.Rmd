@@ -64,7 +64,7 @@ Boom our package
 
 #  Alghorithm
 
-A family of `get` functions is employed by the `R` package to extract updated time-series data dynamically from different on-line sources.
+A family of `get` functions is employed by the `R` package to extract updated time-series data dynamically from different on-line sources and combine them and return a `dataframe`.
 
 For **U.S** the prefix of the functions to extract data is `getus_`, and it is followed by the specific metric of interest:
 
@@ -82,63 +82,103 @@ For **Italy**, the prefix of the function is `getit_` followed by `covid` or `al
   
 Age and sex of the population (2019),  first aid and medical guard visits (2018), smoking status (2018),  prevalence of chronic conditions (2018), annual-household income (2017), household crowding index (2018) and body-mass index were collect from [ISTAT](http://dati.istat.it/?lang=en). Prevalence of types of cancer patients (2016), influenza-vaccination coverage (2019) and the number of hospital beds per 1000 people (2017) were obtained from [Ministero della Salute](http://www.dati.salute.gov.it/). Data of particulate 2.5 (2017) comes from the [Istituto Superiore Per La protezione Ambientale](https://annuario.isprambiente.it/pon/basic/14).
 
-The documentation of the functions reports and describes each variable (`colnames`) and list all the data sources. Because of the large amount of variables, to facilitate exploration of the documentation, it was deemed more practical to create separate functions with separate documentation for each of the country, instead of creating a single function with an argument relative to the country.
+The package documentation reports and describes each variable (`colnames`) and lists all the data sources of each of the functions. Because of the large amount of variables and to facilitate exploration of the documentation, it was deemed more practical to create separate functions with separate documentation for each of the country, instead of creating a single function with an argument relative to the country.
 
   
 #  Implementation and use
 
-The package is current available on `github`. 
+The package is current available on [github](https://github.com/c1au6i0/covid19census). 
 
 ```{r libraries, echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
 library(ggrepel)
 library(scales)
+library(corrplot)
 theme_set(theme_bw())
 ```
 
+The following code launchs the functions and assign the returned `dataframes` to different names.
 
 ```{r get, results="asis", echo=TRUE}
 library(covid19census)
 dat_it <- getit_all()
 dat_us <- getus_all()
+
+unlist(lapply(list(dat_it, dat_us), class))
 ```
-
-
 
 
 
 ```{r tab_info, results="asis", echo=FALSE}
-tab1 <- as.data.frame(tribble(
-   ~getus_all, ~getit_all,
-   "304",   "64",
-   "2790",  "21",
-   "2020-01-21", "2020-02-24"
-  
-))
+tab1 <- as.data.frame(
+  tribble(
+    ~ getus_all,
+    ~ getit_all,
+    "304",
+    "64",
+    "2790",
+    "21",
+    "7",
+    "4",
+    "2020-01-21",
+    "2020-02-24"
+    
+  )
+)
 
-rownames(tab1) <- c("variables", "counties-regions", "from") 
+rownames(tab1) <-
+  c("variables", "counties-regions", "sources", "from")
 
 
-print(xtable(tab1, caption = "Info regarding dataframes", label="tab:tab1"), comment=FALSE)
+print(
+  xtable(
+    tab1,
+    caption = "Dataframes retuned by functions",
+    label = "tab:tab1",
+    align = c("c", "c", "c")
+  ),
+  comment = FALSE
+)
 ```
 
-```{r fig_corr, fig.cap="COVID-19 Mortality and Obesity in Italy", results="asis", echo=FALSE, fig.height=4, fig.width=4, warning=FALSE, message=FALSE}
+```{r fig_corr, fig.cap="United States Correlation Matrix", results="asis", echo=FALSE, fig.height=4, fig.width=4, warning=FALSE, message=FALSE}
 
-dat_it %>% 
-  filter(date == max(date)) %>% 
-  ggplot(aes(cmr, bweight_obese)) +
-      geom_smooth(method = "lm", formula = y~x, se = FALSE, lwd = 0.8, colour = "gray35", lty = 4) +
-        geom_label_repel(aes(label = region), label.size = 0.1, position = position_stack(vjust = 1), size = 3) +
-        scale_x_continuous(labels = percent_format(scale = 1, accuracy = 1)) +
-        scale_y_continuous(limits = c(6, 13), breaks = seq(6, 13, 1), labels = percent_format(scale = 1, accuracy = 1)) +
-        geom_point(size = 3) +
+dat_us %>%
+  filter(date == max(date)) %>%
+  # get 65 and over
+  mutate(age65_over = rowSums(select(., matches(
+    "perc_[6|7|8][0-9]"
+  )))) %>%
+  select(
+    "cases",
+    "deaths",
+    "age65_over",
+    "perc_poverty",
+    "cancer_all" ,
+    "diabetes",
+    "asthma",
+    "hypertension",
+    "tobacco_use",
+    "tot_beds"
+  ) %>%
+  rename(
+    "age 65 and over" =  age65_over,
+    "in poverty" =  perc_poverty,
+    "with cancer" = cancer_all,
+    "with diabetes" = diabetes,
+    "with asthma" = asthma,
+    "with hypertension" = hypertension,
+    "using tobacco" = tobacco_use,
+    "hospital beds" = tot_beds
+    
+  ) %>%
+  na.omit() %>%
+  cor() %>%
+  corrplot(method = "color",
+           tl.cex  = 0.7,
+           tl.col = "black",
+           cl.cex = 0.7)
 
-    labs(
-          title = "COVID-19 Mortality and Obesity",
-          subtitle = paste0("date: ", max(dat_it$date)),
-          x = "Obesity (% of regional population)",
-          y = "Case-Mortality Rate"
-          ) 
 ```
 
 
