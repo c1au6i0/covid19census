@@ -65,7 +65,7 @@
 
 \begin{document}
 
-\title{covid19census: U.S. and Italy COVID-19 epidemiolagical data with
+\title{covid19census: U.S. and Italy COVID-19 epidemiolagical data, joined with
 demographic and health related metrics}
 
 \author{%
@@ -75,12 +75,12 @@ Baltimore, MD, USA}\email{\href{mailto:claudio.zanettini@gmail.com}{claudio.zane
 \name{Luigi Marchionni}\address{Department of Oncology, Johns Hopkins University School of Medicine,
 Baltimore, MD, USA}\email{\href{mailto:marchion@jhu.edu}{marchion@jhu.edu}}\thanks{Corresponding author; Email: \href{mailto:marchion@jhu.edu}{marchion@jhu.edu}}
 \and
-\name{Others to be add}\address{Another University}\email{\href{mailto:otherst@example.com}{otherst@example.com}}
+\name{Others to be add}\address{Another University}\email{\href{mailto:otherstobeadd@example.com}{otherstobeadd@example.com}}
 }
 
-\abstract{This is the abstract.
-
-It consists of two paragraphs.}
+\abstract{This is the abstract. Claudio's favourite colour is blue, Claudio's
+least favirite part of writing a paper is the abstract. Claudio has
+postponed till the end the writing of the abstract.}
 
 \date{\today}
 
@@ -98,28 +98,31 @@ epidemiological data is of paramount importance, not only to guide the
 evaluation and implementation of non-pharmacological interventions
 (NPI), but also to optimize drug development.
 
-For example, early analysis and modeling of COVID-19 confirmed cases and
-deaths was employed to assess the effects of ongoing NPI in China and
-Europe \citep{flaxman2020, prem2020tlph}. Moreover, aggregation of
-COVID-19 epidemiological data with that regarding i) the seasonality of
-other coronoviruses, ii) U.S. clinical care capacity, allowed to make
-long-term predictions on possible effective containment strategies
+For example, analysis and modeling of COVID-19 confirmed cases and
+deaths has been employed, in early phases of the pandemic, to assess the
+effects of NPI in China and Europe \citep{flaxman2020, prem2020tlph}.
+More recently, the increased flow of COVID-19 data, and the integration
+of different sources of information (seasonality of other coronoviruses,
+U.S. clinical care) has allowed even more long-term predictions of the
+feasibility and effectiveness of possible containment strategies
 \citep{kissler2020s}.
 
 Similarly, early evidences of the correlation between Bacille
 Calmette-Guérin vaccination and COVID-19 outcomes, spur several clinical
 investigations \citep{miller2020m, shet2020m};
 \href{https://www.who.int/news-room/commentaries/detail/bacille-calmette-gu\%C3\%A9rin-(bcg)-vaccination-and-covid-19}{WHO}{]}.
-However, the implications and validity of that initial observation was
-curtailed by subsequent models that took into account additional factors
+However, the implications and conclusions of that initial observation
+were curtailed by subsequent models that included more factors
 \citep[e.s. age;][]{fukui2020m}. Overall, these few examples underscore
-the importance, in general, of sharing data and, in particular, of
-combining of datasets from different sources, for addressing the
-challenges of the current pandemic emergency.
+the importance in general, of providing public access to ongoing
+COVID-19 metrics and in particular, of including multiple heterogeneous
+collections of data in modeling and analysis, to improve predictions and
+ultimately address the many challenges of the current pandemic
+emergency.
 
 The current \texttt{R} package provides tools to rapidly extract United
 States and Italy COVID-19 epidemiological metrics (at county and
-regional level, respectivelty) from different sources and combine them
+regional level, respectively) from different sources and combine them
 with other demographic and health related datasets. The goal of the
 package is to facilitate multifactorial analysis and modeling of
 COVID-19 data by the scientific community.
@@ -128,8 +131,8 @@ COVID-19 data by the scientific community.
 \section{Alghorithm}\label{alghorithm}}
 
 A family of \texttt{get} functions is employed by the \texttt{R} package
-to extract updated time-series data dynamically from different on-line
-sources and combine them and return a \texttt{dataframe}.
+to dynamically extract updated time-series data from different on-line
+sources, combine them and finally return a \texttt{dataframe}.
 
 For \textbf{U.S} the prefix of the functions to extract data is
 \texttt{getus\_}, and it is followed by the specific metric of interest:
@@ -179,7 +182,7 @@ followed by \texttt{covid} or \texttt{all}.
   \href{\%22https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-regioni/dpc-covid19-ita-regioni.csv\%22}{Protezione
   Civile}.
 \item
-  \texttt{getit\_all}: executes the above function and join the results
+  \texttt{getit\_all}: executes the above function, join the results
   with other datasets statically contained in the package and returns a
   \texttt{dataframe} with 64 variables.
 \end{itemize}
@@ -198,11 +201,10 @@ Per La protezione Ambientale}.
 
 The package documentation reports and describes each variable
 (\texttt{colnames}) and lists all the data sources of each of the
-functions. Because of the large amount of variables and in order to
+functions. Because of the large amount of variables and, in order to
 facilitate exploration of the documentation, it was deemed more
 practical to create separate functions with separate documentation for
-each of the country, instead of creating a single function with an
-argument relative to the country.
+each of the country.
 
 \hypertarget{implementation-and-use}{%
 \section{Implementation and use}\label{implementation-and-use}}
@@ -240,7 +242,7 @@ different names.
 \end{verbatim}
 
 \begin{verbatim}
-## US test data up to 2020-04-25 successfully retrived!
+## US test data up to 2020-04-26 successfully retrived!
 \end{verbatim}
 
 \begin{Shaded}
@@ -278,22 +280,25 @@ columns & 304 & 64 \\
 \label{tab:tab_dat}
 \end{table}
 
-Therefore, data exploration and modeling of COVID-19 metrics can be
-conveniently performed on single dataframes that combine heterogeneous
-datasets from multiple sources.
+Data exploration and modeling can be conveniently performed on a
+(single) dataframe that contains COVID-19 as well as many other metrics
+retrieved from multiple sources.
 
 \begin{figure}[p]
 \includegraphics[width=1\linewidth]{draft_files/figure-latex/fig_corr-1} \caption{United States Correlation Matrix. An example of exploratory analysis of data from different sources combined by the function `getus\_all`. Colours indicates Pearson's correlation between pairs of variables}\label{fig:fig_corr}
 \end{figure}
 
-For example, in {[}figure \ref{fig:fig_corr}{]} correlation analysis of
-pair of selected U.S. variables and relative visualization.
+For example, in {[}figure \ref{fig:fig_corr}{]} is reported a
+correlation analysis of pair of selected U.S. variables.
 
-\hypertarget{discussion}{%
-\section{Discussion}\label{discussion}}
+\hypertarget{conclusions}{%
+\section{Conclusions}\label{conclusions}}
 
-The \texttt{R} package \texttt{covid19census} does this and that so use
-it
+The \texttt{R} package \texttt{covid19census} extracts and integrates
+epidemiological COVID-19 data (Italy and U.S at the regional and county
+level, respectively) with several other demographic and health related
+indexes. By combining data form different sources, the package is aimed
+at promoting and simplifying the analysis and modeling of COVID-19 data.
 
 
 \begin{notes}[Acknowledgements]
