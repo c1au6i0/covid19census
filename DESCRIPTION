@@ -27,7 +27,8 @@ Depends:
 Suggests: 
     testthat,
     knitr,
-    rmarkdown 
+    rmarkdown,
+    covr
 Remotes:
     Bioconductor/BiocStyle
 VignetteBuilder: knitr
