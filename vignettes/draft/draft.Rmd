@@ -1,5 +1,5 @@
 ---
-title: "covid19census:  U.S. and Italy COVID-19 epidemiolagical data, joined with demographic and health related metrics"
+title: "covid19census:  U.S. and Italy COVID-19 epidemiolagical data joined with demographic and health related metrics"
 #date: "`r Sys.Date()`"
 authors:
   - name: Claudio Zanettini
@@ -65,7 +65,7 @@ A family of `get` functions is employed by the `R` package to dynamically extrac
 
 For **U.S** the prefix of the functions to extract data is `getus_`, and it is followed by the specific metric of interest:
 
-  * `getus_covid`: extracts data of COVID-19 from the [New York Time git repository](https://github.com/nytimes/covid-19-data).
+  * `getus_covid`: extracts data of COVID-19 from the [New York Time github repository](https://github.com/nytimes/covid-19-data).
   * `getus_dex`: extracts data of DEX, an [activity indexes](https://github.com/COVIDExposureIndices/COVIDExposureIndices) calculated  by  Victor Couture, Jonathan Dingel, Allison Green, Jessie Handbury, and Kevin Williams based on smartphone movement data provided by `PlaceIQ`.
   * `getus_tests`: extract info regarding number of tests performed, their results and hospitalization from the repository of [the Covid Tracking Project](https://covidtracking.com/api}).
   * `getus_all`: executes all the above functions and join the results with other datasets statically contained in the package, and returns a `dataframe` with 304 variables.
