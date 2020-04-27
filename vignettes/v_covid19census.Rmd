@@ -8,12 +8,12 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 author:
 - name: Claudio Zanettini
-  affiliation: 
-  - Shared affiliation
-  - Additional affiliation
+  affiliation: Department of Oncology, Johns Hopkins University School of Medicine, Baltimore, MD, USA
+  email: claudio.zanettini@gmail.com
+  
 - name: Luigi Marchionni
-  affiliation: Shared affiliation
-  email: corresponding@author.com
+  affiliation: Department of Oncology, Johns Hopkins University School of Medicine, Baltimore, MD, USA
+  email: marchion@jhu.edu
 ---
 
 ```{r, include = FALSE}
@@ -25,7 +25,7 @@ knitr::opts_chunk$set(
 
 ## Objective and Overview
 
-The goal of `covid19census`is to facilitate the exploration of the possible relationship between demographic, heath related, environmental and economic metrics and, health outcomes and spreading of COVID-19. 
+The goal of `covid19census`is to facilitate the exploration of possible relationship between demographic, heath related, environmental, economic metrics, health indexes and metrics of spreading/outcomes of COVID-19 epidemic in U.S and Italy. 
 
 The package provide functions to extract updated information of COVID-19 tests, confirmed cases, hospitalization and, aggregates those info with datasets obtained from other government and institutional sources.  Moreover, detailed documentation regarding each variables and their sources is provided in the relative documentation.
 
@@ -50,6 +50,7 @@ dat_us <-  getus_all()
 
 dim(dat_us)
 ```
+
 For *Italy" the prefix of the function is `getit_` , followed by the specific metric of interest:
 
   * `getit_covid`: extracts data of COVID-19 from the [Protezione Civle]( "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-regioni/dpc-covid19-ita-regioni.csv").

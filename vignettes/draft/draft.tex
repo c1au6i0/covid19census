@@ -78,13 +78,16 @@ Baltimore, MD, USA}\email{\href{mailto:marchion@jhu.edu}{marchion@jhu.edu}}\than
 \name{Others to be add}\address{Another University}\email{\href{mailto:otherstobeadd@example.com}{otherstobeadd@example.com}}
 }
 
-\abstract{This is the abstract. Claudio's favourite colour is blue, Claudio's
-least favirite part of writing a paper is the abstract. Claudio has
-postponed till the end the writing of the abstract.}
+\abstract{The R package \texttt{covid19census} provides funcions to extract U.S.
+and Italy COVID-19 epidemiological data (at the regional and county
+level, respectively) and combine the results with relevant demographic
+and health related metrics obtained from other sources. The aim of the
+packages is to promote and facilitate modeling and analysis of COVID-19
+data by the scientific community.}
 
 \date{\today}
 
-\keywords{covid19; R}
+\keywords{COVID-19; R}
 
 \maketitle
 
@@ -98,8 +101,8 @@ epidemiological data is of paramount importance, not only to guide the
 evaluation and implementation of non-pharmacological interventions
 (NPI), but also to optimize drug development.
 
-For example, analysis and modeling of COVID-19 confirmed cases and
-deaths has been employed, in early phases of the pandemic, to assess the
+For example, in early phases of the pandemic, analysis and modeling of
+COVID-19 confirmed cases and deaths has been employed to assess the
 effects of NPI in China and Europe \citep{flaxman2020, prem2020tlph}.
 More recently, the increased flow of COVID-19 data, and the integration
 of different sources of information (seasonality of other coronoviruses,
@@ -108,7 +111,7 @@ feasibility and effectiveness of possible containment strategies
 \citep{kissler2020s}.
 
 Similarly, early evidences of the correlation between Bacille
-Calmette-Guérin vaccination and COVID-19 outcomes, spur several clinical
+Calmette-Guérin vaccination and COVID-19 outcomes spur several clinical
 investigations \citep{miller2020m, shet2020m};
 \href{https://www.who.int/news-room/commentaries/detail/bacille-calmette-gu\%C3\%A9rin-(bcg)-vaccination-and-covid-19}{WHO}{]}.
 However, the implications and conclusions of that initial observation
@@ -116,23 +119,26 @@ were curtailed by subsequent models that included more factors
 \citep[e.s. age;][]{fukui2020m}. Overall, these few examples underscore
 the importance in general, of providing public access to ongoing
 COVID-19 metrics and in particular, of including multiple heterogeneous
-collections of data in modeling and analysis, to improve predictions and
-ultimately address the many challenges of the current pandemic
-emergency.
+collections of data in modeling and analysis in order to improve
+predictions and ultimately, to address the many challenges of the
+current pandemic emergency.
 
 The current \texttt{R} package provides tools to rapidly extract United
 States and Italy COVID-19 epidemiological metrics (at county and
-regional level, respectively) from different sources and combine them
-with other demographic and health related datasets. The goal of the
+regional level, respectively) from different sources, and to combine
+them with other demographic and health related datasets. The goal of the
 package is to facilitate multifactorial analysis and modeling of
-COVID-19 data by the scientific community.
+COVID-19 data by the scientific community. Specific effort was made to
+provide a detailed documentation of each of the variables returned by
+the functions, and to list external sources and methodology of their
+collection, with the objective of promoting appropriate analysis.
 
 \hypertarget{alghorithm}{%
 \section{Alghorithm}\label{alghorithm}}
 
 A family of \texttt{get} functions is employed by the \texttt{R} package
 to dynamically extract updated time-series data from different on-line
-sources, combine them and finally return a \texttt{dataframe}.
+sources, combine them, and to return a \texttt{dataframe}.
 
 For \textbf{U.S} the prefix of the functions to extract data is
 \texttt{getus\_}, and it is followed by the specific metric of interest:
@@ -152,7 +158,8 @@ For \textbf{U.S} the prefix of the functions to extract data is
 \item
   \texttt{getus\_tests}: extract info regarding number of tests
   performed, their results and hospitalization from the repository of
-  \href{https://covidtracking.com/api\%7D}{the Covid Tracking Project}.
+  \href{https://covidtracking.com/api\%7D}{the Covid Tracking Project}
+  (at the state level).
 \item
   \texttt{getus\_all}: executes all the above functions and join the
   results with other datasets statically contained in the package, and
@@ -200,11 +207,10 @@ particulate 2.5 (2017) comes from the
 Per La protezione Ambientale}.
 
 The package documentation reports and describes each variable
-(\texttt{colnames}) and lists all the data sources of each of the
-functions. Because of the large amount of variables and, in order to
-facilitate exploration of the documentation, it was deemed more
-practical to create separate functions with separate documentation for
-each of the country.
+(\texttt{colnames}) and lists all relative data sources. Because of the
+large amount of variables and in order to facilitate exploration of the
+documentation, it was deemed more practical to create separate functions
+with separate documentation for each of the country.
 
 \hypertarget{implementation-and-use}{%
 \section{Implementation and use}\label{implementation-and-use}}
@@ -224,7 +230,7 @@ different names.
 \end{Shaded}
 
 \begin{verbatim}
-## Italy COVID-19 data up to 2020-04-26 17:00:00 successfully retrived!
+## Italy COVID-19 data up to 2020-04-27 17:00:00 successfully retrived!
 \end{verbatim}
 
 \begin{Shaded}
@@ -272,22 +278,20 @@ columns & 304 & 64 \\
   from & 2020-01-21 & 2020-02-24 \\ 
    \hline
 \end{tabular}
-\caption{Dataframes retuned by the functions.
-    The table reports number of columns, number of unique regions (Italy) and counties (U.S.),
-    unique sources of data was scarped and earliest data related to COVID-19 metrics, of the dataframes returned
-    by the two functions.
+\caption{Information regarding the dataframes retuned by the functions.
+    The table reports, for the dataframes returned by each of the functions: i. number of columns; ii.number of unique regions (Italy) and counties (U.S.);  number of unique data sourfces; earliest date of COVID-19 metric.
     } 
 \label{tab:tab_dat}
 \end{table}
 
 Data exploration and modeling can be conveniently performed on a
 (single) dataframe that contains COVID-19 as well as many other metrics
-retrieved from multiple sources. For example, in {[}figure
-\ref{fig:fig_corr}{]} is reported a correlation analysis of pair of
-selected U.S. variables.
+retrieved from multiple sources. For example, a correlation analysis of
+pair of selected U.S. variables is reported in {[}figure
+\ref{fig:fig_corr}{]}.
 
 \begin{figure}[p]
-\includegraphics[width=1\linewidth]{draft_files/figure-latex/fig_corr-1} \caption{United States Correlation Matrix. An example of exploratory analysis of data from different sources combined by the function `getus\_all`. Colours indicates Pearson's correlation between pairs of variables}\label{fig:fig_corr}
+\includegraphics[width=1\linewidth]{draft_files/figure-latex/fig_corr-1} \caption{United States Correlation Matrix. An example of exploratory analysis on data returned by the function `getus\_all`. Colours indicates Pearson's correlation between pairs of variables.}\label{fig:fig_corr}
 \end{figure}
 
 \hypertarget{conclusions}{%
@@ -296,15 +300,19 @@ selected U.S. variables.
 The \texttt{R} package \texttt{covid19census} extracts and integrates
 epidemiological COVID-19 data (Italy and U.S at the regional and county
 level, respectively) with several other demographic and health related
-indexes. By combining data form different sources, the package is aimed
-at promoting and simplifying the analysis and modeling of COVID-19 data.
+indexes. Currently, the dataframes returned by the main functions
+\texttt{getus\_all} and \texttt{getit\_all}, consist of 304 variables
+for 2790 U.S counties, and of 64 variables for 21 Italy regions (19
+regions and autonomous provinces), respectively. By combining data form
+different sources, the package is aimed at promoting and simplifying the
+analysis and modeling of COVID-19 data by the scientific comunity.
 
 
 \begin{notes}[Acknowledgements]
-\emph{Funding} : L.M. was supported by NIH-NCI grants P30CA006973,
-U01CA196390, R01CA200859and the Department of Defense (DoD) office of
-the Congressionally Directed Medical Research Programs (CDMRP) award
-W81XWH-16-1-0739.
+\emph{Funding} : L.M. and C.Z were supported by NIH-NCI grants
+P30CA006973, U01CA196390, R01CA200859and the Department of Defense (DoD)
+office of the Congressionally Directed Medical Research Programs (CDMRP)
+award W81XWH-16-1-0739.
 
 \emph{Conflict of interest} : none.
 \end{notes}

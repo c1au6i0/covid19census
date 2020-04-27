@@ -14,10 +14,10 @@ authors:
     address: Another University
 
 abstract: |
-  This is the abstract. Claudio's favourite colour is blue, Claudio's least favirite part of writing a paper is the abstract. Claudio has postponed till the end the writing of the abstract.
-
+  The R package `covid19census` provides funcions to extract U.S. and Italy COVID-19 epidemiological data (at the regional and county level, respectively) and combine the results with relevant demographic and health related metrics obtained from other sources. The aim of the packages is to promote and facilitate modeling and analysis of COVID-19 data by the scientific community.
+  
 acknowledgements: |
-  *Funding* : L.M. was supported by NIH-NCI grants P30CA006973, U01CA196390, R01CA200859and the Department of  Defense (DoD) office of the Congressionally Directed Medical Research Programs (CDMRP) award W81XWH-16-1-0739.
+  *Funding* : L.M. and C.Z were supported by NIH-NCI grants P30CA006973, U01CA196390, R01CA200859and the Department of  Defense (DoD) office of the Congressionally Directed Medical Research Programs (CDMRP) award W81XWH-16-1-0739.
   
   *Conflict of interest* : none.
 
@@ -25,7 +25,7 @@ availability: |
   covid19census is available under the MIT license at https://github.com/c1au6i0/covid19census
 
 keywords:
-  - covid19
+  - COVID-19
   - R
 
 #fontsize: 12pt
@@ -50,24 +50,24 @@ library(xtable) # Creates tables that follow OUP guidelines; other options, such
 
   In the mist of a virus pandemic, unraveling the constant flow of epidemiological data is of paramount importance, not only to  guide the evaluation and implementation of non-pharmacological interventions (NPI), but also to optimize drug development. 
 
-For example,  analysis and modeling of COVID-19 confirmed cases and deaths has been employed, in early phases of the pandemic, to assess the effects of NPI in China and Europe [@flaxman2020; @prem2020tlph]. More recently, the increased flow of COVID-19 data, and the integration of different sources of information (seasonality of  other coronoviruses,  U.S. clinical care) has allowed even more long-term predictions of the feasibility and effectiveness of possible containment strategies [@kissler2020s].
+For example, in early phases of the pandemic, analysis and modeling of COVID-19 confirmed cases and deaths has been employed to assess the effects of NPI in China and Europe [@flaxman2020; @prem2020tlph]. More recently, the increased flow of COVID-19 data, and the integration of different sources of information (seasonality of  other coronoviruses,  U.S. clinical care) has allowed even more long-term predictions of the feasibility and effectiveness of possible containment strategies [@kissler2020s].
 
-Similarly, early evidences of the correlation between Bacille Calmette-Guérin vaccination and COVID-19 outcomes, spur several clinical investigations [@miller2020m; @shet2020m];
+Similarly, early evidences of the correlation between Bacille Calmette-Guérin vaccination and COVID-19 outcomes spur several clinical investigations [@miller2020m; @shet2020m];
 [WHO](https://www.who.int/news-room/commentaries/detail/bacille-calmette-gu%C3%A9rin-(bcg)-vaccination-and-covid-19)].
-However, the implications and conclusions of that initial observation were curtailed  by subsequent models that included more factors [e.s. age; @fukui2020m]. Overall, these few examples underscore the importance in general, of providing public access to ongoing COVID-19 metrics and in particular, of including  multiple heterogeneous collections of data in modeling and analysis, to improve predictions and ultimately address the many challenges of the current pandemic emergency.
+However, the implications and conclusions of that initial observation were curtailed  by subsequent models that included more factors [e.s. age; @fukui2020m]. Overall, these few examples underscore the importance in general, of providing public access to ongoing COVID-19 metrics and in particular, of including  multiple heterogeneous collections of data in modeling and analysis in order to improve predictions and ultimately, to address the many challenges of the current pandemic emergency.
 
-The current `R` package provides tools to rapidly extract United States and Italy COVID-19 epidemiological metrics (at county and regional level, respectively) from different sources and combine them with other demographic and health related datasets. The goal of the package is to facilitate multifactorial analysis and modeling of COVID-19 data by the scientific community.
+The current `R` package provides tools to rapidly extract United States and Italy COVID-19 epidemiological metrics (at county and regional level, respectively) from different sources, and to combine them with other demographic and health related datasets. The goal of the package is to facilitate multifactorial analysis and modeling of COVID-19 data by the scientific community. Specific effort was made to provide a detailed documentation of each of the variables returned by the functions, and to list external sources and methodology of their collection, with the objective of promoting appropriate analysis. 
 
 
 #  Alghorithm
 
-A family of `get` functions is employed by the `R` package to dynamically extract updated time-series data from different on-line sources, combine them and finally return a `dataframe`.
+A family of `get` functions is employed by the `R` package to dynamically extract updated time-series data from different on-line sources, combine them, and to return a `dataframe`.
 
 For **U.S** the prefix of the functions to extract data is `getus_`, and it is followed by the specific metric of interest:
 
   * `getus_covid`: extracts data of COVID-19 from the [New York Time github repository](https://github.com/nytimes/covid-19-data).
   * `getus_dex`: extracts data of DEX, an [activity indexes](https://github.com/COVIDExposureIndices/COVIDExposureIndices) calculated  by  Victor Couture, Jonathan Dingel, Allison Green, Jessie Handbury, and Kevin Williams based on smartphone movement data provided by `PlaceIQ`.
-  * `getus_tests`: extract info regarding number of tests performed, their results and hospitalization from the repository of [the Covid Tracking Project](https://covidtracking.com/api}).
+  * `getus_tests`: extract info regarding number of tests performed, their results and hospitalization from the repository of [the Covid Tracking Project](https://covidtracking.com/api}) (at the state level).
   * `getus_all`: executes all the above functions and join the results with other datasets statically contained in the package, and returns a `dataframe` with 304 variables.
   
 Data regarding the household composition, population sex and age and poverty levels (2018), were retrieved from the [American Community Survey](https://data.census.gov/cedsci/table?q=United%20States). Medical conditions, tobacco use, cancer and, data relative to the number of medical and emergency visits (2017) of medicare beneficiaries were obtained from the [Mapping Medicare Disparities](https://data.cms.gov/mapping-medicare-disparities). The number of hospital beds per county (2020) was calculated from data of the  [Homeland Infrastructure Foundation](https://hifld-geoplatform.opendata.arcgis.com/datasets/hospitals/data?page=18).
@@ -79,7 +79,7 @@ For **Italy**, the prefix of the function is `getit_` followed by `covid` or `al
   
 Age and sex of the population (2019),  first aid and medical guard visits (2018), smoking status (2018),  prevalence of chronic conditions (2018), annual-household income (2017), household crowding index (2018) and body-mass index were collect from [ISTAT](http://dati.istat.it/?lang=en). Prevalence of types of cancer patients (2016), influenza-vaccination coverage (2019) and the number of hospital beds per 1000 people (2017) were obtained from [Ministero della Salute](http://www.dati.salute.gov.it/). Data of particulate 2.5 (2017) comes from the [Istituto Superiore Per La protezione Ambientale](https://annuario.isprambiente.it/pon/basic/14).
 
-The package documentation reports and describes each variable (`colnames`) and lists all the data sources of each of the functions. Because of the large amount of variables and, in order to facilitate exploration of the documentation, it was deemed more practical to create separate functions with separate documentation for each of the country.
+The package documentation reports and describes each variable (`colnames`) and lists all relative data sources. Because of the large amount of variables and in order to facilitate exploration of the documentation, it was deemed more practical to create separate functions with separate documentation for each of the country.
 
   
 #  Implementation and use
@@ -137,10 +137,8 @@ rownames(tab1) <-
 print(
   xtable(
     tab1,
-    caption = "Dataframes retuned by the functions.
-    The table reports number of columns, number of unique regions (Italy) and counties (U.S.),
-    unique sources of data was scarped and earliest data related to COVID-19 metrics, of the dataframes returned
-    by the two functions.
+    caption = "Information regarding the dataframes retuned by the functions.
+    The table reports, for the dataframes returned by each of the functions: i. number of columns; ii.number of unique regions (Italy) and counties (U.S.);  number of unique data sourfces; earliest date of COVID-19 metric.
     ",
     label = "tab:tab_dat",
     align = c("c", "c", "c")
@@ -149,10 +147,10 @@ print(
 )
 ```
 
-Data exploration and modeling  can be conveniently performed on a (single) dataframe that contains COVID-19 as well as many other metrics retrieved from multiple sources. For example, in  [figure \ref{fig:fig_corr}] is reported a correlation analysis of pair of selected U.S. variables. 
+Data exploration and modeling  can be conveniently performed on a (single) dataframe that contains COVID-19 as well as many other metrics retrieved from multiple sources. For example,  a correlation analysis of pair of selected U.S. variables is reported in  [figure \ref{fig:fig_corr}].
 
 ```{r fig_corr, fig.cap=fig_cap, results="asis", echo=FALSE, fig.height=4, fig.width=4, warning=FALSE, message=FALSE}
-fig_cap <- "United States Correlation Matrix. An example of exploratory analysis of data from different sources combined by the function `getus\\_all`. Colours indicates Pearson's correlation between pairs of variables"
+fig_cap <- "United States Correlation Matrix. An example of exploratory analysis on data returned by the function `getus\\_all`. Colours indicates Pearson's correlation between pairs of variables."
 
 dat_us %>%
   filter(date == max(date)) %>%
@@ -198,7 +196,7 @@ dat_us %>%
 
 # Conclusions
 
-The `R` package `covid19census` extracts and integrates epidemiological COVID-19 data (Italy and U.S at the regional and county level, respectively) with several other demographic and health related indexes. By combining data form different  sources, the package is aimed at promoting and simplifying the analysis and modeling of COVID-19 data.
+The `R` package `covid19census` extracts and integrates epidemiological COVID-19 data (Italy and U.S at the regional and county level, respectively) with several other demographic and health related indexes. Currently, the dataframes returned by the main functions `getus_all` and `getit_all`, consist of  304 variables for 2790 U.S counties, and of 64 variables for 21 Italy regions (19 regions and autonomous provinces), respectively. By combining data form different sources, the package is aimed at promoting and simplifying the analysis and modeling of COVID-19 data by the scientific comunity.
 
 
 <!-- rmarkdown::render("/Users/heverz/Documents/R_projects/covid19census/vignettes/draft/draft.Rmd", output_file= "draft.pdf") -->
