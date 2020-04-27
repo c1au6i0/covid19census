@@ -27,4 +27,5 @@ Suggests:
     testthat,
     knitr,
     rmarkdown
+Remotes: Bioconductor/BiocStyle
 VignetteBuilder: knitr
