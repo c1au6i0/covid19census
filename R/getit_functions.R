@@ -32,10 +32,9 @@
 #' @import vroom
 #' @export
 getit_covid <- function() {
+  url_data <- "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-regioni/dpc-covid19-ita-regioni.csv"
 
-  url_data <-  "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-regioni/dpc-covid19-ita-regioni.csv"
-
-  if(RCurl::url.exists(url_data) == FALSE){
+  if (RCurl::url.exists(url_data) == FALSE) {
     stop("Something wrong with the repository or your internet connection!")
   }
 
@@ -86,36 +85,37 @@ getit_covid <- function() {
       note_it = "_",
       note_eng = "_"
     )
-  )  %>%
+  ) %>%
     dplyr::mutate(
       cmr = .data$deaths / .data$total_cases * 100
     ) %>%
     dplyr::mutate(region = stringr::str_replace(.data$region, "-", " "))
 
   # just reorder
-  dat <- dat[,
-      c(
-        "date",
-        "state",
-        "region_cod",
-        "region",
-        "lat",
-        "long",
-        "cmr",
-        "total_cases",
-        "deaths",
-        "tests",
-        "hospitalized_with_symptoms",
-        "intensive_care_unit",
-        "total_hospitalized",
-        "home_quarantine",
-        "total_positives",
-        "change_positives",
-        "new_positives",
-        "recovered_released",
-        "people_tested"
-      )
-   ]
+  dat <- dat[
+    ,
+    c(
+      "date",
+      "state",
+      "region_cod",
+      "region",
+      "lat",
+      "long",
+      "cmr",
+      "total_cases",
+      "deaths",
+      "tests",
+      "hospitalized_with_symptoms",
+      "intensive_care_unit",
+      "total_hospitalized",
+      "home_quarantine",
+      "total_positives",
+      "change_positives",
+      "new_positives",
+      "recovered_released",
+      "people_tested"
+    )
+  ]
 
   message(paste0("Italy COVID-19 data up to ", max(dat$date), " successfully retrived!"))
 

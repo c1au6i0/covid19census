@@ -163,10 +163,10 @@ For \textbf{U.S} the prefix of the functions to extract data is
 \item
   \texttt{getus\_all}: executes all the above functions and join the
   results with other datasets statically contained in the package, and
-  returns a \texttt{dataframe} with 313 variables.
+  returns a \texttt{dataframe} with 314 variables.
 \end{itemize}
 
-Data regarding the household composition, population sex and age and
+Data regarding the household composition, population sex, race, age and
 poverty levels (2018), were retrieved from the
 \href{https://data.census.gov/cedsci/table?q=United\%20States}{American
 Community Survey}. Medical conditions, tobacco use, cancer and, data
@@ -176,7 +176,10 @@ medicare beneficiaries were obtained from the
 Medicare Disparities}. The number of hospital beds per county (2020) was
 calculated from data of the
 \href{https://hifld-geoplatform.opendata.arcgis.com/datasets/hospitals/data?page=18}{Homeland
-Infrastructure Foundation}.
+Infrastructure Foundation}. Emissions of particulate 2.5 (2016) were
+reported by
+\href{http://fizz.phys.dal.ca/~atmos/martin/?page_id=140\#V4.NA.02.MAPLE}{the
+Atmoshpheric Composition Analysis Group}.
 
 For \textbf{Italy}, the prefix of the function is \texttt{getit\_}
 followed by \texttt{covid} or \texttt{all}.
@@ -272,7 +275,7 @@ reported in table below {[}table \ref{tab:tab_dat}{]}.
   \hline
  & getus\_all & getit\_all \\ 
   \hline
-columns & 313 & 64 \\ 
+columns & 314 & 64 \\ 
   counties-regions & 2790 & 21 \\ 
   sources & 7 & 4 \\ 
   from & 2020-01-21 & 2020-02-24 \\ 
@@ -301,7 +304,7 @@ The \texttt{R} package \texttt{covid19census} extracts and integrates
 epidemiological COVID-19 data (Italy and U.S at the regional and county
 level, respectively) with several other demographic and health related
 indexes. Currently, the dataframes returned by the main functions
-\texttt{getus\_all} and \texttt{getit\_all}, consist of 313 variables
+\texttt{getus\_all} and \texttt{getit\_all}, consist of 314 variables
 for 2790 U.S counties, and of 64 variables for 21 Italy regions (19
 regions and autonomous provinces), respectively. By combining data form
 different sources, the package is aimed at promoting and simplifying the

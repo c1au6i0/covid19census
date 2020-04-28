@@ -11,14 +11,14 @@ library(tabulizer)
 # xxxxxxxxxxxxxxxx-------------------
 # age and sex- age_sex_us ---------
 
-age_sex_all_us <- vroom("data-raw/us/american_comunity_survey_2018/age_sex/ACSST5Y2018.S0101_data_with_overlays_2020-04-14T063202.csv",
+age_sex_all_us <- vroom("data-raw/it_us/us/american_comunity_survey_2018/age_sex/ACSST5Y2018.S0101_data_with_overlays_2020-04-14T063202.csv",
   skip = 1,
   col_select = c(`id`, `Geographic Area Name`, starts_with("Estimate"))
 ) %>%
   clean_names()
 
 
-to_select_age_sex <- readxl::read_xlsx("data-raw/us/american_comunity_survey_2018/age_sex/to_select_age_sex.xlsx")
+to_select_age_sex <- readxl::read_xlsx("data-raw/it_us/us/american_comunity_survey_2018/age_sex/to_select_age_sex.xlsx")
 
 age_sex_us <- age_sex_all_us %>%
   select(!!to_select_age_sex$old_names)
@@ -33,7 +33,7 @@ age_sex_us <- age_sex_us %>%
 
 
 # flu vax - fl65_us  ----------
-fl65_all_us <- vroom("data-raw/us/flu_us.csv",
+fl65_all_us <- vroom("data-raw/it_us/us/flu_us.csv",
   col_types = cols(
     year = col_double(),
     geography = col_character(),
@@ -60,7 +60,7 @@ fl65_us <- fl65_all_us %>%
   dplyr::select(state, county, fips, imm65)
 
 # hospital beds - hospbeds_us  ----------
-hospbeds_all_us <- vroom("data-raw/us/hospital_beds.csv",
+hospbeds_all_us <- vroom("data-raw/it_us/us/hospital_beds.csv",
   col_types = cols(
     X = col_double(),
     Y = col_double(),
@@ -114,7 +114,7 @@ hospbeds_us <- hospbeds_all_us %>%
   filter(!is.na(fips))
 
 # Mapping Medicare Disparities - mmd_us  ----------
-to_imp <- list.files("data-raw/us/data_cms/", full.names = TRUE)
+to_imp <- list.files("data-raw/it_us/us/data_cms/", full.names = TRUE)
 mmd_all_us <- vroom(to_imp,
   col_types = cols(
     year = col_double(),
@@ -168,14 +168,14 @@ mmd_us <- mmd_all_us %>%
 # AMERICAN COMUNITY SURVEY
 # codes: https://www.census.gov/programs-surveys/acs/technical-documentation/code-lists.html
 # households - acm_househ_us ----------
-acm_househ_all_us <- vroom("data-raw/us/american_comunity_survey_2018/households/ACSDP5Y2018.DP02_data_with_overlays_2020-04-15T004120.csv",
+acm_househ_all_us <- vroom("data-raw/it_us/us/american_comunity_survey_2018/households/ACSDP5Y2018.DP02_data_with_overlays_2020-04-15T004120.csv",
   col_types = cols(.default = "c"), skip = 1
 ) %>%
   clean_names() %>%
   select(id, geographic_area_name, starts_with("percent_estimate"))
 
 
-to_select <- readxl::read_xlsx("data-raw/us/american_comunity_survey_2018/households/to_select.xlsx")
+to_select <- readxl::read_xlsx("data-raw/it_us/us/american_comunity_survey_2018/households/to_select.xlsx")
 
 acm_househ_us <- acm_househ_all_us %>%
   select(!!to_select$old_names)
@@ -190,9 +190,9 @@ acm_househ_us <- acm_househ_us %>%
   filter(fips < 72000) # no values for PuertoRico
 
 # poverty_us -------------------
-to_select_pov <- readxl::read_xlsx("data-raw/us/american_comunity_survey_2018/poverty/to_select_pov.xlsx")
+to_select_pov <- readxl::read_xlsx("data-raw/it_us/us/american_comunity_survey_2018/poverty/to_select_pov.xlsx")
 
-poverty_all_us <- vroom("data-raw/us/american_comunity_survey_2018/poverty/ACSST5Y2018.S1701_data_with_overlays_2020-04-16T182603.csv",
+poverty_all_us <- vroom("data-raw/it_us/us/american_comunity_survey_2018/poverty/ACSST5Y2018.S1701_data_with_overlays_2020-04-16T182603.csv",
   skip = 1
 ) %>%
   clean_names() %>%
@@ -209,13 +209,13 @@ poverty_us <- poverty_all_us %>%
 
 # state abbreviations
 
-state_abbr <- vroom("data-raw/us/state_abbr.csv", col_types = cols(.default = "c"))
+state_abbr <- vroom("data-raw/it_us/us/state_abbr.csv", col_types = cols(.default = "c"))
 
 # race: race_us ------------
-to_select_race <- readxl::read_xlsx("data-raw/us/american_comunity_survey_2018/race/to_select_race.xlsx")
+to_select_race <- readxl::read_xlsx("data-raw/it_us/us/american_comunity_survey_2018/race/to_select_race.xlsx")
 
-race_all_us <- vroom("data-raw/us/american_comunity_survey_2018/race/ACSDT5Y2018.B02001_data_with_overlays_2020-04-28T102942.csv",
-                           col_types = cols(.default = "c"), skip = 1
+race_all_us <- vroom("data-raw/it_us/us/american_comunity_survey_2018/race/ACSDT5Y2018.B02001_data_with_overlays_2020-04-28T102942.csv",
+  col_types = cols(.default = "c"), skip = 1
 ) %>%
   clean_names() %>%
   select(!!to_select_race$old_names)
@@ -228,12 +228,24 @@ race_us <- race_all_us %>%
   separate(geographic_area_name, c("county", "state"), sep = ",") %>%
   mutate_at(vars(-county, -state), as.numeric)
 
+# pm2.5_us ---------------------
+# Thank you  Ista Zahn and Ben Sabath for hints on the sources
+# https://github.com/wxwx1993/PM_COVID/blob/master/additional_preprocessing_code/download_pm25_values.md
+# The Atmospheric Composition Analysis Group at Dalhouse University
+pm2.5_us <- vroom("https://raw.githubusercontent.com/wxwx1993/PM_COVID/master/Data/county_pm25.csv",
+  col_types = cols(
+    fips = col_double(),
+    year = col_double(),
+    pm25 = col_double()
+  )
+)
+
 
 # xxxxxxxxxxxxxxxx-------------------
 # Italy ------------------------
 # xxxxxxxxxxxxxxxx-------------------
 # bweight_it -----
-bweight_it <- vroom("data-raw/it/bweight_it.csv", col_types = cols(
+bweight_it <- vroom("data-raw/it_us/it/bweight_it.csv", col_types = cols(
   ITTER107 = col_character(),
   Territorio = col_character(),
   TIPO_DATO_AVQ = col_character(),
@@ -336,7 +348,7 @@ cancer_it[21, "region"] <- "P.A. Trento"
 
 
 # chronic_it -----
-chronic_it_p <- vroom("data-raw/it/chronic_conditions.csv",
+chronic_it_p <- vroom("data-raw/it_us/it/chronic_conditions.csv",
   col_types = cols(
     ITTER107 = col_character(),
     Territorio = col_character(),
@@ -376,7 +388,7 @@ chronic_it <- chronic_it_p %>%
 
 # dem_it_p -----
 dem_it_p <- vroom(
-  "data-raw/it/pop_it.csv",
+  "data-raw/it_us/it/pop_it.csv",
   col_types = cols(
     ITTER107 = col_character(),
     Territorio = col_character(),
@@ -458,7 +470,7 @@ dem_65bin_fm <-
 
 
 # firstaid_it 2018 -------------------
-firstaid_it <- vroom("data-raw/it/first_aid.csv",
+firstaid_it <- vroom("data-raw/it_us/it/first_aid.csv",
   col_types = cols(
     ITTER107 = col_character(),
     Territory = col_character(),
@@ -583,7 +595,7 @@ fl_it_2019 <- inner_join(fl65_it_2019, fl_it_2019, by = "region")
 
 
 # house_it -------------------
-house_it <- vroom("data-raw/it/people_household.csv", col_types = cols(
+house_it <- vroom("data-raw/it_us/it/people_household.csv", col_types = cols(
   ITTER107 = col_character(),
   Territorio = col_character(),
   TIPO_DATO8 = col_character(),
@@ -613,7 +625,7 @@ house_it <- vroom("data-raw/it/people_household.csv", col_types = cols(
 # hospbed_it -------
 # persons using first aid or medical guard in 3 months preceding (2018)
 # inpatient hospital beds (2017) per 1000 people
-hospbed_it <- vroom("data-raw/it/hospital_beds.csv",
+hospbed_it <- vroom("data-raw/it_us/it/hospital_beds.csv",
   col_types = cols(
     ITTER107 = col_character(),
     Territory = col_character(),
@@ -646,7 +658,7 @@ hospbed_it <- vroom("data-raw/it/hospital_beds.csv",
   )
 
 # netinc_it -------
-netinc_it <- vroom("data-raw/it/netinc_it.csv",
+netinc_it <- vroom("data-raw/it_us/it/netinc_it.csv",
   col_types = cols(
     IT107 = col_character(),
     Territory = col_character(),
@@ -684,7 +696,7 @@ netinc_it <- vroom("data-raw/it/netinc_it.csv",
 
 # pm2.5_it -----
 pm2.5_it_p <- vroom(
-  "data-raw/it/pm2.5_it.csv",
+  "data-raw/it_us/it/pm2.5_it.csv",
   col_types = cols(
     region = col_character(),
     `1990` = col_number(),
@@ -731,7 +743,7 @@ regions_area <- bind_rows(regions_area, tribble(
 
 
 # smoking_it ------
-smoking_it <- vroom("data-raw/it/smoking.csv",
+smoking_it <- vroom("data-raw/it_us/it/smoking.csv",
   col_types = cols(
     ITTER107 = col_character(),
     Territorio = col_character(),
@@ -777,7 +789,7 @@ smoking_it <- vroom("data-raw/it/smoking.csv",
 
 # external data
 
-dem_us <-   age_sex_us
+dem_us <- age_sex_us
 usethis::use_data(
   # US data
   acm_househ_us,
@@ -800,6 +812,7 @@ usethis::use_data(
   house_it,
   netinc_it,
   pm2.5_it,
+  pm2.5_us,
   race_us,
   regions_area,
   smoking_it,
@@ -807,6 +820,12 @@ usethis::use_data(
   overwrite = TRUE
 )
 #
+
+pm2.5_us <- pm2.5_us %>%
+  filter(year == 2016) %>%
+  rename(pm2.5 = pm25) %>%
+  select(fips, pm2.5)
+
 # # internal data
 usethis::use_data(
   # US data
@@ -830,12 +849,10 @@ usethis::use_data(
   house_it,
   netinc_it,
   pm2.5_it,
+  pm2.5_us,
   race_us,
   regions_area,
   smoking_it,
   internal = TRUE,
   overwrite = TRUE
 )
-
-
-

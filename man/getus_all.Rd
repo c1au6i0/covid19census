@@ -8,7 +8,8 @@
 \href{https://hifld-geoplatform.opendata.arcgis.com/datasets/hospitals/data?page=18}{Homeland Infrastructure Foundation-Level Data},
 \href{https://data.census.gov/cedsci/table?q=United\%20States}{American Community Survey tables},
 \href{https://data.cms.gov/mapping-medicare-disparities}{Mapping Medicare Disparities},
-\href{https://github.com/COVIDExposureIndices/COVIDExposureIndices}{COVIDExposureIndices}
+\href{https://github.com/COVIDExposureIndices/COVIDExposureIndices}{COVIDExposureIndices},
+\href{http://fizz.phys.dal.ca/~atmos/martin/?page_id=140#V4.NA.02.MAPLE}{Atmoshpheric Composition Analysis Group}
 }
 \usage{
 getus_all()
@@ -18,12 +19,13 @@ A dataframe with 314 variables. Data regarding the household composition, popula
 were scraped from the 2018 American Community Survey (ACS). Poverty was defined at the family level and not the household level in
 the ACS. Medical conditions, tobacco use, cancer and, data relative to the number of medical and emergency visits
 was obtained from the 2017 Mapping Medicare Disparities. From relative documentation listed in the source: "Prevalence rates are calculated
-by searching for certain diagnosis codes in \strong{Medicare beneficiaries’ claims}. T
-he admission rate by admission type is the frequency of a specific type of inpatient admission per 1,000 inpatient admissions in a year."
-The number of hospital beds per county was calculated from data of the
-2020 Homeland Infrastructure Foundation. \cr
+by searching for certain diagnosis codes in \strong{Medicare beneficiaries’ claims}. The admission rate by admission type is the frequency of
+a specific type of inpatient admission per 1,000 inpatient admissions in a year."
+The number of hospital beds per county was calculated from data of the2020 Homeland Infrastructure Foundation.
+Emissions of particulate 2.5 in micro g/m3 (2016) were reported by \href{http://fizz.phys.dal.ca/~atmos/martin/?page_id=140#V4.NA.02.MAPLE}{Atmoshpheric Composition Analysis Group} and
+aggregate by \href{https://github.com/wxwx1993/PM_COVID/blob/master/additional_preprocessing_code/download_pm25_values.md}{Ista Zahn and Ben Sabath}. \cr
 The following list of variables is divided in sections \emph{COVID-19 VARS, HOUSEHOLDS MARITAL STATUS AND COMPOSITION, HOUSEHOLDS EDUCATION DEGREES,
-ANCESTRY, COMPUTER OR INTERNET, POPULATION AND SEX, POPULATION AND RACE, MEDICAL AND VACCINES, POVERTY, STATE LEVEL TESTS AND HOSPITALIZATIONS, ACTIVITY}. \cr
+ANCESTRY, COMPUTER OR INTERNET, POPULATION AND SEX, POPULATION AND RACE, MEDICAL AND VACCINES, POVERTY, ACTIVITY, POLLUTIONS, STATE LEVEL TESTS AND HOSPITALIZATIONS}. \cr
 \strong{Note that data on test and hospitalizations are at the state level!}
 \describe{
 \item{date}{formatted \verb{ISO 8601}}
@@ -36,30 +38,21 @@ ANCESTRY, COMPUTER OR INTERNET, POPULATION AND SEX, POPULATION AND RACE, MEDICAL
 \item{deaths}{number of deaths attributed to COVID-19}
 \item{cmr}{case-mortality rate (deaths / confirmed cases * 100)}
 \item{\strong{HOUSEHOLDS MARITAL STATUS AND COMPOSITION}}{---------------}
-\item{total_households}{total number of households (occupy a housing unit) in that county.People not
-living in households are classified as living in group quarters)}
-\item{perc_families}{percent of households that are defined as family. A family consists of a householder and one or more other people
-living in the same household who are related to the householder by birth, marriage, or
-adoption}
+\item{total_households}{total number of households (occupy a housing unit) in that county. People not living in households are classified as living in group quarters}
+\item{perc_families}{percent of households that are defined as family. A family consists of a householder and one or more other people living in the same household who are related to the householder by birth, marriage, or adoption}
 \item{perc_families_18childereen}{percentfamilies with at least a child <= 18 years old}
 \item{perc_married_couples}{percent families consisting of married couples}
 \item{perc_married_couples_u18ychildreen}{percent families consisting of married couples at least a child 18 years old or less}
-\item{perc_families_only_male}{percent of family with a male householder
-and no spouse of householder present}
-\item{perc_families_only_male_18ychildreen}{percent families with male householder
-and no spouse of householder present and with at least a child under 18 years old}
+\item{perc_families_only_male}{percent of family with a male householder and no spouse of householder present}
+\item{perc_families_only_male_18ychildreen}{percent families with male householder and no spouse of householder present and with at least a child under 18 years old}
 \item{perc_families_only_female}{percent families with female householder}
-\item{perc_families_only_female_18ychildreen}{percent families with female householder with
-at least a child under 18 years old}
-\item{perc_non_families}{percent of non-family households. A family consists of a householder and one or more other people
-living in the same household who are related to the householder by birth, marriage, or
-adoption}
+\item{perc_families_only_female_18ychildreen}{percent families with female householder with at least a child under 18 years old}
+\item{perc_non_families}{percent of non-family households. A family consists of a householder and one or more other people living in the same household who are related to the householder by birth, marriage, or adoption}
 \item{perc_non_families_alone}{percent of non-family households with householder living alone}
-\item{perc_non_families_alone65y}{percent of non-family households with householder living alone, age 65 years and older}}
+\item{perc_non_families_alone65y}{percent of non-family households with householder living alone, age 65 years and older}
 \item{perc_non_families_u18y}{percent of non-family households with one or more people under 18 years}
 \item{perc_non_families_65y}{percent of non-family households with with one or more people 65 years and older}
 \item{total_relationship_in_households}{total number of people that responded to the question regarding relationship}
-\item{perc_relationship_householder}{percent of family households (?) }
 \item{perc_relationship_spouse}{households including person married to and living with the householder}
 \item{perc_relationship_child}{households including a son or daughter by birth, a stepchild, or adopted child of the householder}
 \item{perc_relationship_other_relatives}{percent households including other relatives}
@@ -153,6 +146,10 @@ adoption}
 \item{total_determination \emph{race}}{total people evaluated for poverty in that race}
 \item{total_poverty \emph{race}}{total people that met the definition of below poverty level in that race}
 \item{perc_poverty \emph{race}}{perc people that met the definition of below poverty level in that race}
+\item{\strong{ACTIVITY}}{---------------}
+\item{dex_a}{activity index}
+\item{\strong{POLLUTIONS}}{---------------}
+\item{pm2.5}{pm2.5 in  micro g per m3}
 \item{\strong{STATE LEVEL TESTS AND HOSPITALIZATIONS}}{---------------}
 \item{positive}{total cumulative positive test results}
 \item{negative}{total cumulative negative test results}
@@ -169,8 +166,6 @@ adoption}
 \item{negative_increase}{increase in negative results from day before}
 \item{positive_increase}{increase in positive results from day before}
 \item{total_test_increase}{increase from the day before}
-\item{\strong{ACTIVITY}}{---------------}
-\item{dex_a}{activity index, see details in the repository of the \href{https://github.com/COVIDExposureIndices/COVIDExposureIndices}{authors}
 }
 }
 \description{

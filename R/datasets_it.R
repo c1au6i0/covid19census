@@ -128,7 +128,7 @@
 "netinc_it"
 
 
-#' particulate 2.5
+#' particulate 2.5 italy
 #'
 #' Emission of pm2.5 in tons per region from 1990 to 2017
 #' @docType data

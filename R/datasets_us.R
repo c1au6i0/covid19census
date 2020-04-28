@@ -90,36 +90,16 @@
 #' @source \href{https://data.census.gov/cedsci/table?q=United%20States}{American Community Survey tables}
 #' @details \href{https://www2.census.gov/programs-surveys/acs/tech_docs/subject_definitions/2018_ACSSubjectDefinitions.pdf?#}{Subject Definitions of the American Community Survey}
 #' @return  a tibble
-#' @usage data(poverty_us)
+#' @usage data(race_us)
 "race_us"
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#' particulate 2.5
+#'
+#' Emission of pm2.5 in  micro g/m3 per county from 2000 to 2016
+#' @docType data
+#' @source \href{http://fizz.phys.dal.ca/~atmos/martin/?page_id=140#V4.NA.02.MAPLE}{Atmoshpheric Composition Analysis Group},
+#' \href{https://github.com/wxwx1993/PM_COVID/blob/master/Data/county_pm25.csv}{wxwk1993 processed data}
+#' @details  \href{https://github.com/wxwx1993/PM_COVID/blob/master/additional_preprocessing_code/download_pm25_values.md}{Ista Zahn and Ben Sabath repo}
+#' @return  a tibble
+#' @usage data(pm2.5_us)
+"pm2.5_us"

@@ -59,4 +59,3 @@ test_that("sum smoking is < 100 ", {
     0
   )
 })
-

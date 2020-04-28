@@ -75,21 +75,22 @@ Disparities](https://data.cms.gov/mapping-medicare-disparities), and
 indexes](https://github.com/COVIDExposureIndices/COVIDExposureIndices)
 calculated by Victor Couture, Jonathan Dingel, Allison Green, Jessie
 Handbury, and Kevin Williams based on smartphone movement data provided
-by `PlaceIQ`.
+by `PlaceIQ`. Emissions of pm2.5 in micro g/m3 (2016) were reported by 
+and \#’ aggregate by 
 
 This is a list of U.S. datasets that can be accessed directly or in a
 `dataframe` containing also COVID-19 metrics:
 
-  - `act_ind`: county-level device exposure index (DEX), an index of
+  - `act_ind_us`: county-level device exposure index (DEX), an index of
     activity.
-  - `acm_househ`: several metric regarding household composition,
+  - `acm_househ_us`: several metric regarding household composition,
     including poverty, education, ancestry (2018).
-  - `age_sex`: age and sex distribution (2018).
+  - `age_sex_us`: age and sex distribution (2018).
   - `race_us`: estimated races in population (2018).
-  - `fl65`: percentage of fee-for-service (FFS) Medicare enrollees that
-    had an annual flu vaccination (2017)
-  - `hospbeds`: total hospital beds in each county (2019).
-  - `mmd`: data of 2017 regarding the prevalence found in medicare
+  - `fl65_us`: percentage of fee-for-service (FFS) Medicare enrollees
+    that had an annual flu vaccination (2017)
+  - `hospbeds_us`: total hospital beds in each county (2019).
+  - `mmd_us`: data of 2017 regarding the prevalence found in medicare
     beneficiaries of
       - many medical and chronic conditions (Alzheimer, chronic kidney,
         obesity, depression, obstructive pulmonary, disease, arthritis,
@@ -99,6 +100,7 @@ This is a list of U.S. datasets that can be accessed directly or in a
       - emergency, medical admissions and annual visits.
       - pneumoccocal vaccine.
       - tobacco use.
+  - `pm2.5_us`: Emissions of pm2.5 in micro g/m3
 
 *Note that* info for some counties are missing in some datasets. For
 example, `hospbeds` contains info on 2545 counties, `fl65` has 3224

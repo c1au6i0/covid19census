@@ -11,7 +11,7 @@ An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) w
 \href{https://data.census.gov/cedsci/table?q=United\%20States}{American Community Survey tables}
 }
 \usage{
-data(poverty_us)
+data(race_us)
 }
 \value{
 a tibble

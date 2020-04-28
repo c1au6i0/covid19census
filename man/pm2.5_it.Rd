@@ -3,7 +3,7 @@
 \docType{data}
 \name{pm2.5_it}
 \alias{pm2.5_it}
-\title{particulate 2.5}
+\title{particulate 2.5 italy}
 \format{
 An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 21 rows and 2 columns.
 }
