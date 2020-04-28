@@ -156,7 +156,7 @@ dat_us %>%
   filter(date == max(date)) %>%
   # get 65 and over
   mutate(age65_over = rowSums(select(., matches(
-    "perc_[6|7|8][0-9]"
+    "perc_[6][5-9]|[7|8][0-9]"
   )))) %>%
   mutate(urban = if_else(urban == "Urban", 0, 1)) %>% 
   select(
