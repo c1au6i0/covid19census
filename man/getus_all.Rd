@@ -22,6 +22,8 @@ by searching for certain diagnosis codes in \strong{Medicare beneficiaries’ cl
 he admission rate by admission type is the frequency of a specific type of inpatient admission per 1,000 inpatient admissions in a year."
 The number of hospital beds per county was calculated from data of the
 2020 Homeland Infrastructure Foundation. \cr
+The following list of variables is divided in sections \emph{COVID-19 VARS, HOUSEHOLDS MARITAL STATUS AND COMPOSITION, HOUSEHOLDS EDUCATION DEGREES,
+ANCESTRY, COMPUTER OR INTERNET, POPULATION AND SEX, POPULATION AND RACE, MEDICAL AND VACCINES, POVERTY, STATE LEVEL TESTS AND HOSPITALIZATIONS, ACTIVITY}. \cr
 \strong{Note that data on test and hospitalizations are at the state level!}
 \describe{
 \item{date}{formatted \verb{ISO 8601}}
@@ -29,7 +31,7 @@ The number of hospital beds per county was calculated from data of the
 \item{state}{state}
 \item{fips}{federal information processing standard, a unique numeric identifier of a county}
 \item{urban}{urban or rural (not sure about the  definition)}
-\item{\strong{COVID-19 vars}}{---------------}
+\item{\strong{COVID-19 VARS}}{---------------}
 \item{cases}{confirmed COVID-19 cases (cumulates with date)}
 \item{deaths}{number of deaths attributed to COVID-19}
 \item{cmr}{case-mortality rate (deaths / confirmed cases * 100)}
@@ -104,7 +106,7 @@ adoption}
 \item{total_ \emph{age_sex}}{total population by age bin and sex}
 \item{perc_ \emph{age_sex}}{percent population by age bin and sex}
 \item{\strong{POPULATION AND RACE}}{---------------}
-\item{total \emph{race}}{total number of people of that race. It can be normalized using total_population}
+\item{total \emph{race}}{total number of people of that race (white, black, native, asian, island, other). It can be normalized using total_population}
 \item{totat_other1race}{estimate total some other race alone}
 \item{totat_2races}{estimate total two or more races}
 \item{total_2races_other}{estimate total two or more races including other race}
