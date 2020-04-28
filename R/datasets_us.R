@@ -82,3 +82,44 @@
 #' @usage data(mmd_us)
 #' @seealso \code{\link{getus_all}} for more details regarding the variables
 "mmd_us"
+
+#' race
+#'
+#' Estimate population of each county by race. American Community Survey of 2018
+#' @docType data
+#' @source \href{https://data.census.gov/cedsci/table?q=United%20States}{American Community Survey tables}
+#' @details \href{https://www2.census.gov/programs-surveys/acs/tech_docs/subject_definitions/2018_ACSSubjectDefinitions.pdf?#}{Subject Definitions of the American Community Survey}
+#' @return  a tibble
+#' @usage data(poverty_us)
+"race_us"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

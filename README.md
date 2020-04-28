@@ -82,8 +82,10 @@ This is a list of U.S. datasets that can be accessed directly or in a
 
   - `act_ind`: county-level device exposure index (DEX), an index of
     activity.
-  - `acm_househ`: several metric regarding household composition (2018).
+  - `acm_househ`: several metric regarding household composition,
+    including poverty, education, ancestry (2018).
   - `age_sex`: age and sex distribution (2018).
+  - `race_us`: estimated races in population (2018).
   - `fl65`: percentage of fee-for-service (FFS) Medicare enrollees that
     had an annual flu vaccination (2017)
   - `hospbeds`: total hospital beds in each county (2019).

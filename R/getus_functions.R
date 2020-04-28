@@ -206,9 +206,9 @@ getus_tests <- function() {
 #'  \href{https://data.census.gov/cedsci/table?q=United%20States}{American Community Survey tables},
 #'  \href{https://data.cms.gov/mapping-medicare-disparities}{Mapping Medicare Disparities},
 #'  \href{https://github.com/COVIDExposureIndices/COVIDExposureIndices}{COVIDExposureIndices}
-#' @return A dataframe with 304 variables. Data regarding the household composition, population sex and age and poverty levels,
+#' @return A dataframe with 314 variables. Data regarding the household composition, population sex, age, race, ancestry and poverty levels,
 #'  were scraped from the 2018 American Community Survey (ACS). Poverty was defined at the family level and not the household level in
-#'  the ACS. Medical conditions, tabaco use, cancer and, data relative to the number of medical and emergency visits
+#'  the ACS. Medical conditions, tobacco use, cancer and, data relative to the number of medical and emergency visits
 #'  was obtained from the 2017 Mapping Medicare Disparities. From relative documentation listed in the source: "Prevalence rates are calculated
 #'  by searching for certain diagnosis codes in \strong{Medicare beneficiaries’ claims}. T
 #'  he admission rate by admission type is the frequency of a specific type of inpatient admission per 1,000 inpatient admissions in a year."
@@ -290,14 +290,20 @@ getus_tests <- function() {
 #'   \item{perc_withcomputer}{percent that owns or use computer}
 #'   \item{perc_withinternet}{percet that has acces to internet}
 #'   \item{\strong{POPULATION AND SEX}}{---------------}
-#'   \item{tot_pop}{total population}
-#'   \item{tot_male}{total male}
-#'   \item{tot_female}{total female}
-#'   \item{tot_ \emph{age_sex}}{total population by age bin and sex}
+#'   \item{total_pop}{total population}
+#'   \item{total_male}{total male}
+#'   \item{total_female}{total female}
+#'   \item{total_ \emph{age_sex}}{total population by age bin and sex}
 #'   \item{perc_ \emph{age_sex}}{percent population by age bin and sex}
+#'   \item{\strong{POPULATION AND RACE}}{---------------}
+#'   \item{total \emph{race}}{total number of people of that race. It can be normalized using total_population}
+#'   \item{totat_other1race}{estimate total some other race alone}
+#'   \item{totat_2races}{estimate total two or more races}
+#'   \item{total_2races_other}{estimate total two or more races including other race}
+#'   \item{total_2races_exlusion}{estimate total two or more races exluding some other arce and three or more races}
 #'   \item{\strong{MEDICAL AND VACCINES}}{---------------}
 #'   \item{imm65}{percentage of fee-for-service (FFS) Medicare enrollees that had an annual flu vaccination.}
-#'   \item{tot_beds}{total number of hospital beds}
+#'   \item{total_beds}{total number of hospital beds}
 #'   \item{acute_myocardial_infarction}{percent medicare with acute myocardial infarction}
 #'   \item{alzheimer_dementia}{percent medicare with Alzheimer’s Disease, Related Disorders, or Senile Dementia}
 #'   \item{asthma}{percent medicare with asthma}
@@ -317,7 +323,7 @@ getus_tests <- function() {
 #'   \item{rheumatoid_arthritis}{percent  medicare beneficiaries with Rheumatoid Arthritis}
 #'   \item{schizophrenia_psychotic_dis}{percent  medicare beneficiaries with Schizophrenia/Other Psychotic Disorders}
 #'   \item{stroke}{percent  medicare beneficiaries with Stroke Transient Ischemic Attack }
-#'   \item{tobacco_use}{??}
+#'   \item{tobacco_use}{}
 #'   \item{urgent_admission}{urgent care admission rate}
 #'   \item{annual_wellness_visit}{number of annual wellness visits}
 #'   \item{elective_admission}{elective admission rate}
@@ -373,7 +379,7 @@ getus_all <- function() {
     dplyr::select(-.data$death, -.data$death_increase, -.data$abbr, -.data$hash, -.data$fips)
 
   # we keep only fips and vars
-  to_join <- lapply(list(acm_househ_us, age_sex_us, fl65_us, hospbeds_us, mmd_us, poverty_us), function(x) {
+  to_join <- lapply(list(acm_househ_us, age_sex_us, race_us, fl65_us, hospbeds_us, mmd_us, poverty_us), function(x) {
     x[, !names(x) %in% c("state_county", "county", "state", "year", "abbr")]
   })
 
@@ -384,11 +390,10 @@ getus_all <- function() {
 
 
   dat <- dplyr::left_join(covid19_us, dem_metrics, by = "fips")
-
   dat2 <- dplyr::left_join(dat, dex_us, by = c("fips", "date"))
-
-
   dat2 <- dplyr::left_join(dat2, tests_us, by = c("state", "date"))
+
+  names(dat2) <- stringr::str_replace(names(dat2), "tot_", "total_")
 
   as.data.frame(dat2)
 }

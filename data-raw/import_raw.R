@@ -2,10 +2,12 @@ library(vroom)
 library(tidyverse)
 library(janitor)
 library(reshape2)
+library(tabulizer)
 
+# Unpackit_us.zip and run the script
 
+# xxxxxxxxxxxxxxxx-------------------
 # United States #-----
-
 # xxxxxxxxxxxxxxxx-------------------
 # age and sex- age_sex_us ---------
 
@@ -209,7 +211,25 @@ poverty_us <- poverty_all_us %>%
 
 state_abbr <- vroom("data-raw/us/state_abbr.csv", col_types = cols(.default = "c"))
 
+# race: race_us ------------
+to_select_race <- readxl::read_xlsx("data-raw/us/american_comunity_survey_2018/race/to_select_race.xlsx")
 
+race_all_us <- vroom("data-raw/us/american_comunity_survey_2018/race/ACSDT5Y2018.B02001_data_with_overlays_2020-04-28T102942.csv",
+                           col_types = cols(.default = "c"), skip = 1
+) %>%
+  clean_names() %>%
+  select(!!to_select_race$old_names)
+
+names(race_all_us) <- to_select_race$new_names
+
+race_us <- race_all_us %>%
+  separate(id, into = c("us_id", "fips"), sep = 9) %>%
+  select(-us_id) %>%
+  separate(geographic_area_name, c("county", "state"), sep = ",") %>%
+  mutate_at(vars(-county, -state), as.numeric)
+
+
+# xxxxxxxxxxxxxxxx-------------------
 # Italy ------------------------
 # xxxxxxxxxxxxxxxx-------------------
 # bweight_it -----
@@ -780,6 +800,7 @@ usethis::use_data(
   house_it,
   netinc_it,
   pm2.5_it,
+  race_us,
   regions_area,
   smoking_it,
   # internal = TRUE,
@@ -787,33 +808,34 @@ usethis::use_data(
 )
 #
 # # internal data
-# usethis::use_data(
-#   # US data
-#   acm_househ_us,
-#   age_sex_us,
-#   fl65_us,
-#   hospbeds_us,
-#   mmd_us,
-#   poverty_us,
-#   state_abbr,
-#   # italy
-#   bweight_it,
-#   cancer_it,
-#   chronic_it,
-#   dem_65bin_fm,
-#   dem_it,
-#   firstaid_it,
-#   # fl_it,
-#   fl_it_2019,
-#   hospbed_it,
-#   house_it,
-#   netinc_it,
-#   pm2.5_it,
-#   regions_area,
-#   smoking_it,
-#   internal = TRUE,
-#   overwrite = TRUE
-# )
+usethis::use_data(
+  # US data
+  acm_househ_us,
+  age_sex_us,
+  fl65_us,
+  hospbeds_us,
+  mmd_us,
+  poverty_us,
+  state_abbr,
+  # italy
+  bweight_it,
+  cancer_it,
+  chronic_it,
+  dem_65bin_fm,
+  dem_it,
+  firstaid_it,
+  # fl_it,
+  fl_it_2019,
+  hospbed_it,
+  house_it,
+  netinc_it,
+  pm2.5_it,
+  race_us,
+  regions_area,
+  smoking_it,
+  internal = TRUE,
+  overwrite = TRUE
+)
 
 
 
