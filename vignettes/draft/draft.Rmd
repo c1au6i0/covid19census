@@ -52,7 +52,7 @@ library(xtable) # Creates tables that follow OUP guidelines; other options, such
 
 For example, in early phases of the pandemic, analysis and modeling of COVID-19 confirmed cases and deaths has been employed to assess the effects of NPI in China and Europe [@flaxman2020; @prem2020tlph]. More recently, the increased flow of COVID-19 data, and the integration of different sources of information (seasonality of  other coronoviruses,  U.S. clinical care) has allowed even more long-term predictions of the feasibility and effectiveness of possible containment strategies [@kissler2020s].
 
-Similarly, early evidences of the correlation between Bacille Calmette-Guérin vaccination and COVID-19 outcomes spur several clinical investigations [@miller2020m; @shet2020m];
+Similarly, early evidences of the correlation between Bacille Calmette-Guérin vaccination and COVID-19 outcomes spur several clinical investigations [@miller2020m; @shet2020m;
 [WHO](https://www.who.int/news-room/commentaries/detail/bacille-calmette-gu%C3%A9rin-(bcg)-vaccination-and-covid-19)].
 However, the implications and conclusions of that initial observation were curtailed  by subsequent models that included more factors [e.s. age; @fukui2020m]. Overall, these few examples underscore the importance in general, of providing public access to ongoing COVID-19 metrics and in particular, of including  multiple heterogeneous collections of data in modeling and analysis in order to improve predictions and ultimately, to address the many challenges of the current pandemic emergency.
 
@@ -170,7 +170,7 @@ dat_us %>%
     "asthma",
     "hypertension",
     "tobacco_use",
-    "tot_beds"
+    "total_beds"
   ) %>%
   rename(
     "age 65 and over" =  age65_over,
@@ -180,7 +180,7 @@ dat_us %>%
     "with asthma" = asthma,
     "with hypertension" = hypertension,
     "using tobacco" = tobacco_use,
-    "hospital beds" = tot_beds
+    "hospital beds" = total_beds
     
   ) %>%
   na.omit() %>%

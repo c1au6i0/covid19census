@@ -112,7 +112,7 @@ feasibility and effectiveness of possible containment strategies
 
 Similarly, early evidences of the correlation between Bacille
 Calmette-Guérin vaccination and COVID-19 outcomes spur several clinical
-investigations \citep{miller2020m, shet2020m};
+investigations {[}\citet{miller2020m}; \citet{shet2020m};
 \href{https://www.who.int/news-room/commentaries/detail/bacille-calmette-gu\%C3\%A9rin-(bcg)-vaccination-and-covid-19}{WHO}{]}.
 However, the implications and conclusions of that initial observation
 were curtailed by subsequent models that included more factors
@@ -163,7 +163,7 @@ For \textbf{U.S} the prefix of the functions to extract data is
 \item
   \texttt{getus\_all}: executes all the above functions and join the
   results with other datasets statically contained in the package, and
-  returns a \texttt{dataframe} with 304 variables.
+  returns a \texttt{dataframe} with 313 variables.
 \end{itemize}
 
 Data regarding the household composition, population sex and age and
@@ -230,7 +230,7 @@ different names.
 \end{Shaded}
 
 \begin{verbatim}
-## Italy COVID-19 data up to 2020-04-27 17:00:00 successfully retrived!
+## Italy COVID-19 data up to 2020-04-28 17:00:00 successfully retrived!
 \end{verbatim}
 
 \begin{Shaded}
@@ -240,7 +240,7 @@ different names.
 \end{Shaded}
 
 \begin{verbatim}
-## US COVID-19 data up to 2020-04-26 successfully retrived!
+## US COVID-19 data up to 2020-04-27 successfully retrived!
 \end{verbatim}
 
 \begin{verbatim}
@@ -272,7 +272,7 @@ reported in table below {[}table \ref{tab:tab_dat}{]}.
   \hline
  & getus\_all & getit\_all \\ 
   \hline
-columns & 304 & 64 \\ 
+columns & 313 & 64 \\ 
   counties-regions & 2790 & 21 \\ 
   sources & 7 & 4 \\ 
   from & 2020-01-21 & 2020-02-24 \\ 
@@ -301,7 +301,7 @@ The \texttt{R} package \texttt{covid19census} extracts and integrates
 epidemiological COVID-19 data (Italy and U.S at the regional and county
 level, respectively) with several other demographic and health related
 indexes. Currently, the dataframes returned by the main functions
-\texttt{getus\_all} and \texttt{getit\_all}, consist of 304 variables
+\texttt{getus\_all} and \texttt{getit\_all}, consist of 313 variables
 for 2790 U.S counties, and of 64 variables for 21 Italy regions (19
 regions and autonomous provinces), respectively. By combining data form
 different sources, the package is aimed at promoting and simplifying the
