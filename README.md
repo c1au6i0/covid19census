@@ -86,10 +86,10 @@ This is a list of U.S. datasets that can be accessed directly or in a
   - `acm_househ_us`: several metric regarding household composition,
     including poverty, education, ancestry (2018).
   - `age_sex_us`: age and sex distribution (2018).
-  - `race_us`: estimated races in population (2018).
   - `fl65_us`: percentage of fee-for-service (FFS) Medicare enrollees
     that had an annual flu vaccination (2017)
   - `hospbeds_us`: total hospital beds in each county (2019).
+  - \`netinc\_us: median househould income (2018).
   - `mmd_us`: data of 2017 regarding the prevalence found in medicare
     beneficiaries of
       - many medical and chronic conditions (Alzheimer, chronic kidney,
@@ -101,6 +101,7 @@ This is a list of U.S. datasets that can be accessed directly or in a
       - pneumoccocal vaccine.
       - tobacco use.
   - `pm2.5_us`: Emissions of pm2.5 in micro g/m3
+  - `race_us`: estimated races in population (2018).
 
 *Note that* info for some counties are missing in some datasets. For
 example, `hospbeds` contains info on 2545 counties, `fl65` has 3224

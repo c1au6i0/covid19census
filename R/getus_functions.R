@@ -205,7 +205,7 @@ getus_tests <- function() {
 #'  \href{https://data.cms.gov/mapping-medicare-disparities}{Mapping Medicare Disparities},
 #'  \href{https://github.com/COVIDExposureIndices/COVIDExposureIndices}{COVIDExposureIndices},
 #'  \href{http://fizz.phys.dal.ca/~atmos/martin/?page_id=140#V4.NA.02.MAPLE}{Atmoshpheric Composition Analysis Group}
-#' @return A dataframe with 314 variables. Data regarding the household composition, population sex, age, race, ancestry and poverty levels,
+#' @return A dataframe with 326 variables. Data regarding the household composition, population sex, age, race, ancestry and poverty levels,
 #'  were scraped from the 2018 American Community Survey (ACS). Poverty was defined at the family level and not the household level in
 #'  the ACS. Medical conditions, tobacco use, cancer and, data relative to the number of medical and emergency visits
 #'  was obtained from the 2017 Mapping Medicare Disparities. From relative documentation listed in the source: "Prevalence rates are calculated
@@ -289,11 +289,26 @@ getus_tests <- function() {
 #'     \item{total_ \emph{age_sex}}{total population by age bin and sex}
 #'     \item{perc_ \emph{age_sex}}{percent population by age bin and sex}
 #'     \item{\strong{POPULATION AND RACE}}{---------------}
-#'     \item{total \emph{race}}{total number of people of that race (white, black, native, asian, island, other). It can be normalized using total_population}
-#'     \item{totat_other1race}{estimate total some other race alone}
-#'     \item{totat_2races}{estimate total two or more races}
-#'     \item{total_2races_other}{estimate total two or more races including other race}
-#'     \item{total_2races_exlusion}{estimate total two or more races exluding some other arce and three or more races}
+#'     \item{total_nlat}{total not hispanic or latinos. It can be normalized using total_population}
+#'     \item{total_nlat_white_alone}{total white in that category}
+#'     \item{total_nlat_blackaa_alone}{total black or african american}
+#'     \item{total_nlat_native_alone}{total american indian and alaska native}
+#'     \item{total_nlat_asian_alone}{total asian}
+#'     \item{total_nlat_island_alone}{total native hawaiaian and other pacific islander}
+#'     \item{total_nlat_other_race}{total other race}
+#'     \item{total_nlat_2ormore}{total 2 or more race}
+#'     \item{total_nlat2ormore_io}{total 2 or more race including other races}
+#'     \item{total_nlat_3ormore_io}{total 3 or more race including other races}
+#'     \item{total_lat}{total hispanic or latinos. It can be normalized using total_population}
+#'     \item{total_lat_white_alone}{total white in that category}
+#'     \item{total_lat_blackaa_alone}{total black or african american}
+#'     \item{total_lat_native_alone}{total american indian and alaska native}
+#'     \item{total_lat_asian_alone}{total asian}
+#'     \item{total_lat_island_alone}{total native hawaiaian and other pacific islander}
+#'     \item{total_lat_other_race}{total other race}
+#'     \item{total_lat_2ormore}{total 2 or more race}
+#'     \item{total_lat2ormore_io}{total 2 or more race including other races}
+#'     \item{total_lat_3ormore_io}{total 3 or more race including other races}
 #'     \item{\strong{MEDICAL AND VACCINES}}{---------------}
 #'     \item{imm65}{percentage of fee-for-service (FFS) Medicare enrollees that had an annual flu vaccination.}
 #'     \item{total_beds}{total number of hospital beds}
@@ -336,6 +351,7 @@ getus_tests <- function() {
 #'     \item{total_determination \emph{race}}{total people evaluated for poverty in that race}
 #'     \item{total_poverty \emph{race}}{total people that met the definition of below poverty level in that race}
 #'     \item{perc_poverty \emph{race}}{perc people that met the definition of below poverty level in that race}
+#'     \item{median_income)}{median household income}
 #'     \item{\strong{ACTIVITY}}{---------------}
 #'     \item{dex_a}{activity index}
 #'     \item{\strong{POLLUTIONS}}{---------------}
@@ -374,7 +390,7 @@ getus_all <- function() {
     dplyr::select(-.data$death, -.data$death_increase, -.data$abbr, -.data$hash, -.data$fips)
 
   # we keep only fips and vars
-  to_join <- lapply(list(acm_househ_us, age_sex_us, race_us, fl65_us, hospbeds_us, mmd_us, poverty_us, pm2.5_us), function(x) {
+  to_join <- lapply(list(acm_househ_us, age_sex_us, race_us, fl65_us, hospbeds_us, mmd_us, poverty_us, netinc_us,pm2.5_us), function(x) {
     x[, !names(x) %in% c("state_county", "county", "state", "year", "abbr")]
   })
 

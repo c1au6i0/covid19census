@@ -214,7 +214,7 @@ state_abbr <- vroom("data-raw/it_us/us/state_abbr.csv", col_types = cols(.defaul
 # race: race_us ------------
 to_select_race <- readxl::read_xlsx("data-raw/it_us/us/american_comunity_survey_2018/race/to_select_race.xlsx")
 
-race_all_us <- vroom("data-raw/it_us/us/american_comunity_survey_2018/race/ACSDT5Y2018.B02001_data_with_overlays_2020-04-28T102942.csv",
+race_all_us <- vroom("data-raw/it_us/us/american_comunity_survey_2018/race/ACSDT5Y2018.B03002_data_with_overlays_2020-04-28T232845.csv",
   col_types = cols(.default = "c"), skip = 1
 ) %>%
   clean_names() %>%
@@ -225,7 +225,7 @@ names(race_all_us) <- to_select_race$new_names
 race_us <- race_all_us %>%
   separate(id, into = c("us_id", "fips"), sep = 9) %>%
   select(-us_id) %>%
-  separate(geographic_area_name, c("county", "state"), sep = ",") %>%
+  separate(state_county, c("county", "state"), sep = ",") %>%
   mutate_at(vars(-county, -state), as.numeric)
 
 # pm2.5_us ---------------------
@@ -240,6 +240,23 @@ pm2.5_us <- vroom("https://raw.githubusercontent.com/wxwx1993/PM_COVID/master/Da
   )
 )
 
+# netinc_us -----
+
+
+netincome_all_us <- vroom("data-raw/it_us/us/american_comunity_survey_2018/netincome/ACSST5Y2018.S1901_data_with_overlays_2020-04-29T001634.csv",
+                     col_types = cols(.default = "c"), skip = 1
+) %>%
+  clean_names() %>%
+  select(id, geographic_area_name, estimate_households_median_income_dollars)
+
+names(netincome_all_us)
+
+netinc_us <- netincome_all_us %>%
+  separate(id, into = c("us_id", "fips"), sep = 9) %>%
+  select(-us_id) %>%
+  separate(geographic_area_name, c("county", "state"), sep = ",") %>%
+  rename(median_income = estimate_households_median_income_dollars) %>%
+  mutate_at(vars(-county, -state), as.numeric)
 
 # xxxxxxxxxxxxxxxx-------------------
 # Italy ------------------------
@@ -288,8 +305,6 @@ bweight_it <- vroom("data-raw/it_us/it/bweight_it.csv", col_types = cols(
   # values are in thousands
   mutate(value = value * 1000) %>%
   pivot_wider(names_from = bweight_status, values_from = value)
-
-
 
 # cancer_it -----
 web_page <- "http://www.registri-tumori.it/PDF/AIOM2016/I_numeri_del_cancro_2016.pdf"
@@ -811,6 +826,7 @@ usethis::use_data(
   hospbed_it,
   house_it,
   netinc_it,
+  netinc_us,
   pm2.5_it,
   pm2.5_us,
   race_us,
@@ -848,6 +864,7 @@ usethis::use_data(
   hospbed_it,
   house_it,
   netinc_it,
+  netinc_us,
   pm2.5_it,
   pm2.5_us,
   race_us,
