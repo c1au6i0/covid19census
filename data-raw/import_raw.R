@@ -853,7 +853,7 @@ usethis::use_data(
 us_pm2.5 <-
   us_pm2.5 %>%
   group_by(fips) %>%
-  summarize(pm2.5 = mean(pm25)) %>%
+  summarize(pm2.5 = mean(pm25, na.rm = TRUE)) %>%
   ungroup()
 
 us_season <-
@@ -861,7 +861,7 @@ us_season <-
   group_by(fips) %>%
   # easy summarization of each variable...
   summarize_at(
-    vars(summer_temp:winter_hum), mean
+    vars(summer_temp:winter_hum), mean, na.rm = TRUE
     ) %>%
   ungroup()
 
