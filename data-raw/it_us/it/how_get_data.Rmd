@@ -72,7 +72,7 @@ suppressWarnings(
 
 # inFLuenza coverage ITaly
 
-fl_it <- fl_tab %>%
+it_fl <- fl_tab %>%
   rename(region = X) %>%
   {
     x <- .
@@ -91,18 +91,18 @@ fl_it <- fl_tab %>%
   }
 
 
-# fl_it
+# it_fl
 ```
 
 Let's plot
 
-```{r plot_fl_it2019}
-fl_it_2019 <- fl_it %>%
+```{r plot_it_fl2019}
+it_fl_2019 <- it_fl %>%
   rename(perc_imm = "2019") %>%
   mutate(perc_imm = as.numeric(perc_imm)) %>%
   select(region, perc_imm)
 
-fl_it_2019 %>%
+it_fl_2019 %>%
   ggplot(aes(reorder(region, perc_imm), perc_imm)) +
   geom_col(fill = "grey") +
   theme_bw() +
@@ -113,7 +113,7 @@ fl_it_2019 %>%
 We actually have influenza vaccination coverage for people that are 65 > 
 It is in the same file but at page 3
 
-```{r fl65_it}
+```{r it_fl65}
 area_sel2 <- c(
   top = 75.63785, left = 51.12191, bottom = 434.73870 ,
   right =   795.57018 
@@ -133,7 +133,7 @@ suppressWarnings(
 
 # inFLuenza coverage ITaly
 
-fl65_it <- fl65_tab %>%
+it_fl65 <- fl65_tab %>%
   rename(region = X) %>%
   {
     x <- .
@@ -151,7 +151,7 @@ fl65_it <- fl65_tab %>%
     x
   }
 
-fl65_it_2019 <- fl65_it %>%
+it_fl65_2019 <- it_fl65 %>%
   rename(perc_imm65 = "2019") %>%
   mutate(perc_imm65 = as.numeric(perc_imm65)) %>%
   select(region, perc_imm65)
@@ -159,8 +159,8 @@ fl65_it_2019 <- fl65_it %>%
 
 Let's put it together with the other flu data
 
-```{r fl_it_all}
-fl_it_2019 <- inner_join(fl65_it_2019, fl_it_2019, by = "region")
+```{r it_fl_all}
+it_fl_2019 <- inner_join(it_fl65_2019, it_fl_2019, by = "region")
 ```
 
 
@@ -175,8 +175,8 @@ Details about the dataset can be found [here](http://siqual.istat.it/SIQual/visu
 
 Let's check the demographic.
 
-```{r dem_it_p}
-dem_it_p <- vroom(
+```{r it_dem_p}
+it_dem_p <- vroom(
   "data/italy/pop_it.csv",
   col_types = cols(
     ITTER107 = col_character(),
@@ -212,8 +212,8 @@ dem_it_p <- vroom(
     sex = recode(sex, femmine = "female", maschi = "male")
   )
 
-dem_it_p$region <- recode(
-  dem_it_p$region,
+it_dem_p$region <- recode(
+  it_dem_p$region,
   "Valle d'Aosta / Vallée d'Aoste" = "Valle d'Aosta",
   "Provincia Autonoma Bolzano / Bozen" = "P.A. Bolzano",
   "Provincia Autonoma Trento"  = "P.A. Trento",
@@ -225,7 +225,7 @@ dem_it_p$region <- recode(
 These data have `Trentino Alto Adige / Südtirol` but also `PA Trento` and `PA Bolazono`. Let's see if `Trentino Alto Adige` is the sum of the 2.
 
 ```{r trentino}
-dem_it_p %>%
+it_dem_p %>%
   filter(region %in% list("P.A. Bolzano", "P.A. Trento", "Trentino Alto Adige / Südtirol")) %>%
   group_by(region) %>%
   summarize(tot = sum(value))
@@ -235,7 +235,7 @@ Yes, it is, we need to remove it.
 Let's do that and compute some percentage.
 
 ```{r percent}
-dem_it_p <- dem_it_p %>%
+it_dem_p <- it_dem_p %>%
   filter(region != "Trentino Alto Adige / Südtirol") %>%
   group_by(region) %>%
   mutate(tot = sum(value)) %>% # this makes total for regions
@@ -244,7 +244,7 @@ dem_it_p <- dem_it_p %>%
 ```
 
 ```{r plot_dem, fig.height= 10, fig.width=10}
-dem_it_p %>%
+it_dem_p %>%
   ggplot(aes(age, perc_pop, group = sex, color = sex)) +
   geom_line() +
   facet_wrap(~region)
@@ -255,7 +255,7 @@ The Istituto Superiore Sanità (HHS) provides info regarding the mortality in di
 If we want to consider some variables with modeling packages, we might need a wider format. Let's get that too.
 
 ```{r dem_i_binned}
-dem_it_p <- dem_it_p %>%
+it_dem_p <- it_dem_p %>%
   mutate(age_bins = cut(age, seq(0, 100, 10), right = FALSE, include.lowest = TRUE)) %>%
   mutate(age_bins = recode(age_bins, "[90,100]" = "[90,100+]")) %>%
   group_by_at(vars(-age, -value, -marital_status, -index, -year, -perc_pop)) %>%
@@ -264,7 +264,7 @@ dem_it_p <- dem_it_p %>%
 
 
 # if we want to use caret or any package for regression we need to have a variable age-sex bins as columns
-dem_it_wider <- dem_it_p %>%
+it_dem_wider <- it_dem_p %>%
   mutate(sex_age_bin = paste0("perc_", sex, "_", age_bins)) %>% # now that we have the perc we create the new factor
   select(region, tot, perc_pop, sex_age_bin) %>%
   # now we do the magic
@@ -272,13 +272,13 @@ dem_it_wider <- dem_it_p %>%
   rename(pop_tot = tot)
 
 
-glimpse(dem_it_p)
+glimpse(it_dem_p)
 ```
 
 Let's check if the percentage adds up to 100
 
 ```{r check}
-apply(dem_it_wider[, 3:ncol(dem_it_wider)], 1, sum)
+apply(it_dem_wider[, 3:ncol(it_dem_wider)], 1, sum)
 ```
 
 We have the demographic data.
@@ -287,11 +287,11 @@ We have the demographic data.
 
 We can get that from wikipedia.
 
-```{r regions_area}
+```{r it_regions}
 wiki <- xml2::read_html("https://it.wikipedia.org/wiki/Regioni_d%27Italia")
 
 
-regions_area_p <- wiki %>%
+it_regions_p <- wiki %>%
   rvest::html_nodes("table") %>%
   rvest::html_table(fill = TRUE) %>%
   {
@@ -300,14 +300,14 @@ regions_area_p <- wiki %>%
   }
 
 # let's clean the names
-regions_area <- regions_area_p %>%
+it_regions <- it_regions_p %>%
   select(Regione, `Superficie (km²)`) %>%
   rename(region = Regione, area_km2 = `Superficie (km²)`) %>%
   mutate(region = str_replace(region, "-", " "), area_km2 = as.numeric(str_remove(area_km2, "[[:blank:]]"))) %>%
   filter(!region %in% c("Trentino Alto Adige", "Italia"))
 
 #  we add those missing regions
-regions_area <- bind_rows(regions_area, tribble(
+it_regions <- bind_rows(it_regions, tribble(
   ~region, ~area_km2,
   "P.A. Bolzano", 7398,
   "P.A. Trento", 2397
@@ -324,7 +324,7 @@ Data are of **2018**
 
 ```{r healt_it}
 
-chronic_it_p <- vroom("data/italy/chronic_conditions.csv",
+it_chronic_p <- vroom("data/italy/chronic_conditions.csv",
   col_types = cols(
     ITTER107 = col_character(),
     Territorio = col_character(),
@@ -345,7 +345,7 @@ chronic_it_p <- vroom("data/italy/chronic_conditions.csv",
 
 
 # we do some cleaning and translations
-chronic_it <- chronic_it_p %>%
+it_chronic <- it_chronic_p %>%
   rename(region = territorio, ch_condition = tipo_dato_avq) %>%
   mutate(region = str_replace(region, "-", " ")) %>%
   filter(!region %in% c("Trentino Alto Adige / Südtirol", "Italia")) %>%
@@ -369,8 +369,8 @@ On the Istat [website](http://dati.istat.it/) in `Salute e Sanità` > `Stili di 
 
  **14 years old or more**
 
-```{r smoking_it, warning=FALSE, message=FALSE}
-smoking_it <- vroom("data/italy/smoking.csv",
+```{r it_smoking, warning=FALSE, message=FALSE}
+it_smoking <- vroom("data/italy/smoking.csv",
   col_types = cols(
     ITTER107 = col_character(),
     Territorio = col_character(),
@@ -419,7 +419,7 @@ On the Istat [website](http://dati.istat.it/) in `Salute e Sanità` > `Stili di 
 **18 years old or more**
 
 ```{r obesity_it, warning=FALSE, message=FALSE}
-bweight_it <- vroom("data/italy/bweight_it.csv", col_types = cols(
+it_bweight <- vroom("data/italy/it_bweight.csv", col_types = cols(
   ITTER107 = col_character(),
   Territorio = col_character(),
   TIPO_DATO_AVQ = col_character(),
@@ -471,7 +471,7 @@ Data on tumor prevalence (year: ##2016##) can be found in the website of Istitut
 
 ** year was 2016 **
 
-```{r cancer_it}
+```{r it_cancer}
 web_page <- "http://www.registri-tumori.it/PDF/AIOM2016/I_numeri_del_cancro_2016.pdf"
 
 area_sel <- c(
@@ -511,7 +511,7 @@ names(cancer_tab) <-
   )
 
 # clean names
-cancer_it <- cancer_tab %>%
+it_cancer <- cancer_tab %>%
   mutate(region = recode(region,
     "Trentino Alto" = "Trentino Alto Adige",
     "Emilia" = "Emilia Romagna",
@@ -524,8 +524,8 @@ cancer_it <- cancer_tab %>%
 
 # no data on those  but we want to include them anyway for the join
 
-cancer_it[20, "region"] <- "P.A. Bolzano"
-cancer_it[21, "region"] <- "P.A. Trento"
+it_cancer[20, "region"] <- "P.A. Bolzano"
+it_cancer[21, "region"] <- "P.A. Trento"
 ```
 
 ## COVID-19 Cases
@@ -597,16 +597,16 @@ cmr_it <- get_cases_italy()
 ```{r join_all}
 # nuovi attualmente positivi not reliable...look at critiques in recent Italian news
 # Join fl with cmr
-fl_cmr_it <- inner_join(cmr_it, fl_it_2019, by = "region") %>%
+fl_cmr_it <- inner_join(cmr_it, it_fl_2019, by = "region") %>%
   mutate_at(vars("perc_imm65","perc_imm"), as.numeric)
 
 
 # join  with demographics
-fl_cmr_dem_it <- inner_join(fl_cmr_it, dem_it_wider, by = "region")
+fl_cmr_it_dem <- inner_join(fl_cmr_it, it_dem_wider, by = "region")
 
 
 # adding regions km2
-fl_cmr_dem_it <- inner_join(fl_cmr_dem_it, regions_area, by = "region") %>%
+fl_cmr_it_dem <- inner_join(fl_cmr_it_dem, it_regions, by = "region") %>%
   mutate(pop_km2 = pop_tot / area_km2) %>%
   # reorder col
   select(c(
@@ -622,21 +622,21 @@ fl_cmr_dem_it <- inner_join(fl_cmr_dem_it, regions_area, by = "region") %>%
   ))
 
 # join health data
-fl_cmr_dem_chronic_it <- inner_join(fl_cmr_dem_it, chronic_it, by = "region")
+fl_cmr_it_dem_chronic <- inner_join(fl_cmr_it_dem, it_chronic, by = "region")
 
 # join cancer data
-fl_cmr_dem_health_cancer_it <- inner_join(fl_cmr_dem_chronic_it, cancer_it, by = "region")
+fl_cmr_dem_health_it_cancer <- inner_join(fl_cmr_it_dem_chronic, it_cancer, by = "region")
 
 # join smoking data
-fl_cmr_dem_health_cancer_smoking_it <- inner_join(fl_cmr_dem_health_cancer_it, smoking_it, by = "region")
+fl_cmr_dem_health_cancer_it_smoking <- inner_join(fl_cmr_dem_health_it_cancer, it_smoking, by = "region")
 
 # join bweight
-fl_cmr_dem_health_cancer_smoking_bweight_it <- inner_join(fl_cmr_dem_health_cancer_smoking_it, bweight_it, by = "region")
+fl_cmr_dem_health_cancer_it_smoking_bweight <- inner_join(fl_cmr_dem_health_cancer_it_smoking, it_bweight, by = "region")
 
 # something wrong with bweight
 
 
-all_dat <- fl_cmr_dem_health_cancer_smoking_bweight_it
+all_dat <- fl_cmr_dem_health_cancer_it_smoking_bweight
 
 # make cancer and health as percentage
 all_dat <- all_dat %>%

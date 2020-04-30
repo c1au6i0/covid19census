@@ -394,7 +394,7 @@ getus_all <- function() {
     dplyr::select(-.data$death, -.data$death_increase, -.data$abbr, -.data$hash, -.data$fips)
 
   # we keep only fips and vars
-  to_join <- lapply(list(acm_househ_us, age_sex_us, race_us, fl65_us, hospbeds_us, mmd_us, poverty_us, netinc_us, pm2.5_us, season_us), function(x) {
+  to_join <- lapply(list(us_acm_househ, us_age_sex, us_race, us_fl65, us_hospbeds, us_mmd, us_poverty, us_netinc, us_pm2.5, us_season), function(x) {
     x[, !names(x) %in% c("state_county", "county", "state", "year", "abbr")]
   })
 

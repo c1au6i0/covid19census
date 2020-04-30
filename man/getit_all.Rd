@@ -66,7 +66,7 @@ region population esitmates of 2019. Data of particulate 2.5 (2017) comes from t
 \href{https://annuario.isprambiente.it/pon/basic/14}{Istituto Superiore Per La protezione Ambientale}.
 }
 \seealso{
-for details regarding  the methodology of specific datasets check  \code{\link{bweight_it}}, \code{\link{cancer_it}},
-\code{\link{chronic_it}}, \code{\link{dem_it}}, \code{\link{firstaid_it}}, \code{\link{fl_it}}, \code{\link{fl65_it}},\code{\link{fl_it}},
-\code{\link{hospbed_it}}, \code{\link{house_it}}, \code{\link{pm2.5_it}}
+for details regarding  the methodology of specific datasets check  \code{\link{it_bweight}}, \code{\link{it_cancer}},
+\code{\link{it_chronic}}, \code{\link{it_dem}}, \code{\link{it_firstaid}}, \code{\link{it_fl}}, \code{\link{it_fl65}},\code{\link{it_fl}},
+\code{\link{it_hospbed}}, \code{\link{it_house}}, \code{\link{it_pm2.5}}
 }

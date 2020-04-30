@@ -69,10 +69,10 @@ dim(dat_it)
 Static U.S and Italy datasets can be accessed directly.
 
 ```{r data}
-data(dem_us)
+data(us_dem)
 ```
 
-The country is generally specified in the last 2 letters of the object name. For example `dem_us` contains demographic info (sex age) of U.S counties, whereas `dem_it` of Italy. 
+The country is generally specified in the first 2 letters of the object name. For example `us_dem` contains demographic info (sex age) of U.S counties, whereas `it_dem` of Italy. 
 
 Note that it was not always possible to obtain the same datasets/information for U.S and Italy.
 

@@ -182,19 +182,19 @@ getit_covid <- function() {
 #' @importFrom dplyr vars
 #' @importFrom stats na.omit
 #' @export
-#' @seealso for details regarding  the methodology of specific datasets check  \code{\link{bweight_it}}, \code{\link{cancer_it}},
-#' \code{\link{chronic_it}}, \code{\link{dem_it}}, \code{\link{firstaid_it}}, \code{\link{fl_it}}, \code{\link{fl65_it}},\code{\link{fl_it}},
-#' \code{\link{hospbed_it}}, \code{\link{house_it}}, \code{\link{pm2.5_it}}
+#' @seealso for details regarding  the methodology of specific datasets check  \code{\link{it_bweight}}, \code{\link{it_cancer}},
+#' \code{\link{it_chronic}}, \code{\link{it_dem}}, \code{\link{it_firstaid}}, \code{\link{it_fl}}, \code{\link{it_fl65}},\code{\link{it_fl}},
+#' \code{\link{it_hospbed}}, \code{\link{it_house}}, \code{\link{it_pm2.5}}
 getit_all <- function() {
   cmr_it <- getit_covid()
 
-  house_it <- house_it %>%
+  it_house <- it_house %>%
     dplyr::filter(.data$year == 2018) %>%
     dplyr::select(.data$region, .data$phouse) %>%
     dplyr::rename("p_house" = "phouse")
 
   # get data and combine it together
-  dat1 <- plyr::join_all(list(cmr_it, house_it, fl_it_2019, dem_65bin_fm, regions_area), by = "region", type = "inner") %>%
+  dat1 <- plyr::join_all(list(cmr_it, it_house, it_fl_2019, dem_65bin_fm, it_regions), by = "region", type = "inner") %>%
     dplyr::mutate_at(vars("perc_imm65", "perc_imm"), as.numeric) %>%
     dplyr::mutate(pop_km2 = .data$pop_tot / .data$area_km2)
 
@@ -227,7 +227,7 @@ getit_all <- function() {
   )
 
   # inner join the rest
-  dat2 <- plyr::join_all(list(dat1[, col_order], chronic_it, cancer_it, smoking_it, bweight_it, firstaid_it, hospbed_it, netinc_it, pm2.5_it), by = "region", type = "inner")
+  dat2 <- plyr::join_all(list(dat1[, col_order], it_chronic, it_cancer, it_smoking, it_bweight, it_firstaid, it_hospbed, it_netinc, it_pm2.5), by = "region", type = "inner")
 
   # make cancer and health as percentage
   suppressWarnings(

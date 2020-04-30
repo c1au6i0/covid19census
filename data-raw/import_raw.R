@@ -9,9 +9,9 @@ library(tabulizer)
 # xxxxxxxxxxxxxxxx-------------------
 # United States #-----
 # xxxxxxxxxxxxxxxx-------------------
-# age and sex- age_sex_us ---------
+# us_age_sex AKA us_dem  ---------
 
-age_sex_all_us <- vroom("data-raw/it_us/us/american_comunity_survey_2018/age_sex/ACSST5Y2018.S0101_data_with_overlays_2020-04-14T063202.csv",
+us_age_sex_all <- vroom("data-raw/it_us/us/american_comunity_survey_2018/age_sex/ACSST5Y2018.S0101_data_with_overlays_2020-04-14T063202.csv",
   skip = 1,
   col_select = c(`id`, `Geographic Area Name`, starts_with("Estimate"))
 ) %>%
@@ -20,20 +20,20 @@ age_sex_all_us <- vroom("data-raw/it_us/us/american_comunity_survey_2018/age_sex
 
 to_select_age_sex <- readxl::read_xlsx("data-raw/it_us/us/american_comunity_survey_2018/age_sex/to_select_age_sex.xlsx")
 
-age_sex_us <- age_sex_all_us %>%
+us_age_sex <- us_age_sex_all %>%
   select(!!to_select_age_sex$old_names)
 
 
-names(age_sex_us) <- to_select_age_sex$new_names
+names(us_age_sex) <- to_select_age_sex$new_names
 
-age_sex_us <- age_sex_us %>%
+us_age_sex <- us_age_sex %>%
   separate(id, into = c("us_id", "fips"), sep = 9) %>%
   select(-us_id) %>%
   mutate(fips = as.numeric(fips))
 
 
-# flu vax - fl65_us  ----------
-fl65_all_us <- vroom("data-raw/it_us/us/flu_us.csv",
+# us_fl65 ----------
+us_fl65_all <- vroom("data-raw/it_us/us/flu_us.csv",
   col_types = cols(
     year = col_double(),
     geography = col_character(),
@@ -55,12 +55,12 @@ fl65_all_us <- vroom("data-raw/it_us/us/flu_us.csv",
   )
 )
 
-fl65_us <- fl65_all_us %>%
+us_fl65<- us_fl65_all %>%
   rename("imm65" = "analysis_value") %>%
   dplyr::select(state, county, fips, imm65)
 
-# hospital beds - hospbeds_us  ----------
-hospbeds_all_us <- vroom("data-raw/it_us/us/hospital_beds.csv",
+# us_hospbeds  ----------
+us_hospbeds_all <- vroom("data-raw/it_us/us/hospital_beds.csv",
   col_types = cols(
     X = col_double(),
     Y = col_double(),
@@ -106,14 +106,14 @@ hospbeds_all_us <- vroom("data-raw/it_us/us/hospital_beds.csv",
 # https://hifld-geoplatform.opendata.arcgis.com/datasets/hospitals/data?page=18
 
 # this is by city we need to go by county
-hospbeds_us <- hospbeds_all_us %>%
+us_hospbeds <- us_hospbeds_all %>%
   rename(fips = countyfips) %>%
   group_by(state, fips) %>%
   summarize(tot_beds = sum(beds, na.rm = TRUE)) %>%
   mutate(fips = as.numeric(fips)) %>%
   filter(!is.na(fips))
 
-# Mapping Medicare Disparities - mmd_us  ----------
+# us_mmd: Mapping Medicare Disparities -   ----------
 to_imp <- list.files("data-raw/it_us/us/data_cms/", full.names = TRUE)
 mmd_all_us <- vroom(to_imp,
   col_types = cols(
@@ -137,7 +137,7 @@ mmd_all_us <- vroom(to_imp,
   )
 )
 
-mmd_us <- mmd_all_us %>%
+us_mmd <- mmd_all_us %>%
   mutate(
     condition =
       recode(condition,
@@ -167,7 +167,7 @@ mmd_us <- mmd_all_us %>%
 
 # AMERICAN COMUNITY SURVEY
 # codes: https://www.census.gov/programs-surveys/acs/technical-documentation/code-lists.html
-# households - acm_househ_us ----------
+# us_acm_househ ----------
 acm_househ_all_us <- vroom("data-raw/it_us/us/american_comunity_survey_2018/households/ACSDP5Y2018.DP02_data_with_overlays_2020-04-15T004120.csv",
   col_types = cols(.default = "c"), skip = 1
 ) %>%
@@ -177,19 +177,19 @@ acm_househ_all_us <- vroom("data-raw/it_us/us/american_comunity_survey_2018/hous
 
 to_select <- readxl::read_xlsx("data-raw/it_us/us/american_comunity_survey_2018/households/to_select.xlsx")
 
-acm_househ_us <- acm_househ_all_us %>%
+us_acm_househ <- acm_househ_all_us %>%
   select(!!to_select$old_names)
 
-names(acm_househ_us) <- to_select$new_names
+names(us_acm_househ) <- to_select$new_names
 
 # the id is 0500000US16001 with last 5 numbers identifing the fips
-acm_househ_us <- acm_househ_us %>%
+us_acm_househ <- us_acm_househ %>%
   separate(id, into = c("us_id", "fips"), sep = 9) %>%
   select(-us_id) %>%
   mutate_at(vars(-state_county), as.numeric) %>%
   filter(fips < 72000) # no values for PuertoRico
 
-# poverty_us -------------------
+# us_poverty -------------------
 to_select_pov <- readxl::read_xlsx("data-raw/it_us/us/american_comunity_survey_2018/poverty/to_select_pov.xlsx")
 
 poverty_all_us <- vroom("data-raw/it_us/us/american_comunity_survey_2018/poverty/ACSST5Y2018.S1701_data_with_overlays_2020-04-16T182603.csv",
@@ -201,7 +201,7 @@ poverty_all_us <- vroom("data-raw/it_us/us/american_comunity_survey_2018/poverty
 
 names(poverty_all_us) <- to_select_pov$new_names
 
-poverty_us <- poverty_all_us %>%
+us_poverty <- poverty_all_us %>%
   separate(id, into = c("us_id", "fips"), sep = 9) %>%
   select(-us_id) %>%
   separate(geographic_area_name, c("county", "state"), sep = ",") %>%
@@ -211,7 +211,7 @@ poverty_us <- poverty_all_us %>%
 
 state_abbr <- vroom("data-raw/it_us/us/state_abbr.csv", col_types = cols(.default = "c"))
 
-# race: race_us ------------
+# us_race ------------
 to_select_race <- readxl::read_xlsx("data-raw/it_us/us/american_comunity_survey_2018/race/to_select_race.xlsx")
 
 race_all_us <- vroom("data-raw/it_us/us/american_comunity_survey_2018/race/ACSDT5Y2018.B03002_data_with_overlays_2020-04-28T232845.csv",
@@ -222,17 +222,17 @@ race_all_us <- vroom("data-raw/it_us/us/american_comunity_survey_2018/race/ACSDT
 
 names(race_all_us) <- to_select_race$new_names
 
-race_us <- race_all_us %>%
+us_race <- race_all_us %>%
   separate(id, into = c("us_id", "fips"), sep = 9) %>%
   select(-us_id) %>%
   separate(state_county, c("county", "state"), sep = ",") %>%
   mutate_at(vars(-county, -state), as.numeric)
 
-# pm2.5_us ---------------------
+# us_pm2.5 ---------------------
 # Thank you  Ista Zahn and Ben Sabath for hints on the sources
 # https://github.com/wxwx1993/PM_COVID/blob/master/additional_preprocessing_code/download_pm25_values.md
 # The Atmospheric Composition Analysis Group at Dalhouse University
-pm2.5_us <- vroom("https://raw.githubusercontent.com/wxwx1993/PM_COVID/master/Data/county_pm25.csv",
+us_pm2.5 <- vroom("https://raw.githubusercontent.com/wxwx1993/PM_COVID/master/Data/county_pm25.csv",
   col_types = cols(
     fips = col_double(),
     year = col_double(),
@@ -240,18 +240,18 @@ pm2.5_us <- vroom("https://raw.githubusercontent.com/wxwx1993/PM_COVID/master/Da
   )
 )
 
-# season_us ---------------------
+# us_season ---------------------
 # Thank you  Ista Zahn and Ben Sabath for hints on the sources
 # https://github.com/wxwx1993/PM_COVID/blob/master/additional_preprocessing_code/download_pm25_values.md
 # The Atmospheric Composition Analysis Group at Dalhouse University
 
-season_us <- vroom("https://raw.githubusercontent.com/wxwx1993/PM_COVID/master/Data/temp_seasonal_county.csv",
+us_season <- vroom("https://raw.githubusercontent.com/wxwx1993/PM_COVID/master/Data/temp_seasonal_county.csv",
                     col_types = cols(.default = "d")
                   )
 
-names(season_us) <- c("fips", "year", "summer_temp", "summer_hum", "winter_temp", "winter_hum")
+names(us_season) <- c("fips", "year", "summer_temp", "summer_hum", "winter_temp", "winter_hum")
 
-# netinc_us -----
+# us_netinc -----
 # from census
 netincome_all_us <- vroom("data-raw/it_us/us/american_comunity_survey_2018/netincome/ACSST5Y2018.S1901_data_with_overlays_2020-04-29T001634.csv",
                      col_types = cols(.default = "c"), skip = 1
@@ -261,7 +261,7 @@ netincome_all_us <- vroom("data-raw/it_us/us/american_comunity_survey_2018/netin
 
 names(netincome_all_us)
 
-netinc_us <- netincome_all_us %>%
+us_netinc <- netincome_all_us %>%
   separate(id, into = c("us_id", "fips"), sep = 9) %>%
   select(-us_id) %>%
   separate(geographic_area_name, c("county", "state"), sep = ",") %>%
@@ -271,8 +271,8 @@ netinc_us <- netincome_all_us %>%
 # xxxxxxxxxxxxxxxx-------------------
 # Italy ------------------------
 # xxxxxxxxxxxxxxxx-------------------
-# bweight_it -----
-bweight_it <- vroom("data-raw/it_us/it/bweight_it.csv", col_types = cols(
+# it_bweight -----
+it_bweight <- vroom("data-raw/it_us/it/bweight_it.csv", col_types = cols(
   ITTER107 = col_character(),
   Territorio = col_character(),
   TIPO_DATO_AVQ = col_character(),
@@ -316,7 +316,7 @@ bweight_it <- vroom("data-raw/it_us/it/bweight_it.csv", col_types = cols(
   mutate(value = value * 1000) %>%
   pivot_wider(names_from = bweight_status, values_from = value)
 
-# cancer_it -----
+# it_cancer -----
 web_page <- "http://www.registri-tumori.it/PDF/AIOM2016/I_numeri_del_cancro_2016.pdf"
 
 area_sel <- c(
@@ -356,7 +356,7 @@ names(cancer_tab) <-
   )
 
 # clean names
-cancer_it <- cancer_tab %>%
+it_cancer <- cancer_tab %>%
   mutate(region = recode(region,
     "Trentino Alto" = "Trentino Alto Adige",
     "Emilia" = "Emilia Romagna",
@@ -368,12 +368,12 @@ cancer_it <- cancer_tab %>%
   mutate_if(is.double, ~ . * 1000)
 
 # no data on those  but we want to include them anyway for the join
-cancer_it[20, "region"] <- "P.A. Bolzano"
-cancer_it[21, "region"] <- "P.A. Trento"
+it_cancer[20, "region"] <- "P.A. Bolzano"
+it_cancer[21, "region"] <- "P.A. Trento"
 
 
-# chronic_it -----
-chronic_it_p <- vroom("data-raw/it_us/it/chronic_conditions.csv",
+# it_chronic -----
+it_chronic_p <- vroom("data-raw/it_us/it/chronic_conditions.csv",
   col_types = cols(
     ITTER107 = col_character(),
     Territorio = col_character(),
@@ -394,7 +394,7 @@ chronic_it_p <- vroom("data-raw/it_us/it/chronic_conditions.csv",
 
 
 # we do some cleaning and translations
-chronic_it <- chronic_it_p %>%
+it_chronic <- it_chronic_p %>%
   rename(region = territorio, ch_condition = tipo_dato_avq) %>%
   mutate(region = str_replace(region, "-", " ")) %>%
   filter(!region %in% c("Trentino Alto Adige / Südtirol", "Italia")) %>%
@@ -411,8 +411,8 @@ chronic_it <- chronic_it_p %>%
   pivot_wider(names_from = ch_condition, values_from = value) %>%
   rename(chronic_aleast_2cron = aleast_2cron, chronic_aleast_1cron = aleast_1cron, chronic_good_h = good_h)
 
-# dem_it_p -----
-dem_it_p <- vroom(
+# it_dem_p -----
+it_dem_p <- vroom(
   "data-raw/it_us/it/pop_it.csv",
   col_types = cols(
     ITTER107 = col_character(),
@@ -448,8 +448,8 @@ dem_it_p <- vroom(
     sex = recode(sex, femmine = "female", maschi = "male")
   )
 
-dem_it_p$region <- recode(
-  dem_it_p$region,
+it_dem_p$region <- recode(
+  it_dem_p$region,
   "Valle d'Aosta / Vallée d'Aoste" = "Valle d'Aosta",
   "Provincia Autonoma Bolzano / Bozen" = "P.A. Bolzano",
   "Provincia Autonoma Trento"  = "P.A. Trento",
@@ -457,33 +457,33 @@ dem_it_p$region <- recode(
   "Emilia-Romagna" = "Emilia Romagna"
 )
 
-# dem_it: age continuus
-dem_it <- dem_it_p %>%
+# it_dem: age continuus
+it_dem <- it_dem_p %>%
   filter(region != "Trentino Alto Adige / Südtirol") %>%
   group_by(region) %>%
   mutate(tot = sum(value)) %>% # this makes total for regions
   ungroup() %>%
   mutate(perc_pop = value / tot * 100)
 
-dem_it_bins <- dem_it %>%
+it_dem_bins <- it_dem %>%
   mutate(age_bins = cut(age, seq(0, 100, 10), right = FALSE, include.lowest = TRUE)) %>%
   mutate(age_bins = recode(age_bins, "[90,100]" = "[90,100+]")) %>%
   group_by_at(vars(-age, -value, -marital_status, -index, -year, -perc_pop)) %>%
   summarize(value = sum(value), perc_pop = sum(perc_pop)) %>%
   ungroup()
 
-# dem_it_wider -----
+# it_dem_wider -----
 # if we want to use caret or any package for regression we need to have a variable age-sex bins as columns
-dem_it_wider <- dem_it_bins %>%
+it_dem_wider <- it_dem_bins %>%
   mutate(sex_age_bin = paste0("perc_", sex, "_", age_bins)) %>% # now that we have the perc we create the new factor
   select(region, tot, perc_pop, sex_age_bin) %>%
   # now we do the magic
   pivot_wider(names_from = sex_age_bin, values_from = perc_pop) %>%
   rename(pop_tot = tot)
 
-# dem_it_65bin_fm -----
+# it_dem_65bin_fm -----
 dem_65bin_fm <-
-  dem_it %>%
+  it_dem %>%
   mutate(age_bins = cut(age, breaks = c(0, 65, 100), include.lowest = TRUE, labels = c("less65", "65andMore"))) %>%
   group_by(region, age_bins, sex) %>%
   dplyr::summarize(pop_tot = first(tot), value = sum(value), perc_pop = sum(perc_pop)) %>%
@@ -494,8 +494,8 @@ dem_65bin_fm <-
   rename(female_65m = female, male_65m = male)
 
 
-# firstaid_it 2018 -------------------
-firstaid_it <- vroom("data-raw/it_us/it/first_aid.csv",
+# it_firstaid 2018 -------------------
+it_firstaid <- vroom("data-raw/it_us/it/first_aid.csv",
   col_types = cols(
     ITTER107 = col_character(),
     Territory = col_character(),
@@ -533,7 +533,7 @@ firstaid_it <- vroom("data-raw/it_us/it/first_aid.csv",
       )
   )
 
-# fl_it_2019 ---------
+# it_fl_2019 ---------
 web_page <- "http://www.salute.gov.it/imgs/C_17_tavole_19_allegati_iitemAllegati_0_fileAllegati_itemFile_3_file.pdf"
 
 area_sel <- c(
@@ -551,7 +551,7 @@ suppressWarnings(
   )[[1]]
 )
 
-fl_it <- fl_tab %>%
+it_fl <- fl_tab %>%
   rename(region = X) %>%
   {
     x <- .
@@ -569,8 +569,8 @@ fl_it <- fl_tab %>%
     x
   }
 
-fl_it_2019 <-
-  fl_it %>%
+it_fl_2019 <-
+  it_fl %>%
   select(region, `2019`) %>%
   rename(perc_imm = `2019`)
 
@@ -592,7 +592,7 @@ suppressWarnings(
 )
 
 
-fl65_it <- fl65_tab %>%
+it_fl65 <- fl65_tab %>%
   rename(region = X) %>%
   {
     x <- .
@@ -610,17 +610,17 @@ fl65_it <- fl65_tab %>%
     x
   }
 
-fl65_it_2019 <- fl65_it %>%
+it_fl65_2019 <- it_fl65 %>%
   rename(perc_imm65 = "2019") %>%
   mutate(perc_imm65 = as.numeric(perc_imm65)) %>%
   select(region, perc_imm65)
 
-fl_it_2019 <- inner_join(fl65_it_2019, fl_it_2019, by = "region")
+it_fl_2019 <- inner_join(it_fl65_2019, it_fl_2019, by = "region")
 
 
 
-# house_it -------------------
-house_it <- vroom("data-raw/it_us/it/people_household.csv", col_types = cols(
+# it_house -------------------
+it_house <- vroom("data-raw/it_us/it/people_household.csv", col_types = cols(
   ITTER107 = col_character(),
   Territorio = col_character(),
   TIPO_DATO8 = col_character(),
@@ -647,10 +647,10 @@ house_it <- vroom("data-raw/it_us/it/people_household.csv", col_types = cols(
       )
   )
 
-# hospbed_it -------
+# it_hospbed -------
 # persons using first aid or medical guard in 3 months preceding (2018)
 # inpatient hospital beds (2017) per 1000 people
-hospbed_it <- vroom("data-raw/it_us/it/hospital_beds.csv",
+it_hospbed <- vroom("data-raw/it_us/it/hospital_beds.csv",
   col_types = cols(
     ITTER107 = col_character(),
     Territory = col_character(),
@@ -682,8 +682,8 @@ hospbed_it <- vroom("data-raw/it_us/it/hospital_beds.csv",
       )
   )
 
-# netinc_it -------
-netinc_it <- vroom("data-raw/it_us/it/netinc_it.csv",
+# it_netinc -------
+it_netinc <- vroom("data-raw/it_us/it/netinc_it.csv",
   col_types = cols(
     IT107 = col_character(),
     Territory = col_character(),
@@ -719,8 +719,8 @@ netinc_it <- vroom("data-raw/it_us/it/netinc_it.csv",
       )
   )
 
-# pm2.5_it -----
-pm2.5_it_p <- vroom(
+# it_pm2.5 -----
+it_pm2.5_p <- vroom(
   "data-raw/it_us/it/pm2.5_it.csv",
   col_types = cols(
     region = col_character(),
@@ -734,16 +734,16 @@ pm2.5_it_p <- vroom(
   )
 )
 # pm2.5f_it
-pm2.5_it <-
-  pm2.5_it_p %>%
+it_pm2.5 <-
+  it_pm2.5_p %>%
   select(region, `2017`) %>%
   rename(pm2.5 = `2017`)
 
-# regions_area ------
+# it_regions ------
 wiki <- xml2::read_html("https://it.wikipedia.org/wiki/Regioni_d%27Italia")
 
 
-regions_area_p <- wiki %>%
+it_regions_p <- wiki %>%
   rvest::html_nodes("table") %>%
   rvest::html_table(fill = TRUE) %>%
   {
@@ -752,14 +752,14 @@ regions_area_p <- wiki %>%
   }
 
 # let's clean the names
-regions_area <- regions_area_p %>%
+it_regions <- it_regions_p %>%
   select(Regione, `Superficie (km²)`) %>%
   rename(region = Regione, area_km2 = `Superficie (km²)`) %>%
   mutate(region = str_replace(region, "-", " "), area_km2 = as.numeric(str_remove(area_km2, "[[:blank:]]"))) %>%
   filter(!region %in% c("Trentino Alto Adige", "Italia"))
 
 #  we add those missing regions
-regions_area <- bind_rows(regions_area, tribble(
+it_regions <- bind_rows(it_regions, tribble(
   ~region, ~area_km2,
   "P.A. Bolzano", 7398,
   "P.A. Trento", 2397
@@ -767,8 +767,8 @@ regions_area <- bind_rows(regions_area, tribble(
 
 
 
-# smoking_it ------
-smoking_it <- vroom("data-raw/it_us/it/smoking.csv",
+# it_smoking ------
+it_smoking <- vroom("data-raw/it_us/it/smoking.csv",
   col_types = cols(
     ITTER107 = col_character(),
     Territorio = col_character(),
@@ -809,40 +809,40 @@ smoking_it <- vroom("data-raw/it_us/it/smoking.csv",
   mutate(value = value * 1000) %>%
   pivot_wider(names_from = smoking_status, values_from = value)
 
-
-# usethis -----
-
+# xxxxxxxxxxxxxxxx-------------------
+# savedata  ------------------------
+# xxxxxxxxxxxxxxxx-------------------
 # external data
 
-dem_us <- age_sex_us
+us_dem <- us_age_sex
 usethis::use_data(
   # US data
-  acm_househ_us,
-  dem_us,
-  fl65_us,
-  hospbeds_us,
-  mmd_us,
-  poverty_us,
+  us_acm_househ,
+  us_dem,
+  us_fl65,
+  us_hospbeds,
+  us_mmd,
+  us_poverty,
   # state_abbr,
   # italy
-  bweight_it,
-  cancer_it,
-  chronic_it,
+  it_bweight,
+  it_cancer,
+  it_chronic,
   # dem_65bin_fm,
-  dem_it,
-  firstaid_it,
-  fl_it,
-  fl65_it,
-  hospbed_it,
-  house_it,
-  netinc_it,
-  netinc_us,
-  pm2.5_it,
-  pm2.5_us,
-  race_us,
-  regions_area,
-  smoking_it,
-  season_us,
+  it_dem,
+  it_firstaid,
+  it_fl,
+  it_fl65,
+  it_hospbed,
+  it_house,
+  it_netinc,
+  us_netinc,
+  it_pm2.5,
+  us_pm2.5,
+  us_race,
+  it_regions,
+  it_smoking,
+  us_season,
   # internal = TRUE,
   overwrite = TRUE
 )
@@ -850,14 +850,14 @@ usethis::use_data(
 
 
 # they take the mean of all the different years, we do the same
-pm2.5_us <-
-  pm2.5_us %>%
+us_pm2.5 <-
+  us_pm2.5 %>%
   group_by(fips) %>%
   summarize(pm2.5 = mean(pm25)) %>%
   ungroup()
 
-season_us <-
-  season_us %>%
+us_season <-
+  us_season %>%
   group_by(fips) %>%
   # easy summarization of each variable...
   summarize_at(
@@ -869,32 +869,32 @@ season_us <-
 # # internal data
 usethis::use_data(
   # US data
-  acm_househ_us,
-  age_sex_us,
-  fl65_us,
-  hospbeds_us,
-  mmd_us,
-  poverty_us,
+  us_acm_househ,
+  us_age_sex,
+  us_fl65,
+  us_hospbeds,
+  us_mmd,
+  us_poverty,
   state_abbr,
   # italy
-  bweight_it,
-  cancer_it,
-  chronic_it,
+  it_bweight,
+  it_cancer,
+  it_chronic,
   dem_65bin_fm,
-  dem_it,
-  firstaid_it,
-  # fl_it,
-  fl_it_2019,
-  hospbed_it,
-  house_it,
-  netinc_it,
-  netinc_us,
-  pm2.5_it,
-  pm2.5_us,
-  race_us,
-  regions_area,
-  smoking_it,
-  season_us,
+  it_dem,
+  it_firstaid,
+  # it_fl,
+  it_fl_2019,
+  it_hospbed,
+  it_house,
+  it_netinc,
+  us_netinc,
+  it_pm2.5,
+  us_pm2.5,
+  us_race,
+  it_regions,
+  it_smoking,
+  us_season,
   internal = TRUE,
   overwrite = TRUE
 )

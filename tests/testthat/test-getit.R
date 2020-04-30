@@ -8,7 +8,7 @@ test_that("getit_covid executes", {
 x <- getit_covid()
 
 # we take only the last year
-house_it <- house_it %>%
+it_house <- it_house %>%
   dplyr::filter(.data$year == 2018) %>%
   dplyr::select(.data$region, .data$phouse) %>%
   dplyr::rename("p_house" = "phouse")
@@ -16,17 +16,17 @@ house_it <- house_it %>%
 # check the datasets that we are merging-----
 t_data <- lapply(list(
   x,
-  cancer_it,
-  chronic_it,
+  it_cancer,
+  it_chronic,
   dem_65bin_fm,
-  bweight_it,
-  firstaid_it,
-  hospbed_it,
-  house_it,
-  netinc_it,
-  pm2.5_it,
-  regions_area,
-  smoking_it
+  it_bweight,
+  it_firstaid,
+  it_hospbed,
+  it_house,
+  it_netinc,
+  it_pm2.5,
+  it_regions,
+  it_smoking
 ), function(x) {
   unique(x$region) %in% unique(dem_65bin_fm$region)
 })

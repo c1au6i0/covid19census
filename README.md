@@ -81,16 +81,14 @@ and \#’ aggregate by
 This is a list of U.S. datasets that can be accessed directly or in a
 `dataframe` containing also COVID-19 metrics:
 
-  - `act_ind_us`: county-level device exposure index (DEX), an index of
-    activity.
-  - `acm_househ_us`: several metric regarding household composition,
+  - `us_acm_househ`: several metric regarding household composition,
     including poverty, education, ancestry (2018).
-  - `age_sex_us`: age and sex distribution (2018).
-  - `fl65_us`: percentage of fee-for-service (FFS) Medicare enrollees
+  - `us_age_sex`: age and sex distribution (2018).
+  - `us_fl65`: percentage of fee-for-service (FFS) Medicare enrollees
     that had an annual flu vaccination (2017)
-  - `hospbeds_us`: total hospital beds in each county (2019).
-  - \`netinc\_us: median househould income (2018).
-  - `mmd_us`: data of 2017 regarding the prevalence found in medicare
+  - `us_hospbeds`: total hospital beds in each county (2019).
+  - `us_netinc`: median househould income (2018).
+  - `us_mmd`: data of 2017 regarding the prevalence found in medicare
     beneficiaries of
       - many medical and chronic conditions (Alzheimer, chronic kidney,
         obesity, depression, obstructive pulmonary, disease, arthritis,
@@ -100,8 +98,8 @@ This is a list of U.S. datasets that can be accessed directly or in a
       - emergency, medical admissions and annual visits.
       - pneumoccocal vaccine.
       - tobacco use.
-  - `pm2.5_us`: Emissions of pm2.5 in micro g/m3
-  - `race_us`: estimated races in population (2018).
+  - `us_pm2.5`: Emissions of pm2.5 in micro g/m3
+  - `us_race`: estimated races in population (2018).
 
 *Note that* info for some counties are missing in some datasets. For
 example, `hospbeds` contains info on 2545 counties, `fl65` has 3224
@@ -123,27 +121,27 @@ Ambientale](https://annuario.isprambiente.it/pon/basic/14)
 This is a list of Italy datasets that can be accessed directly or in a
 `dataframe` containing also COVID-19 metrics:
 
-  - `bweight_it`: Body mass index in regions of Italy, in the general
+  - `it_bweight`: Body mass index in regions of Italy, in the general
     population.
-  - `cancer_it`: Number of cancer patients in each region by type.
-  - `chronic_it`: Number of people suffering of chronic conditions by
+  - `it_cancer`: Number of cancer patients in each region by type.
+  - `it_chronic`: Number of people suffering of chronic conditions by
     region and type.
-  - `dem_it`: Number of people by region, sex, age.
-  - `firstaid_it`: Number of people using first aid or medical guard (3
+  - `it_dem`: Number of people by region, sex, age.
+  - `it_firstaid`: Number of people using first aid or medical guard (3
     months).
-  - `fl_it`: Influenza vaccination coverage in Italy for 2009-2019
+  - `it_fl`: Influenza vaccination coverage in Italy for 2009-2019
     season for general population and aged 65 and more.
-  - `fl_it_2019`: Influenza vaccination coverage in Italy for 2018-2019
+  - `it_fl_2019`: Influenza vaccination coverage in Italy for 2018-2019
     season for general population and 65 and more.
-  - `hospbed_it`: Inpatient hospital beds per 1000 people.
-  - `house_it`: household crowding index from 2014 to 2018 in each
+  - `it_hospbed`: Inpatient hospital beds per 1000 people.
+  - `it_house`: household crowding index from 2014 to 2018 in each
     region.
-  - `netinc_it`: median net annual households income (including imputed
+  - `it_netinc`: median net annual households income (including imputed
     rents, in euros).
-  - `pm2.5_it`: emission of particulate 2.5 in tons per region.
-  - `regions_area`: Area in square meters of each region. Used to
+  - `it_pm2.5`: emission of particulate 2.5 in tons per region.
+  - `it_regions`: Area in square meters of each region. Used to
     calculate density per region.
-  - `smoking_it`: Number of people aged 14 years and over that
+  - `it_smoking`: Number of people aged 14 years and over that
     self-referred as smoker, non smoker, or past smoker by region.
 
 ## Raw Data and other Scripts

@@ -5,8 +5,8 @@
 #' @source \href{https://data.cms.gov/mapping-medicare-disparities}{Data.CMS.gov}
 #' @details \href{https://www.cms.gov/About-CMS/Agency-Information/OMH/Downloads/Mapping-Technical-Documentation.pdf}{Center for Medicare and Medicaid Services} and NORC at the University of Chicago.
 #' @return  tibble wotj `fl_65` indicating the percentage of fee-for-service (FFS) Medicare enrollees that had an annual flu vaccination
-#' @usage data(fl65_us)
-"fl65_us"
+#' @usage data(us_fl65)
+"us_fl65"
 
 #' hospital beds
 #'
@@ -14,8 +14,8 @@
 #' @docType data
 #' @source \href{https://hifld-geoplatform.opendata.arcgis.com/datasets/hospitals/data?page=18}{Homeland Infrastructure Foundation-Level Data}
 #' @return  a tibble
-#' @usage data(hospbeds_us)
-"hospbeds_us"
+#' @usage data(us_hospbeds)
+"us_hospbeds"
 
 #' household composition
 #'
@@ -24,8 +24,8 @@
 #' @source \href{https://data.census.gov/cedsci/table?q=United%20States}{American Community Survey tables}
 #' @details \href{https://www2.census.gov/programs-surveys/acs/tech_docs/subject_definitions/2018_ACSSubjectDefinitions.pdf?#}{Subject Definitions}
 #' @return  a tibble
-#' @usage data(acm_househ_us)
-"acm_househ_us"
+#' @usage data(us_acm_househ)
+"us_acm_househ"
 
 #' age and sex
 #'
@@ -33,8 +33,8 @@
 #' @docType data
 #' @source \href{https://data.census.gov/cedsci/table?q=United%20States}{American Community Survey tables}
 #' @return  a tibble
-#' @usage data(dem_us)
-"dem_us"
+#' @usage data(us_dem)
+"us_dem"
 
 #' poverty
 #'
@@ -43,8 +43,8 @@
 #' @source \href{https://data.census.gov/cedsci/table?q=United%20States}{American Community Survey tables}
 #' @details \href{https://www2.census.gov/programs-surveys/acs/tech_docs/subject_definitions/2018_ACSSubjectDefinitions.pdf?#}{Subject Definitions of the American Community Survey}
 #' @return  a tibble
-#' @usage data(poverty_us)
-"poverty_us"
+#' @usage data(us_poverty)
+"us_poverty"
 
 
 #' mapping medicare disparities
@@ -79,9 +79,9 @@
 #'   \item pneumoccocal vaccine
 #'   \item tabacco use
 #' }
-#' @usage data(mmd_us)
+#' @usage data(us_mmd)
 #' @seealso \code{\link{getus_all}} for more details regarding the variables
-"mmd_us"
+"us_mmd"
 
 #' race
 #'
@@ -90,8 +90,8 @@
 #' @source \href{https://data.census.gov/cedsci/table?q=United%20States}{American Community Survey tables}
 #' @details \href{https://www2.census.gov/programs-surveys/acs/tech_docs/subject_definitions/2018_ACSSubjectDefinitions.pdf?#}{Subject Definitions of the American Community Survey}
 #' @return  a tibble
-#' @usage data(race_us)
-"race_us"
+#' @usage data(us_race)
+"us_race"
 
 #' particulate 2.5
 #'
@@ -101,10 +101,10 @@
 #' \href{https://github.com/wxwx1993/PM_COVID/blob/master/Data/county_pm25.csv}{wxwk1993 processed data}
 #' @details  \href{https://github.com/wxwx1993/PM_COVID/blob/master/additional_preprocessing_code/download_pm25_values.md}{Ista Zahn and Ben Sabath repo}
 #' @return  a tibble
-#' @usage data(pm2.5_us)
-"pm2.5_us"
+#' @usage data(us_pm2.5)
+"us_pm2.5"
 
-#' netinc_us
+#' us_netinc
 #'
 #' Median Household income, 2018
 #' @docType data
@@ -112,8 +112,8 @@
 #' @source \href{https://data.census.gov/cedsci/table?q=United%20States}{American Community Survey tables}
 #' @details \href{https://www2.census.gov/programs-surveys/acs/tech_docs/subject_definitions/2018_ACSSubjectDefinitions.pdf?#}{Subject Definitions of the American Community Survey}
 #' @return  a tibble
-#' @usage data(netinc_us)
-"netinc_us"
+#' @usage data(us_netinc)
+"us_netinc"
 
 #' seasonal temperature and humidity
 #'
@@ -123,7 +123,7 @@
 #' \href{https://github.com/wxwx1993/PM_COVID/blob/master/Data/county_pm25.csv}{wxwk1993 processed data}
 #' @details  \href{https://raw.githubusercontent.com/wxwx1993/PM_COVID/master/Data/temp_seasonal_county.csv}{Ista Zahn and Ben Sabath repo}
 #' @return  a tibble
-#' @usage data(season_us)
-"season_us"
+#' @usage data(us_season)
+"us_season"
 
 
