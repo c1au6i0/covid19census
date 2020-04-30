@@ -240,9 +240,19 @@ pm2.5_us <- vroom("https://raw.githubusercontent.com/wxwx1993/PM_COVID/master/Da
   )
 )
 
+# season_us ---------------------
+# Thank you  Ista Zahn and Ben Sabath for hints on the sources
+# https://github.com/wxwx1993/PM_COVID/blob/master/additional_preprocessing_code/download_pm25_values.md
+# The Atmospheric Composition Analysis Group at Dalhouse University
+
+season_us <- vroom("https://raw.githubusercontent.com/wxwx1993/PM_COVID/master/Data/temp_seasonal_county.csv",
+                    col_types = cols(.default = "d")
+                  )
+
+names(season_us) <- c("fips", "year", "summer_temp", "summer_hum", "winter_temp", "winter_hum")
+
 # netinc_us -----
-
-
+# from census
 netincome_all_us <- vroom("data-raw/it_us/us/american_comunity_survey_2018/netincome/ACSST5Y2018.S1901_data_with_overlays_2020-04-29T001634.csv",
                      col_types = cols(.default = "c"), skip = 1
 ) %>%
@@ -832,15 +842,29 @@ usethis::use_data(
   race_us,
   regions_area,
   smoking_it,
+  season_us,
   # internal = TRUE,
   overwrite = TRUE
 )
 #
 
-pm2.5_us <- pm2.5_us %>%
-  filter(year == 2016) %>%
-  rename(pm2.5 = pm25) %>%
-  select(fips, pm2.5)
+
+# they take the mean of all the different years, we do the same
+pm2.5_us <-
+  pm2.5_us %>%
+  group_by(fips) %>%
+  summarize(pm2.5 = mean(pm25)) %>%
+  ungroup()
+
+season_us <-
+  season_us %>%
+  group_by(fips) %>%
+  # easy summarization of each variable...
+  summarize_at(
+    vars(summer_temp:winter_hum), mean
+    ) %>%
+  ungroup()
+
 
 # # internal data
 usethis::use_data(
@@ -870,6 +894,7 @@ usethis::use_data(
   race_us,
   regions_area,
   smoking_it,
+  season_us,
   internal = TRUE,
   overwrite = TRUE
 )

@@ -127,7 +127,7 @@ getus_dex <- function() {
 #' @import vroom
 #' @export
 getus_tests <- function() {
-  url_data <- "https://covidtracking.com/api/states/daily.csv"
+  url_data <- "https://covidtracking.com/api/v1/states/daily.csv"
 
   if (RCurl::url.exists(url_data) == FALSE) {
     stop("Something wrong with the repository or your internet connection!")
@@ -205,17 +205,17 @@ getus_tests <- function() {
 #'  \href{https://data.cms.gov/mapping-medicare-disparities}{Mapping Medicare Disparities},
 #'  \href{https://github.com/COVIDExposureIndices/COVIDExposureIndices}{COVIDExposureIndices},
 #'  \href{http://fizz.phys.dal.ca/~atmos/martin/?page_id=140#V4.NA.02.MAPLE}{Atmoshpheric Composition Analysis Group}
-#' @return A dataframe with 326 variables. Data regarding the household composition, population sex, age, race, ancestry and poverty levels,
+#' @return A dataframe with 330 variables. Data regarding the household composition, population sex, age, race, ancestry and poverty levels,
 #'  were scraped from the 2018 American Community Survey (ACS). Poverty was defined at the family level and not the household level in
 #'  the ACS. Medical conditions, tobacco use, cancer and, data relative to the number of medical and emergency visits
 #'  was obtained from the 2017 Mapping Medicare Disparities. From relative documentation listed in the source: "Prevalence rates are calculated
 #'  by searching for certain diagnosis codes in \strong{Medicare beneficiaries’ claims}. The admission rate by admission type is the frequency of
 #'  a specific type of inpatient admission per 1,000 inpatient admissions in a year."
 #'  The number of hospital beds per county was calculated from data of the2020 Homeland Infrastructure Foundation.
-#'  Emissions of particulate 2.5 in micro g/m3 (2016) were reported by \href{http://fizz.phys.dal.ca/~atmos/martin/?page_id=140#V4.NA.02.MAPLE}{Atmoshpheric Composition Analysis Group} and
+#'  Emissions of particulate 2.5 in micro g/m3 (2000-2016) and seasonal temperature (2000-2016) were reported by \href{http://fizz.phys.dal.ca/~atmos/martin/?page_id=140#V4.NA.02.MAPLE}{Atmoshpheric Composition Analysis Group} and
 #'  aggregate by \href{https://github.com/wxwx1993/PM_COVID/blob/master/additional_preprocessing_code/download_pm25_values.md}{Ista Zahn and Ben Sabath}. \cr
 #'  The following list of variables is divided in sections \emph{COVID-19 VARS, HOUSEHOLDS MARITAL STATUS AND COMPOSITION, HOUSEHOLDS EDUCATION DEGREES,
-#'  ANCESTRY, COMPUTER OR INTERNET, POPULATION AND SEX, POPULATION AND RACE, MEDICAL AND VACCINES, POVERTY, ACTIVITY, POLLUTIONS, STATE LEVEL TESTS AND HOSPITALIZATIONS}. \cr
+#'  ANCESTRY, COMPUTER OR INTERNET, POPULATION AND SEX, POPULATION AND RACE, MEDICAL AND VACCINES, POVERTY, ACTIVITY, POLLUTIONS AND TEMPERATURE, STATE LEVEL TESTS AND HOSPITALIZATIONS}. \cr
 #'  \strong{Note that data on test and hospitalizations are at the state level!}
 #'  \describe{
 #'     \item{date}{formatted `ISO 8601`}
@@ -354,8 +354,12 @@ getus_tests <- function() {
 #'     \item{median_income)}{median household income}
 #'     \item{\strong{ACTIVITY}}{---------------}
 #'     \item{dex_a}{activity index}
-#'     \item{\strong{POLLUTIONS}}{---------------}
+#'     \item{\strong{POLLUTIONS AND TEMPERATURE}}{---------------}
 #'     \item{pm2.5}{pm2.5 in  micro g per m3}
+#'     \item{summer_temp}{mean temperature in summer, F}
+#'     \item{summer_hum}{mean humity in summer, mixing ratio}
+#'     \item{winter_temp}{mean temperature in winter, F}
+#'     \item{winter_hum}{mean humity in winter, mixing ratio}
 #'     \item{\strong{STATE LEVEL TESTS AND HOSPITALIZATIONS}}{---------------}
 #'     \item{positive}{total cumulative positive test results}
 #'     \item{negative}{total cumulative negative test results}
@@ -390,7 +394,7 @@ getus_all <- function() {
     dplyr::select(-.data$death, -.data$death_increase, -.data$abbr, -.data$hash, -.data$fips)
 
   # we keep only fips and vars
-  to_join <- lapply(list(acm_househ_us, age_sex_us, race_us, fl65_us, hospbeds_us, mmd_us, poverty_us, netinc_us,pm2.5_us), function(x) {
+  to_join <- lapply(list(acm_househ_us, age_sex_us, race_us, fl65_us, hospbeds_us, mmd_us, poverty_us, netinc_us, pm2.5_us, season_us), function(x) {
     x[, !names(x) %in% c("state_county", "county", "state", "year", "abbr")]
   })
 

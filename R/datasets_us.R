@@ -115,3 +115,15 @@
 #' @usage data(netinc_us)
 "netinc_us"
 
+#' seasonal temperature and humidity
+#'
+#' Seasonal temperature and humidity
+#' @docType data
+#' @source \href{http://fizz.phys.dal.ca/~atmos/martin/?page_id=140#V4.NA.02.MAPLE}{Atmoshpheric Composition Analysis Group},
+#' \href{https://github.com/wxwx1993/PM_COVID/blob/master/Data/county_pm25.csv}{wxwk1993 processed data}
+#' @details  \href{https://raw.githubusercontent.com/wxwx1993/PM_COVID/master/Data/temp_seasonal_county.csv}{Ista Zahn and Ben Sabath repo}
+#' @return  a tibble
+#' @usage data(season_us)
+"season_us"
+
+
