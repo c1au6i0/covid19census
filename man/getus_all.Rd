@@ -12,7 +12,7 @@
 \href{http://fizz.phys.dal.ca/~atmos/martin/?page_id=140#V4.NA.02.MAPLE}{Atmoshpheric Composition Analysis Group}
 }
 \usage{
-getus_all(repo = "nyt")
+getus_all(repo = "jhu")
 }
 \arguments{
 \item{repo}{repository of COVID-19 data, one of \code{c("nyt", "jhu")}}

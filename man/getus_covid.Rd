@@ -22,5 +22,5 @@ A good description of pitfalls and caveats associated with the use of case-morta
 \href{ https://ourworldindata.org/covid-mortality-risk }{Our World in Data}.
 }
 \examples{
-dat  <- getus_covid(repo = "jhu")
+dat <- getus_covid(repo = "jhu")
 }
