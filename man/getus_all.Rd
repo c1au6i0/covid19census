@@ -12,7 +12,10 @@
 \href{http://fizz.phys.dal.ca/~atmos/martin/?page_id=140#V4.NA.02.MAPLE}{Atmoshpheric Composition Analysis Group}
 }
 \usage{
-getus_all()
+getus_all(repo = "nyt")
+}
+\arguments{
+\item{repo}{repository of COVID-19 data, one of \code{c("nyt", "jhu")}}
 }
 \value{
 A dataframe with 330 variables. Data regarding the household composition, population sex, age, race, ancestry and poverty levels,

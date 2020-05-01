@@ -1,19 +1,24 @@
 library(dplyr)
 
-test_that("get_all executes", {
-  expect_error(getus_all(), NA)
-})
+# test_that("get_all executes", {
+#   expect_error(getus_all(), NA)
+#   expect_error(getus_all(repo = "jhu"), NA)
+# })
+#
+# test_that("get_covid executes", {
+#   expect_error(getus_covid(), NA)
+#   expect_error(getus_covid(repo = "jhu"), NA)
+# })
 
-test_that("get_covid executes", {
-  expect_error(getus_covid(), NA)
-})
+y_nyt <- getus_all()
+y_jhu <- getus_all(repo = "jhu")
 
-y <- getus_all()
-
-x <- getus_covid()
+x_nyt <- getus_covid()
+x_jhu <- getus_covid(repo = "jhu")
 
 test_that("get_all and get_covid have same fips", {
-  expect_equal(length(unique(y$fips)), length(unique(x$fips)))
+  expect_equal(length(unique(y_nyt$fips)), length(unique(x_nyt$fips)))
+  expect_equal(length(unique(y_jhu$fips)), length(unique(x_jhu$fips)))
 })
 
 

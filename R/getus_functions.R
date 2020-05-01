@@ -9,7 +9,7 @@
 #' @details `cases` represents the number of confirmed cases, while `cmr` the case-mortality rate (deaths / confirmed_case * 100).
 #' A good description of pitfalls and caveats associated with the use of case-mortality rate metric has been made on
 #' \href{ https://ourworldindata.org/covid-mortality-risk }{Our World in Data}.
-#' @export
+#' @keywords internal
 getus_covid_jhu <- function() {
 
   url_base <-  "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_"
@@ -20,12 +20,12 @@ getus_covid_jhu <- function() {
   dat_l <- lapply(metric_files, function(x){
     url_full <- paste0(url_base, x, "_US.csv")
 
-    if (RCurl::url.exists(url_data) == FALSE) {
+    if (RCurl::url.exists(url_full) == FALSE) {
       stop("Something wrong with the repository or your internet connection!")
     }
 
-   dat <- vroom(url_full, col_types = c(.default = "?" )) %>%
-      pivot_longer(cols = dplyr::matches("[0-9]{1,}/")  , names_to = "date", values_to = "value") %>%
+   dat <- vroom(url_full, col_types = c(.default = "?" ), progress = FALSE) %>%
+      tidyr::pivot_longer(cols = dplyr::matches("[0-9]{1,}/")  , names_to = "date", values_to = "value") %>%
       janitor::clean_names() %>%
       dplyr::filter(.data$country_region == "US") %>%
       dplyr::select(
@@ -56,18 +56,15 @@ getus_covid_jhu <- function() {
   dat_w <-
     dat_l$confirmed %>%
     dplyr::select(.data$date, .data$fips, .data$confirmed) %>%
-    dplyr::inner_join(dat_l$confirmed, dat_l$deaths, by = c("date", "fips")) %>%
+    dplyr::inner_join(dat_l$deaths, by = c("date", "fips")) %>%
     dplyr::rename("cases"= "confirmed") %>%
     dplyr::mutate(
+      date = as.Date(.data$date, format = "%m/%d/%y"),
       cmr = .data$deaths / .data$cases * 100
       ) %>%
-  dplyr::mutate(date = format(strptime(.data$date, format = "%m/%d/%y"), "%Y-%m-%d"))
+    dplyr::select(.data$date, .data$county, .data$state, .data$fips, .data$cases, .data$deaths, .data$cmr)
 
-
-
-
-
-  message(paste0("\nUS COVID-19 data up to ", max(dat_w$date), " successfully retrived from JHU repository!"))
+  message(paste0("US COVID-19 data up to ", max(dat_w$date), " successfully retrived from JHU repository!"))
 
   dat_w
 }
@@ -111,6 +108,38 @@ getus_covid_nyt <- function() {
 
   dat
 }
+
+#' get COVID-19
+#'
+#' extracts time series from the git repository of the  \href{ https://github.com/nytimes/covid-19-data }{NYT} or of the
+#' \href{ https://github.com/CSSEGISandData }{JHU}
+#'
+#' @param repo repository of COVID-19 data, one of `c("nyt", "jhu")`
+#' @return a dataframe
+#' @importFrom rlang .data
+#' @importFrom magrittr %>%
+#' @import vroom
+#' @details `cases` represents the number of confirmed cases, while `cmr` the case-mortality rate (deaths / confirmed_case * 100).
+#' A good description of pitfalls and caveats associated with the use of case-mortality rate metric has been made on
+#' \href{ https://ourworldindata.org/covid-mortality-risk }{Our World in Data}.
+#' @examples
+#' dat  <- getus_covid(repo = "nyt")
+#' @export
+#'
+getus_covid <- function(repo = "nyt") {
+        if (!repo %in% c("nyt", "jhu")) {
+          stop("The argument repo can be only nyt or jhu")
+        }
+  if(repo == "nyt"){
+    dat <- getus_covid_nyt()
+  } else {
+    dat <- getus_covid_jhu()
+  }
+
+  dat
+
+}
+
 
 #' get device-exposure indexes (DEX)
 #'
@@ -280,6 +309,7 @@ getus_tests <- function() {
 #'  \href{https://data.cms.gov/mapping-medicare-disparities}{Mapping Medicare Disparities},
 #'  \href{https://github.com/COVIDExposureIndices/COVIDExposureIndices}{COVIDExposureIndices},
 #'  \href{http://fizz.phys.dal.ca/~atmos/martin/?page_id=140#V4.NA.02.MAPLE}{Atmoshpheric Composition Analysis Group}
+#' @param repo repository of COVID-19 data, one of `c("nyt", "jhu")`
 #' @return A dataframe with 330 variables. Data regarding the household composition, population sex, age, race, ancestry and poverty levels,
 #'  were scraped from the 2018 American Community Survey (ACS). Poverty was defined at the family level and not the household level in
 #'  the ACS. Medical conditions, tobacco use, cancer and, data relative to the number of medical and emergency visits
@@ -460,8 +490,8 @@ getus_tests <- function() {
 #' @import vroom
 #' @seealso \code{\link{getus_covid}},\code{\link{getus_tests}}, \code{\link{getus_dex}},
 #' @export
-getus_all <- function() {
-  covid19_us <- getus_covid()
+getus_all <- function(repo = "nyt") {
+  covid19_us <- getus_covid(repo = repo)
   dex_us <- getus_dex() %>%
     dplyr::select(.data$fips, .data$date, .data$dex_a)
 
