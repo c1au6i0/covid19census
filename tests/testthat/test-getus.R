@@ -10,10 +10,10 @@ library(dplyr)
 #   expect_error(getus_covid(repo = "jhu"), NA)
 # })
 
-y_nyt <- getus_all()
+y_nyt <- getus_all(repo = "nyt")
 y_jhu <- getus_all(repo = "jhu")
 
-x_nyt <- getus_covid()
+x_nyt <- getus_covid(repo = "nyt")
 x_jhu <- getus_covid(repo = "jhu")
 
 test_that("get_all and get_covid have same fips", {
@@ -41,7 +41,7 @@ expected_states <- structure(list(state = c(
   "New Jersey", "New Mexico", "Nevada", "New York", "Ohio", "Oklahoma",
   "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota",
   "Tennessee", "Texas", "Utah", "Virginia", "Vermont", "Washington",
-  "Wisconsin", "West Virginia", "Wyomin"
+  "Wisconsin", "West Virginia", "Wyoming"
 ), abbr = c(
   "AK", "AL",
   "AR", "AZ", "CA", "CO", "CT", "DC", "DE", "FL", "GA", "HI", "IA",

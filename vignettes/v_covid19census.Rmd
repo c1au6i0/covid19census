@@ -38,7 +38,7 @@ A family of `get` functions is used to extract dynamically daily data and return
 
 For *U.S* the prefix of the function is `getus_`, followed by the specific metric of interest:
 
-  * `getus_covid`: extracts data of COVID-19 from the [New York Time git repository](https://github.com/nytimes/covid-19-data).
+  * `getus_covid`: extracts data of COVID-19 from the [New York Time git repository](https://github.com/nytimes/covid-19-data) or the [Johns Hopkins University](https://github.com/CSSEGISandData).
   * `getus_dex`: extracts data of DEX, an activity index.
   * `getus_tests`: extract info regarding number of tests performed and their results.
 

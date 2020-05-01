@@ -51,8 +51,8 @@ getus_covid_jhu <- function() {
 
   # diff_dat <- dat_w[which(dat_w$county.y != dat_w$county.x),]
 
-  # funny things is that there are unassigned county in one file (confirmed 90049), but
-  # not the other...whatever
+  # funny things is that there are unassigned county (confirmed 90049),
+  # that in the same file have a county
   dat_w <-
     dat_l$confirmed %>%
     dplyr::select(.data$date, .data$fips, .data$confirmed) %>%
@@ -101,8 +101,9 @@ getus_covid_nyt <- function() {
     )
   ) %>%
     dplyr::mutate(cmr = .data$deaths / .data$cases * 100) %>%
-    dplyr::filter(!is.na(.data$fips))
+    dplyr::filter(.data$state %in% state_abbr$state)
 
+  dat$fips[is.na(dat$fips)] <- 00000
 
   message(paste0("US COVID-19 data up to ", max(dat$date), " successfully retrived from NYT repository!"))
 
@@ -123,10 +124,10 @@ getus_covid_nyt <- function() {
 #' A good description of pitfalls and caveats associated with the use of case-mortality rate metric has been made on
 #' \href{ https://ourworldindata.org/covid-mortality-risk }{Our World in Data}.
 #' @examples
-#' dat  <- getus_covid(repo = "nyt")
+#' dat  <- getus_covid(repo = "jhu")
 #' @export
 #'
-getus_covid <- function(repo = "nyt") {
+getus_covid <- function(repo = "jhu") {
         if (!repo %in% c("nyt", "jhu")) {
           stop("The argument repo can be only nyt or jhu")
         }
@@ -326,7 +327,10 @@ getus_tests <- function() {
 #'     \item{date}{formatted `ISO 8601`}
 #'     \item{county}{county}
 #'     \item{state}{state}
-#'     \item{fips}{federal information processing standard, a unique numeric identifier of a county}
+#'     \item{fips}{federal information processing standard, a unique numeric identifier of a county.
+#'         Unknown fips are coded as 00000. \strong{Note that in the nyt repository a lot of deaths
+#'         and confirmed cases are no categorized
+#'         at the county level}}
 #'     \item{urban}{urban or rural (not sure about the  definition)}
 #'     \item{\strong{COVID-19 VARS}}{---------------}
 #'     \item{cases}{confirmed COVID-19 cases (cumulates with date)}

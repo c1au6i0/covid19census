@@ -48,8 +48,9 @@ U.S data, or `getit_all` (get-Italy-all) to get Italy data.
 ``` r
 library(covid19census)
 
-# to retrieve u.s data
-all_us <- getus_all()
+# to retrieve u.s data you can use 
+# the new york times or john hopkins university repository f
+all_us <- getus_all(repo = "jhu")
 
 # to retrieve italy data
 all_it <- getit_all()
@@ -61,9 +62,10 @@ vignette of the package `vignette("v_covid19census")`.
 ## U.S. Datasets and Sources
 
 Data regarding COVID-19 number of cases and deaths (at the county level)
-were obtained from the [New York Time git
-repository](https://github.com/nytimes/covid-19-data), whereas number of
-tests and hospitalizations from the [the Covid Tracking
+can be obtained from the [New York
+Time](https://github.com/nytimes/covid-19-data) or the [Johns Hopkins
+University](https://github.com/CSSEGISandData), whereas number of tests
+and hospitalizations from the [the Covid Tracking
 Project](https://covidtracking.com/api%7D).
 
 The other datsets were obtained from the [Homeland Infrastructure

@@ -209,7 +209,7 @@ us_poverty <- poverty_all_us %>%
 
 # state abbreviations
 
-state_abbr <- vroom("data-raw/it_us/us/state_abbr.csv", col_types = cols(.default = "c"))
+state_abbr <- readxl::read_xlsx("data-raw/it_us/us/state_abbr.xlsx")
 
 # us_race ------------
 to_select_race <- readxl::read_xlsx("data-raw/it_us/us/american_comunity_survey_2018/race/to_select_race.xlsx")

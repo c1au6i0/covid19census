@@ -4,7 +4,7 @@
 \alias{getus_covid}
 \title{get COVID-19}
 \usage{
-getus_covid(repo = "nyt")
+getus_covid(repo = "jhu")
 }
 \arguments{
 \item{repo}{repository of COVID-19 data, one of \code{c("nyt", "jhu")}}
@@ -22,5 +22,5 @@ A good description of pitfalls and caveats associated with the use of case-morta
 \href{ https://ourworldindata.org/covid-mortality-risk }{Our World in Data}.
 }
 \examples{
-dat  <- getus_covid(repo = "nyt")
+dat  <- getus_covid(repo = "jhu")
 }

@@ -34,7 +34,10 @@ ANCESTRY, COMPUTER OR INTERNET, POPULATION AND SEX, POPULATION AND RACE, MEDICAL
 \item{date}{formatted \verb{ISO 8601}}
 \item{county}{county}
 \item{state}{state}
-\item{fips}{federal information processing standard, a unique numeric identifier of a county}
+\item{fips}{federal information processing standard, a unique numeric identifier of a county.
+Unknown fips are coded as 00000. \strong{Note that in the nyt repository a lot of deaths
+and confirmed cases are no categorized
+at the county level}}
 \item{urban}{urban or rural (not sure about the  definition)}
 \item{\strong{COVID-19 VARS}}{---------------}
 \item{cases}{confirmed COVID-19 cases (cumulates with date)}
