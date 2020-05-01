@@ -55,7 +55,7 @@ us_fl65_all <- vroom("data-raw/it_us/us/flu_us.csv",
   )
 )
 
-us_fl65<- us_fl65_all %>%
+us_fl65 <- us_fl65_all %>%
   rename("imm65" = "analysis_value") %>%
   dplyr::select(state, county, fips, imm65)
 
@@ -246,15 +246,15 @@ us_pm2.5 <- vroom("https://raw.githubusercontent.com/wxwx1993/PM_COVID/master/Da
 # The Atmospheric Composition Analysis Group at Dalhouse University
 
 us_season <- vroom("https://raw.githubusercontent.com/wxwx1993/PM_COVID/master/Data/temp_seasonal_county.csv",
-                    col_types = cols(.default = "d")
-                  )
+  col_types = cols(.default = "d")
+)
 
 names(us_season) <- c("fips", "year", "summer_temp", "summer_hum", "winter_temp", "winter_hum")
 
 # us_netinc -----
 # from census
 netincome_all_us <- vroom("data-raw/it_us/us/american_comunity_survey_2018/netincome/ACSST5Y2018.S1901_data_with_overlays_2020-04-29T001634.csv",
-                     col_types = cols(.default = "c"), skip = 1
+  col_types = cols(.default = "c"), skip = 1
 ) %>%
   clean_names() %>%
   select(id, geographic_area_name, estimate_households_median_income_dollars)
@@ -861,8 +861,9 @@ us_season <-
   group_by(fips) %>%
   # easy summarization of each variable...
   summarize_at(
-    vars(summer_temp:winter_hum), mean, na.rm = TRUE
-    ) %>%
+    vars(summer_temp:winter_hum), mean,
+    na.rm = TRUE
+  ) %>%
   ungroup()
 
 

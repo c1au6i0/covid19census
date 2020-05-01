@@ -11,41 +11,39 @@
 #' \href{ https://ourworldindata.org/covid-mortality-risk }{Our World in Data}.
 #' @keywords internal
 getus_covid_jhu <- function() {
-
-  url_base <-  "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_"
+  url_base <- "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_"
 
   metric_files <- list("confirmed", "deaths")
 
   # JHU has 2 files with date in long format (confirmed and deaths)...whatever
-  dat_l <- lapply(metric_files, function(x){
+  dat_l <- lapply(metric_files, function(x) {
     url_full <- paste0(url_base, x, "_US.csv")
 
     if (RCurl::url.exists(url_full) == FALSE) {
       stop("Something wrong with the repository or your internet connection!")
     }
 
-   dat <- vroom(url_full, col_types = c(.default = "?" ), progress = FALSE) %>%
-      tidyr::pivot_longer(cols = dplyr::matches("[0-9]{1,}/")  , names_to = "date", values_to = "value") %>%
+    dat <- vroom(url_full, col_types = c(.default = "?"), progress = FALSE) %>%
+      tidyr::pivot_longer(cols = dplyr::matches("[0-9]{1,}/"), names_to = "date", values_to = "value") %>%
       janitor::clean_names() %>%
       dplyr::filter(.data$country_region == "US") %>%
       dplyr::select(
         .data$date, .data$combined_key, .data$fips, .data$value
-      )  %>%
-     tidyr::separate( .data$combined_key,
-                      sep = ", ",
-                      into = c("county", "state", "country"),
-                      fill = "left"
-                      ) %>%
-     # JHU has unincorporated U.S territories and the cruises data
-     # that ends up to be NA because they have not counties in the dataframe
-     dplyr::filter(!is.na(.data$county), !is.na(.data$fips)) %>%
-     dplyr::select(-.data$country)
+      ) %>%
+      tidyr::separate(.data$combined_key,
+        sep = ", ",
+        into = c("county", "state", "country"),
+        fill = "left"
+      ) %>%
+      # JHU has unincorporated U.S territories and the cruises data
+      # that ends up to be NA because they have not counties in the dataframe
+      dplyr::filter(!is.na(.data$county), !is.na(.data$fips)) %>%
+      dplyr::select(-.data$country)
 
-   names(dat)[names(dat) == "value"] <- x
+    names(dat)[names(dat) == "value"] <- x
 
-   dat
-  }
-  )
+    dat
+  })
 
   names(dat_l) <- metric_files
 
@@ -57,11 +55,11 @@ getus_covid_jhu <- function() {
     dat_l$confirmed %>%
     dplyr::select(.data$date, .data$fips, .data$confirmed) %>%
     dplyr::inner_join(dat_l$deaths, by = c("date", "fips")) %>%
-    dplyr::rename("cases"= "confirmed") %>%
+    dplyr::rename("cases" = "confirmed") %>%
     dplyr::mutate(
       date = as.Date(.data$date, format = "%m/%d/%y"),
       cmr = .data$deaths / .data$cases * 100
-      ) %>%
+    ) %>%
     dplyr::select(.data$date, .data$county, .data$state, .data$fips, .data$cases, .data$deaths, .data$cmr)
 
   message(paste0("US COVID-19 data up to ", max(dat_w$date), " successfully retrived from JHU repository!"))
@@ -124,21 +122,20 @@ getus_covid_nyt <- function() {
 #' A good description of pitfalls and caveats associated with the use of case-mortality rate metric has been made on
 #' \href{ https://ourworldindata.org/covid-mortality-risk }{Our World in Data}.
 #' @examples
-#' dat  <- getus_covid(repo = "jhu")
+#' dat <- getus_covid(repo = "jhu")
 #' @export
 #'
 getus_covid <- function(repo = "jhu") {
-        if (!repo %in% c("nyt", "jhu")) {
-          stop("The argument repo can be only nyt or jhu")
-        }
-  if(repo == "nyt"){
+  if (!repo %in% c("nyt", "jhu")) {
+    stop("The argument repo can be only nyt or jhu")
+  }
+  if (repo == "nyt") {
     dat <- getus_covid_nyt()
   } else {
     dat <- getus_covid_jhu()
   }
 
   dat
-
 }
 
 
@@ -494,7 +491,7 @@ getus_tests <- function() {
 #' @import vroom
 #' @seealso \code{\link{getus_covid}},\code{\link{getus_tests}}, \code{\link{getus_dex}},
 #' @export
-getus_all <- function(repo = "nyt") {
+getus_all <- function(repo = "jhu") {
   covid19_us <- getus_covid(repo = repo)
   dex_us <- getus_dex() %>%
     dplyr::select(.data$fips, .data$date, .data$dex_a)

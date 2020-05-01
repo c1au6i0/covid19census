@@ -125,5 +125,3 @@
 #' @return  a tibble
 #' @usage data(us_season)
 "us_season"
-
-
