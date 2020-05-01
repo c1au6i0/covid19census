@@ -21,7 +21,8 @@ Imports:
     janitor (>= 2.0.1),
     stringr (>= 1.4.0),
     RCurl (>= 1.98.1.2),
-    BiocStyle (>= 2.14.4)
+    BiocStyle (>= 2.14.4),
+    purrr (>= 0.3.4)
 Depends: 
     R (>= 2.10)
 Suggests: 

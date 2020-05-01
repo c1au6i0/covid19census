@@ -1,4 +1,79 @@
-#' get COVID-19 updated cases
+#' get COVID-19 from JHU
+#'
+#' extracts time series from the git repository of the \href{ https://github.com/CSSEGISandData }{JHU}
+#'
+#' @return a dataframe
+#' @importFrom rlang .data
+#' @importFrom magrittr %>%
+#' @import vroom
+#' @details `cases` represents the number of confirmed cases, while `cmr` the case-mortality rate (deaths / confirmed_case * 100).
+#' A good description of pitfalls and caveats associated with the use of case-mortality rate metric has been made on
+#' \href{ https://ourworldindata.org/covid-mortality-risk }{Our World in Data}.
+#' @export
+getus_covid_jhu <- function() {
+
+  url_base <-  "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_"
+
+  metric_files <- list("confirmed", "deaths")
+
+  # JHU has 2 files with date in long format (confirmed and deaths)...whatever
+  dat_l <- lapply(metric_files, function(x){
+    url_full <- paste0(url_base, x, "_US.csv")
+
+    if (RCurl::url.exists(url_data) == FALSE) {
+      stop("Something wrong with the repository or your internet connection!")
+    }
+
+   dat <- vroom(url_full, col_types = c(.default = "?" )) %>%
+      pivot_longer(cols = dplyr::matches("[0-9]{1,}/")  , names_to = "date", values_to = "value") %>%
+      janitor::clean_names() %>%
+      dplyr::filter(.data$country_region == "US") %>%
+      dplyr::select(
+        .data$date, .data$combined_key, .data$fips, .data$value
+      )  %>%
+     tidyr::separate( .data$combined_key,
+                      sep = ", ",
+                      into = c("county", "state", "country"),
+                      fill = "left"
+                      ) %>%
+     # JHU has unincorporated U.S territories and the cruises data
+     # that ends up to be NA because they have not counties in the dataframe
+     dplyr::filter(!is.na(.data$county), !is.na(.data$fips)) %>%
+     dplyr::select(-.data$country)
+
+   names(dat)[names(dat) == "value"] <- x
+
+   dat
+  }
+  )
+
+  names(dat_l) <- metric_files
+
+  # diff_dat <- dat_w[which(dat_w$county.y != dat_w$county.x),]
+
+  # funny things is that there are unassigned county in one file (confirmed 90049), but
+  # not the other...whatever
+  dat_w <-
+    dat_l$confirmed %>%
+    dplyr::select(.data$date, .data$fips, .data$confirmed) %>%
+    dplyr::inner_join(dat_l$confirmed, dat_l$deaths, by = c("date", "fips")) %>%
+    dplyr::rename("cases"= "confirmed") %>%
+    dplyr::mutate(
+      cmr = .data$deaths / .data$cases * 100
+      ) %>%
+  dplyr::mutate(date = format(strptime(.data$date, format = "%m/%d/%y"), "%Y-%m-%d"))
+
+
+
+
+
+  message(paste0("\nUS COVID-19 data up to ", max(dat_w$date), " successfully retrived from JHU repository!"))
+
+  dat_w
+}
+
+
+#' get COVID-19 from NYT
 #'
 #' extracts time series from the git repository of the \href{ https://github.com/nytimes/covid-19-data }{NYT}
 #'
@@ -9,8 +84,8 @@
 #' @details `cases` represents the number of confirmed cases, while `cmr` the case-mortality rate (deaths / confirmed_case * 100).
 #' A good description of pitfalls and caveats associated with the use of case-mortality rate metric has been made on
 #' \href{ https://ourworldindata.org/covid-mortality-risk }{Our World in Data}.
-#' @export
-getus_covid <- function() {
+#' @keywords internal
+getus_covid_nyt <- function() {
   url_data <- "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv"
 
   if (RCurl::url.exists(url_data) == FALSE) {
@@ -32,7 +107,7 @@ getus_covid <- function() {
     dplyr::filter(!is.na(.data$fips))
 
 
-  message(paste0("US COVID-19 data up to ", max(dat$date), " successfully retrived!"))
+  message(paste0("US COVID-19 data up to ", max(dat$date), " successfully retrived from NYT repository!"))
 
   dat
 }
