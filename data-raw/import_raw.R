@@ -215,7 +215,7 @@ names(us_mmd) <-
     "perc_schizophrenia_psychotic_dis",
     "perc_stroke",
     "perc_tobacco_use",
-    "perc_urgent_admission",
+    "urgent_admission",
     "annual_wellness_visit",
     "elective_admission",
     "emergent_admission",
