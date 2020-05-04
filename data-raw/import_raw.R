@@ -56,8 +56,8 @@ us_fl65_all <- vroom("data-raw/it_us/us/flu_us.csv",
 )
 
 us_fl65 <- us_fl65_all %>%
-  rename("imm65" = "analysis_value") %>%
-  dplyr::select(state, county, fips, imm65)
+  rename("perc_imm65" = "analysis_value") %>%
+  dplyr::select(state, county, fips, perc_imm65)
 
 # us_hospbeds  ----------
 us_hospbeds_all <- vroom("data-raw/it_us/us/hospital_beds.csv",
@@ -154,13 +154,73 @@ us_mmd <- mmd_all_us %>%
   clean_names() %>%
   # just reordering (lin the future reorder)
   select(
-    year, fips, county, state, urban, acute_myocardial_infarction,
-    alzheimer_dementia, asthma, atrial_fibrillation,
-    cancer_breast, cancer_colorectal, cancer_lung, cancer_all,
-    ch_obstructive_pulm, chronic_kidney_disease, depression,
-    diabetes, heart_failure, hypertension, ischemic_heart_disease, obesity, osteoporosis,
-    rheumatoid_arthritis, schizophrenia_psychotic_dis, stroke, tobacco_use, urgent_admission, annual_wellness_visit,
-    elective_admission, emergent_admission, other_admission, pneumococcal_vaccine
+    year,
+    fips,
+    county,
+    state,
+    urban,
+    acute_myocardial_infarction,
+    alzheimer_dementia,
+    asthma,
+    atrial_fibrillation,
+    cancer_breast,
+    cancer_colorectal,
+    cancer_lung,
+    cancer_all,
+    ch_obstructive_pulm,
+    chronic_kidney_disease,
+    depression,
+    diabetes,
+    heart_failure,
+    hypertension,
+    ischemic_heart_disease,
+    obesity,
+    osteoporosis,
+    rheumatoid_arthritis,
+    schizophrenia_psychotic_dis,
+    stroke,
+    tobacco_use,
+    urgent_admission,
+    annual_wellness_visit,
+    elective_admission,
+    emergent_admission,
+    other_admission,
+    pneumococcal_vaccine
+  )
+names(us_mmd) <-
+  c(
+    "year",
+    "fips",
+    "county",
+    "state",
+    "urban",
+    "perc_acute_myocardial_infarction",
+    "perc_alzheimer_dementia",
+    "perc_asthma",
+    "perc_atrial_fibrillation",
+    "perc_cancer_breast",
+    "perc_cancer_colorectal",
+    "perc_cancer_lung",
+    "perc_cancer_all",
+    "perc_ch_obstructive_pulm",
+    "perc_chronic_kidney_disease",
+    "perc_depression",
+    "perc_diabetes",
+    "perc_heart_failure",
+    "perc_hypertension",
+    "perc_ischemic_heart_disease",
+    "perc_obesity",
+    "perc_osteoporosis",
+    "perc_rheumatoid_arthritis",
+    "perc_schizophrenia_psychotic_dis",
+    "perc_stroke",
+    "perc_tobacco_use",
+    "perc_urgent_admission",
+    "annual_wellness_visit",
+    "elective_admission",
+    "emergent_admission",
+    "other_admission",
+    "perc_pneumococcal_vaccine"
   )
 
 

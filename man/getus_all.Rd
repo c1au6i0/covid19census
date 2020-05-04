@@ -126,7 +126,7 @@ at the county level}}
 \item{total_lat2ormore_io}{total 2 or more race including other races}
 \item{total_lat_3ormore_io}{total 3 or more race including other races}
 \item{\strong{MEDICAL AND VACCINES}}{---------------}
-\item{imm65}{percentage of fee-for-service (FFS) Medicare enrollees that had an annual flu vaccination.}
+\item{perc_imm65}{percentage of fee-for-service (FFS) Medicare enrollees that had an annual flu vaccination.}
 \item{total_beds}{total number of hospital beds}
 \item{acute_myocardial_infarction}{percent medicare with acute myocardial infarction}
 \item{alzheimer_dementia}{percent medicare with Alzheimer’s Disease, Related Disorders, or Senile Dementia}
