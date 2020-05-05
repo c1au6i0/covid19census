@@ -25,7 +25,7 @@
 #'      \item{people_tested}{number of people tested}
 #' }
 #' @details caveats and problems related the calculation by the Protezione Civile of some variables  were rised by
-#' \href{https://www.gimbe.org/pagine/341/it/comunicati-stampa?pagina=2}{GIMBE fFoundation}. Unfortunately the page is in Italian...
+#' \href{https://www.gimbe.org/pagine/341/it/comunicati-stampa?pagina=2}{GIMBE Foundation}. Unfortunately the page is in Italian...
 #' \emph{ buona lettura! }
 #' @importFrom rlang .data
 #' @importFrom magrittr %>%

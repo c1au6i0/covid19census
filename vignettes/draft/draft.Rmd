@@ -44,6 +44,13 @@ knitr::opts_chunk$set(fig.env="figure") # Latex figure environment
 knitr::opts_knit$set(eval.after = "fig.cap")
 
 library(xtable) # Creates tables that follow OUP guidelines; other options, such as kable, may also be workable
+library(tidyverse)
+library(ggrepel)
+library(scales)
+library(corrplot)
+library(ggcorrplot)
+library(NBZIMM)
+theme_set(theme_bw())
 ```
 
 # Introduction
@@ -59,13 +66,13 @@ However, the implications and conclusions of that initial observation were curta
 The current `R` package provides tools to rapidly extract United States and Italy COVID-19 epidemiological metrics (at county and regional level, respectively) from different sources, and to combine them with other demographic and health related datasets. The goal of the package is to facilitate multifactorial analysis and modeling of COVID-19 data by the scientific community. Specific effort was made to provide a detailed documentation of each of the variables returned by the functions, and to list external sources and methodology of their collection, with the objective of promoting appropriate analysis. 
 
 
-#  Alghorithm
+#  Alghorithm and Sources
 
 A family of `get` functions is employed by the `R` package to dynamically extract updated time-series data from different on-line sources, combine them, and to return a `dataframe`.
 
 For **U.S** the prefix of the functions to extract data is `getus_`, and it is followed by the specific metric of interest:
 
-  * `getus_covid`: extracts data of COVID-19 from the [New York Time github repository](https://github.com/nytimes/covid-19-data).
+  * `getus_covid`: extracts data of COVID-19 from the [New York Time github](https://github.com/nytimes/covid-19-data) (`repo = nyt`) or from the [John Hopkins University github repository](https://github.com/CSSEGISandData).
   * `getus_dex`: extracts data of DEX, an [activity indexes](https://github.com/COVIDExposureIndices/COVIDExposureIndices) calculated  by  Victor Couture, Jonathan Dingel, Allison Green, Jessie Handbury, and Kevin Williams based on smartphone movement data provided by `PlaceIQ`.
   * `getus_tests`: extract info regarding number of tests performed, their results and hospitalization from the repository of [the Covid Tracking Project](https://covidtracking.com/api}) (at the state level).
   * `getus_all`: executes all the above functions and join the results with other datasets statically contained in the package, and returns a `dataframe` with 326 variables.
@@ -77,33 +84,22 @@ For **Italy**, the prefix of the function is `getit_` followed by `covid` or `al
   * `getit_covid`: extracts data of COVID-19 cases, deaths, hospitalizations and tests from the [Protezione Civile]( "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-regioni/dpc-covid19-ita-regioni.csv").
   * `getit_all`: executes the above function, join the results with other datasets statically contained in the package and returns a `dataframe` with 64 variables.
   
-Age and sex of the population (2019),  first aid and medical guard visits (2018), smoking status (2018),  prevalence of chronic conditions (2018), annual-household income (2017), household crowding index (2018) and body-mass index were collect from [ISTAT](http://dati.istat.it/?lang=en). Prevalence of types of cancer patients (2016), influenza-vaccination coverage (2019) and the number of hospital beds per 1000 people (2017) were obtained from [Ministero della Salute](http://www.dati.salute.gov.it/). Data of particulate 2.5 (2017) comes from the [Istituto Superiore Per La protezione Ambientale](https://annuario.isprambiente.it/pon/basic/14).
+Age and sex of the population (2019), first aid and medical guard visits (2018), smoking status (2018), prevalence of chronic conditions (2018), annual-household income (2017), household crowding index (2018) and body-mass index were collect from [ISTAT](http://dati.istat.it/?lang=en). Prevalence of types of cancer patients (2016), influenza-vaccination coverage (2019) and the number of hospital beds per 1000 people (2017) were obtained from [Ministero della Salute](http://www.dati.salute.gov.it/). Data of particulate 2.5 (2017) comes from the [Istituto Superiore Per La protezione Ambientale](https://annuario.isprambiente.it/pon/basic/14).
 
 The package documentation reports and describes each variable (`colnames`) and lists all relative data sources. Because of the large amount of variables and in order to facilitate exploration of the documentation, it was deemed more practical to create separate functions with separate documentation for each of the country.
 
-  
-#  Implementation and use
+Static U.S and Italy datasets can be accessed directly using `data()`. The country is generally specified in the first 2 letters of the object name. For example `us_dem` contains demographic info (sex age) of U.S counties, whereas `it_dem` of regions of Italy. 
 
-
-```{r libraries, echo=FALSE, message=FALSE, warning=FALSE}
-library(ggcorrplot)
-library(tidyverse)
-library(ggrepel)
-library(scales)
-library(corrplot)
-theme_set(theme_bw())
-```
 
 The package is current available on [github](https://github.com/c1au6i0/covid19census). The following code launch the functions and assign the returned `dataframes` to different names.
 
 
 \bigskip
 
-
 ```{r get, results="asis", echo=TRUE}
 library(covid19census)
+dat_us <- getus_all(repo = "jhu")
 dat_it <- getit_all()
-dat_us <- getus_all()
 
 unlist(lapply(list(dat_it, dat_us), class))
 ```
@@ -119,9 +115,9 @@ tab1 <- as.data.frame(
   tribble(
     ~ getus_all,
     ~ getit_all,
-    "326",
+    "330",
     "64",
-    "2790",
+    "3225",
     "21",
     "7",
     "4",
@@ -148,57 +144,123 @@ print(
 )
 ```
 
-Data exploration and modeling  can be conveniently performed on a (single) dataframe that contains COVID-19 as well as many other metrics retrieved from multiple sources. For example,  a correlation analysis of pair of selected U.S. variables is reported in  [figure \ref{fig:fig_corr}].
+# Example of use
+
+Data exploration and modeling  can be conveniently performed on a (single) dataframe that contains COVID-19 as well as many other metrics retrieved from multiple sources.  In the following example, the package `covid19census` was employed to replicate the findings of Wu et al. 2020 [@wu2020m]. In that study, the authors investigated the possible impact of fine particulate matter on COVID-19 mortality rates in U.S and they took into account several confounding factors.
+
+
+
+
+
+```{r warning=FALSE, message=FALSE}
+library(dplyr)
+library(covid19census)
+
+dat_us <- getus_all(repo = "jhu")
+
+us_last <-
+  dat_us %>%  
+  filter(date == max(date)) %>% 
+  # 65 and over by summing all the intervals of age
+  mutate(age65_over = rowSums(dplyr::select(., matches("perc_[6][5-9]|[7|8][0-9]")))) %>% 
+  # calculate percentage of black or afroamerican, white, hispanic or latinos
+  mutate(perc_black = total_nlat_blackaa_alone/total_pop * 100) %>% 
+  mutate(perc_white = total_nlat_white_alone/total_pop * 100) %>% 
+  mutate(perc_lat = total_lat/total_pop * 100) %>% 
+  # calculate total number of tests
+  mutate(total_tests = positive + negative + pending) %>% 
+  # variables that are percent are divided by 100
+  mutate_at(vars(starts_with("perc")), function(x) x / 100)
+```
+
+For example,  a correlation analysis of pair of selected U.S. variables is reported in  [figure \ref{fig:fig_corr}].
 
 ```{r fig_corr, fig.cap=fig_cap, results="asis", echo=FALSE, fig.height=4, fig.width=4, warning=FALSE, message=FALSE}
 fig_cap <- "United States Correlation Matrix. An example of exploratory analysis on data returned by the function `getus\\_all`. Colours indicates Pearson's correlation between pairs of variables."
 
-dat_us %>%
-  filter(date == max(date)) %>%
-  # get 65 and over
-  mutate(age65_over = rowSums(select(., matches(
-    "perc_[6][5-9]|[7|8][0-9]"
-  )))) %>%
-  mutate(urban = if_else(urban == "Urban", 0, 1)) %>% 
-  select(
-    "cases",
-    "deaths",
-    "urban",
-    "age65_over",
-    "perc_poverty",
-    "cancer_all" ,
-    "diabetes",
-    "asthma",
-    "hypertension",
-    "tobacco_use",
-    "total_beds"
+us_last %>%
+  dplyr::select(
+        deaths,
+        cases,
+        pm2.5,
+        median_income,
+        perc_lat,
+        perc_black,
+        perc_edu_somecollege,
+        age65_over,
+        total_tests,
+        perc_obesity,
+        perc_tobacco_use,
+        total_beds,
+        summer_temp,
+        winter_temp,
+        summer_hum,
+        winter_hum,
+        total_pop
   ) %>%
   rename(
+    "median income" = median_income,
+    "hispanic or latinos" = perc_lat,
+    "black or afroamerican" = perc_black,
+    "with college" = perc_edu_somecollege,
     "age 65 and over" =  age65_over,
-    "in poverty" =  perc_poverty,
-    "with cancer" = cancer_all,
-    "with diabetes" = diabetes,
-    "with asthma" = asthma,
-    "with hypertension" = hypertension,
-    "using tobacco" = tobacco_use,
-    "hospital beds" = total_beds
+    "number of tests" =  total_tests,
+    "obesity" =  perc_obesity,
+    "tabacco use" = perc_tobacco_use,
+    "hospital beds" = total_beds,
+    "summer temperature" = summer_temp,
+    "winter temperature" = winter_temp,
+    "summer humidity" = summer_hum,
+    "winter humidity" = winter_hum,
+    "total_pop" = total_pop
     
   ) %>%
   na.omit() %>%
   cor() %>%
-  ggcorrplot()
-  # corrplot(method = "color",
-  #          tl.cex  = 0.7,
-  #          tl.col = "black",
-  #          cl.cex = 0.7)
+  ggcorrplot(tl.cex = 6) +
+  theme(legend.title = element_blank())
+ 
 
 ```
 
 
 
+
+```{r}
+# remotes::install_github("nyiuab/NBZIMM")
+# library(NBZIMM)
+  
+pm2.5_analisis <- glmm.zinb(fixed = 
+                             deaths ~ 
+                             pm2.5 +
+                             scale(median_income) +
+                             scale(perc_lat) +
+                             scale(perc_edu_somecollege) +
+                             scale(perc_black) +
+                             scale(age65_over) +
+                             scale(total_tests) +
+                             scale(total_beds) +
+                             scale(perc_obesity) +
+                             scale(perc_tobacco_use) +
+                             scale(summer_temp) +
+                             scale(winter_temp) +
+                             scale(summer_hum) +
+                             scale(winter_hum) +
+                             offset(log(total_pop)),
+                             random = ~ 1 | state,
+                             data = us_last)
+ 
+summary_pm2.5 <- summary(pm2.5_analisis)
+coef(summary_pm2.5)
+```
+
+
+
+
+
 # Conclusions
 
-The `R` package `covid19census` extracts and integrates epidemiological COVID-19 data (Italy and U.S at the regional and county level, respectively) with several other demographic and health related indexes. Currently, the dataframes returned by the main functions `getus_all` and `getit_all`, consist of  326 variables for 2790 U.S counties, and of 64 variables for 21 Italy regions (19 regions and autonomous provinces), respectively. By combining data form different sources, the package is aimed at promoting and simplifying the analysis and modeling of COVID-19 data by the scientific comunity.
+The `R` package `covid19census` extracts and integrates epidemiological COVID-19 data (Italy and U.S at the regional and county level, respectively) with several other demographic and health related indexes. Currently, the dataframes returned by the main functions `getus_all` and `getit_all`, consist of  326 variables for 2790 U.S counties, and of 64 variables for 21 Italy regions (19 regions and autonomous provinces), respectively. By combining data form different sources, the package is aimed at promoting and simplifying the analysis and modeling of COVID-19 data by the scientific community.
 
 
 <!-- rmarkdown::render("/Users/heverz/Documents/R_projects/covid19census/vignettes/draft/draft.Rmd", output_file= "draft.pdf") -->
