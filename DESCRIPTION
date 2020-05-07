@@ -1,0 +1,35 @@
+Package: covid19census
+Type: Package
+Title: Extracts Covid-19 and other demographic metrics regarding U.S.A and Italy
+Version: 0.0.0.9200
+Author: Claudio Zanettini
+Maintainer: claudio_zanettini <claudio.zanettini@gmail.com>
+Description: Package with functions to scrape data regarding COVID-19 epidemic 
+    in U.S.A and Italy, as well as datasets with related indexes.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.0
+Imports: 
+    vroom (>= 1.2.0),
+    magrittr (>= 1.5),
+    rlang (>= 0.4.5),
+    dplyr (>= 0.8.5),
+    tidyr (>= 1.0.2),
+    plyr (>= 1.8.6),
+    janitor (>= 2.0.1),
+    stringr (>= 1.4.0),
+    RCurl (>= 1.98.1.2),
+    BiocStyle (>= 2.14.4),
+    purrr (>= 0.3.4)
+Depends: 
+    R (>= 2.10)
+Suggests: 
+    testthat,
+    knitr,
+    rmarkdown,
+    covr
+Remotes:
+    Bioconductor/BiocStyle
+VignetteBuilder: knitr
