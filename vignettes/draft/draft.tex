@@ -238,15 +238,15 @@ different names.
 \end{Shaded}
 
 \begin{verbatim}
-## US COVID-19 data up to 2020-05-05 successfully retrived from JHU repository!
+## US COVID-19 data up to 2020-05-06 successfully retrived from JHU repository!
 \end{verbatim}
 
 \begin{verbatim}
-## US mobility data up to 2020-04-28 successfully retrived!
+## US mobility data up to 2020-04-29 successfully retrived!
 \end{verbatim}
 
 \begin{verbatim}
-## US test data up to 2020-05-05 successfully retrived!
+## US test data up to 2020-05-06 successfully retrived!
 \end{verbatim}
 
 \begin{Shaded}
@@ -256,7 +256,7 @@ different names.
 \end{Shaded}
 
 \begin{verbatim}
-## Italy COVID-19 data up to 2020-05-05 17:00:00 successfully retrived!
+## Italy COVID-19 data up to 2020-05-06 17:00:00 successfully retrived!
 \end{verbatim}
 
 \begin{Shaded}
@@ -280,7 +280,7 @@ reported in the table below {[}table \ref{tab:tab_dat}{]}.
   \hline
  & getus\_all & getit\_all \\ 
   \hline
-columns & 330 & 64 \\ 
+columns & 329 & 62 \\ 
   counties-regions & 3225 & 21 \\ 
   sources & 7 & 4 \\ 
   from & 2020-01-21 & 2020-02-24 \\ 
@@ -364,25 +364,25 @@ on COVID-19 mortality.
   \hline
  & Value & Std.Error & DF & t-value & p-value \\ 
   \hline
-(Intercept) & -12.14 & 1.14 & 199.00 & -10.61 & 0.00 \\ 
-  $\mu_g/m^3$ & 0.27 & 0.12 & 199.00 & 2.26 & 0.03 \\ 
-  median income & -0.00 & 0.13 & 199.00 & -0.01 & 0.99 \\ 
-  college education & -0.28 & 0.11 & 199.00 & -2.52 & 0.01 \\ 
-  hispanic or latinos & 0.04 & 0.12 & 199.00 & 0.36 & 0.72 \\ 
-  black or afroamerican & 0.04 & 0.15 & 199.00 & 0.29 & 0.77 \\ 
-  age 65 and over & 0.20 & 0.21 & 199.00 & 0.96 & 0.34 \\ 
-  number of tests & -0.13 & 0.48 & 3.00 & -0.28 & 0.80 \\ 
-  hospital beds & -0.14 & 0.20 & 199.00 & -0.66 & 0.51 \\ 
-  obesity & 0.20 & 0.12 & 199.00 & 1.69 & 0.09 \\ 
-  hypertension & 0.25 & 0.21 & 199.00 & 1.19 & 0.24 \\ 
-  tabacco use & -0.28 & 0.15 & 199.00 & -1.79 & 0.07 \\ 
-  summer temperature & -0.13 & 0.42 & 199.00 & -0.31 & 0.76 \\ 
-  winter temperature & 0.25 & 0.61 & 199.00 & 0.40 & 0.69 \\ 
-  summer humidity & -0.03 & 0.25 & 199.00 & -0.13 & 0.89 \\ 
-  winter humidity & 0.03 & 0.26 & 199.00 & 0.12 & 0.90 \\ 
+(Intercept) & -12.21 & 1.15 & 199.00 & -10.63 & 0.00 \\ 
+  $\mu_g/m^3$ & 0.28 & 0.12 & 199.00 & 2.35 & 0.02 \\ 
+  median income & -0.01 & 0.13 & 199.00 & -0.04 & 0.97 \\ 
+  college education & -0.27 & 0.11 & 199.00 & -2.47 & 0.01 \\ 
+  hispanic or latinos & 0.04 & 0.12 & 199.00 & 0.37 & 0.71 \\ 
+  black or afroamerican & 0.03 & 0.15 & 199.00 & 0.20 & 0.84 \\ 
+  age 65 and over & 0.21 & 0.21 & 199.00 & 0.98 & 0.33 \\ 
+  number of tests & -0.20 & 0.50 & 3.00 & -0.40 & 0.72 \\ 
+  hospital beds & -0.13 & 0.20 & 199.00 & -0.65 & 0.51 \\ 
+  obesity & 0.21 & 0.12 & 199.00 & 1.72 & 0.09 \\ 
+  hypertension & 0.24 & 0.21 & 199.00 & 1.11 & 0.27 \\ 
+  tabacco use & -0.27 & 0.15 & 199.00 & -1.77 & 0.08 \\ 
+  summer temperature & -0.10 & 0.42 & 199.00 & -0.24 & 0.81 \\ 
+  winter temperature & 0.29 & 0.62 & 199.00 & 0.47 & 0.64 \\ 
+  summer humidity & -0.02 & 0.25 & 199.00 & -0.10 & 0.92 \\ 
+  winter humidity & 0.04 & 0.26 & 199.00 & 0.17 & 0.87 \\ 
    \hline
 \end{tabular}
-\caption{Coefficients of the model. A zero-inflated negative binomial mixed model was fitted of data of U.S counties (2020-05-05)} 
+\caption{Coefficients of the model. A zero-inflated negative binomial mixed model was fitted of data of U.S counties (2020-05-06)} 
 \label{tab:tab_coef}
 \end{table}
 
@@ -393,8 +393,8 @@ The \texttt{R} package \texttt{covid19census} extracts and integrates
 epidemiological COVID-19 data (Italy and U.S at the regional and county
 level, respectively) with several other demographic and health related
 indexes. Currently, the dataframes returned by the main functions
-\texttt{getus\_all} and \texttt{getit\_all}, consist of 360 variables
-per 3225 U.S counties, and of 64 variables per 21 Italy regions (19
+\texttt{getus\_all} and \texttt{getit\_all}, consist of 329 variables
+per 3225 U.S counties, and of 62 variables per 21 Italy regions (19
 regions and autonomous provinces), respectively. By combining data form
 different sources, the package is aimed at promoting and simplifying the
 analysis and modeling of COVID-19 data by the scientific community.

@@ -113,10 +113,10 @@ tab1 <- as.data.frame(
   tribble(
     ~getus_all,
     ~getit_all,
-    "330",
-    "64",
-    "3225",
-    "21",
+    as.character(ncol(dat_us)),
+    as.character(ncol(dat_it)),
+    as.character(length(unique(dat_us$fips))),
+    as.character(length(unique(dat_it$region))),
     "7",
     "4",
     "2020-01-21",
@@ -300,7 +300,7 @@ print(
 
 # Conclusions
 
-The `R` package `covid19census` extracts and integrates epidemiological COVID-19 data (Italy and U.S at the regional and county level, respectively) with several other demographic and health related indexes. Currently, the dataframes returned by the main functions `getus_all` and `getit_all`, consist of 360 variables per 3225 U.S counties, and of 64 variables per 21 Italy regions (19 regions and autonomous provinces), respectively. By combining data form different sources, the package is aimed at promoting and simplifying the analysis and modeling of COVID-19 data by the scientific community.
+The `R` package `covid19census` extracts and integrates epidemiological COVID-19 data (Italy and U.S at the regional and county level, respectively) with several other demographic and health related indexes. Currently, the dataframes returned by the main functions `getus_all` and `getit_all`, consist of `r ncol(dat_us)` variables per `r length(unique(dat_us$fips))` U.S counties, and of `r ncol(dat_it)` variables per 21 Italy regions (19 regions and autonomous provinces), respectively. By combining data form different sources, the package is aimed at promoting and simplifying the analysis and modeling of COVID-19 data by the scientific community.
 
 
 <!-- rmarkdown::render("/Users/heverz/Documents/R_projects/covid19census/vignettes/draft/draft.Rmd", output_file= "draft.pdf") -->
