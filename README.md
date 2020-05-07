@@ -8,7 +8,7 @@
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![Travis build
-status](https://travis-ci.com/c1au6i0/covid19census.svg?branch=master)](https://travis-ci.com/c1au6i0/covid19census)
+status](https://travis-ci.com/c1au6i0/covid19census.svg?branch=master)](https://travis-ci.com/c1au6i0/covid19census_dev)
 [![Codecov test
 coverage](https://codecov.io/gh/c1au6i0/covid19census/branch/master/graph/badge.svg)](https://codecov.io/gh/c1au6i0/covid19census?branch=master)
 <!-- badges: end -->
