@@ -64,21 +64,31 @@ Details on the other functions and the datasets can be found in the vignette of 
 
 Data regarding COVID-19 number of cases and deaths (at the county level) can be obtained from the [New York Time](https://github.com/nytimes/covid-19-data) or the [Johns Hopkins University](https://github.com/CSSEGISandData), whereas number of tests and hospitalizations from the [the Covid Tracking Project](https://covidtracking.com/api}).
 
+<<<<<<< HEAD
 The other datsets were obtained from the [Homeland Infrastructure Foundation](https://hifld-geoplatform.opendata.arcgis.com/datasets/hospitals/data?page=18), the [Census](https://data.census.gov/cedsci/table?q=United%20States), [Mapping Medicare Disparities](https://data.cms.gov/mapping-medicare-disparities), and [activity indexes](https://github.com/COVIDExposureIndices/COVIDExposureIndices) calculated by  Victor Couture, Jonathan Dingel, Allison Green, Jessie Handbury, and Kevin Williams based on smartphone movement data provided by `PlaceIQ`. Emissions of pm2.5 in micro g/m3 (2016) were reported by \href{http://fizz.phys.dal.ca/~atmos/martin/?page_id=140#V4.NA.02.MAPLE}{Atmoshpheric Composition Analysis Group} and
 #'  aggregate by \href{https://github.com/wxwx1993/PM_COVID/blob/master/additional_preprocessing_code/download_pm25_values.md}{Ista Zahn and Ben Sabath}
+=======
+The other datsets were obtained from the [Homeland Infrastructure Foundation](https://hifld-geoplatform.opendata.arcgis.com/datasets/hospitals/data?page=18), the [Census](https://data.census.gov/cedsci/table?q=United%20States), [Mapping Medicare Disparities](https://data.cms.gov/mapping-medicare-disparities), and [activity indexes](https://github.com/COVIDExposureIndices/COVIDExposureIndices) calculated by  Victor Couture, Jonathan Dingel, Allison Green, Jessie Handbury, and Kevin Williams based on smartphone movement data provided by `PlaceIQ`. Emissions of pm2.5 in micro g/m3 (2016) were reported by \href{http://fizz.phys.dal.ca/~atmos/martin/?page_id=140#V4.NA.02.MAPLE}{Atmoshpheric Composition Analysis Group} and aggregate by [Ista Zahn and Ben Sabath.](https://github.com/wxwx1993/PM_COVID/blob/master/additional_preprocessing_code/download_pm25_values.md)
+>>>>>>> public
 
 This is a list of U.S. datasets that can be accessed directly or in a `dataframe` containing also COVID-19 metrics:
 
 * `us_acm_househ`: several metric regarding household composition, including poverty, education, ancestry (2018).
 * `us_age_sex`: age and sex distribution (2018).
+<<<<<<< HEAD
 * `us_fl65`:  percentage of fee-for-service (FFS) Medicare enrollees that had an annual flu vaccination (2017)
+=======
+>>>>>>> public
 * `us_hospbeds`: total hospital beds in each county (2019).
 * `us_netinc`: median househould income (2018).
 * `us_mmd`: data of 2017 regarding the  prevalence found in medicare beneficiaries of 
     * many medical and chronic conditions (Alzheimer, chronic kidney, obesity, depression, obstructive pulmonary, disease, arthritis, diabetes, osteoporosis, asthma, atrial  fibrillation, ischemic hearth, myocardial infarction, hypertension).
     * several type of cancer.
     * emergency,  medical admissions and annual visits.
+<<<<<<< HEAD
     * pneumoccocal vaccine.
+=======
+>>>>>>> public
     * tobacco use.
 * `us_pm2.5`: Emissions of pm2.5 in micro g/m3
 * `us_race`: estimated races in population (2018).
@@ -89,7 +99,11 @@ This is a list of U.S. datasets that can be accessed directly or in a `dataframe
 
 Data regarding COVID-19 deaths, confirmed cases, test and hospitalizations are extracted from the [Protezione Civile repository](https://github.com/pcm-dpc/COVID-19)
 
+<<<<<<< HEAD
 Demographic metrics and other stats regarding medical conditions and vaccinations were obtained from the [ISTAT](http://dati.istat.it/?lang=en), [Ministero della Salute](http://www.salute.gov.it/portale/home.html). Data regarding `pm2.5` were collected by [Istituto Superiore Per La protexione Ambientale](https://annuario.isprambiente.it/pon/basic/14)
+=======
+Demographic metrics and other stats regarding medical conditions were obtained from the [ISTAT](http://dati.istat.it/?lang=en), [Ministero della Salute](http://www.salute.gov.it/portale/home.html). Data regarding `pm2.5` were collected by [Istituto Superiore Per La protexione Ambientale](https://annuario.isprambiente.it/pon/basic/14)
+>>>>>>> public
 
 This is a list of Italy datasets that can be accessed directly or in a `dataframe` containing also COVID-19 metrics:
 
@@ -98,8 +112,11 @@ This is a list of Italy datasets that can be accessed directly or in a `datafram
 * `it_chronic`: Number of people suffering of chronic conditions by region and type.
 * `it_dem`: Number of people by region, sex, age.
 * `it_firstaid`: Number of people using first aid or medical guard (3 months). 
+<<<<<<< HEAD
 * `it_fl`: Influenza vaccination coverage in Italy for 2009-2019 season for general population and aged 65 and more.
 * `it_fl_2019`: Influenza vaccination coverage in Italy for 2018-2019 season for general population and 65 and more.
+=======
+>>>>>>> public
 * `it_hospbed`: Inpatient hospital beds per 1000 people.
 * `it_house`:  household crowding index from 2014 to 2018 in each region.
 * `it_netinc`:  median net annual households income (including imputed rents, in euros).

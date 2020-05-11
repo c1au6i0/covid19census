@@ -59,6 +59,7 @@ us_fl65 <- us_fl65_all %>%
   rename("perc_imm65" = "analysis_value") %>%
   dplyr::select(state, county, fips, perc_imm65)
 
+
 # us_hospbeds  ----------
 us_hospbeds_all <- vroom("data-raw/it_us/us/hospital_beds.csv",
   col_types = cols(
@@ -676,7 +677,6 @@ it_fl65_2019 <- it_fl65 %>%
   select(region, perc_imm65)
 
 it_fl_2019 <- inner_join(it_fl65_2019, it_fl_2019, by = "region")
-
 
 
 # it_house -------------------
