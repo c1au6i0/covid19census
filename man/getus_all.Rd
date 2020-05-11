@@ -18,7 +18,7 @@ getus_all(repo = "jhu")
 \item{repo}{repository of COVID-19 data, one of \code{c("nyt", "jhu")}}
 }
 \value{
-A dataframe with 330 variables. Data regarding the household composition, population sex, age, race, ancestry and poverty levels,
+A dataframe. Data regarding the household composition, population sex, age, race, ancestry and poverty levels,
 were scraped from the 2018 American Community Survey (ACS). Poverty was defined at the family level and not the household level in
 the ACS. Medical conditions, tobacco use, cancer and, data relative to the number of medical and emergency visits
 was obtained from the 2017 Mapping Medicare Disparities. From relative documentation listed in the source: "Prevalence rates are calculated
@@ -104,6 +104,14 @@ at the county level}}
 \item{total_female}{total female}
 \item{total_ \emph{age_sex}}{total population by age bin and sex}
 \item{perc_ \emph{age_sex}}{percent population by age bin and sex}
+\item{median_age}{median age in years}
+\item{median_age_male}{median age in years of males}
+\item{median_age_female}{median age in years of females}
+\item{sex_ratio}{males per 100 females}
+\item{age_dependency}{the age dependency ratio is derived by dividing the combined under
+18 years and 65 years and over populations by the 18-to-64 population and multiplying by 100}
+\item{old_age_dependency}{the old-age dependency ratio is derived by dividing the population 65 years and over by the 18-to-64 population and multiplying by 100}
+\item{child_dependency}{the child dependency ratio is derived by dividing the population under 18 years by the 18-to-64 population, and multiplying by 100}
 \item{\strong{POPULATION AND RACE}}{---------------}
 \item{total_nlat}{total not hispanic or latinos. It can be normalized using total_population}
 \item{total_nlat_white_alone}{total white in that category}

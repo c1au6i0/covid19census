@@ -5,7 +5,7 @@
 \alias{us_dem}
 \title{age and sex}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 3220 rows and 113 columns.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 3220 rows and 120 columns.
 }
 \source{
 \href{https://data.census.gov/cedsci/table?q=United\%20States}{American Community Survey tables}
