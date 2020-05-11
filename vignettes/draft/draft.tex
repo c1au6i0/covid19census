@@ -238,15 +238,15 @@ different names.
 \end{Shaded}
 
 \begin{verbatim}
-## US COVID-19 data up to 2020-05-06 successfully retrived from JHU repository!
+## US COVID-19 data up to 2020-05-10 successfully retrived from JHU repository!
 \end{verbatim}
 
 \begin{verbatim}
-## US mobility data up to 2020-04-29 successfully retrived!
+## US mobility data up to 2020-05-04 successfully retrived!
 \end{verbatim}
 
 \begin{verbatim}
-## US test data up to 2020-05-06 successfully retrived!
+## US test data up to 2020-05-10 successfully retrived!
 \end{verbatim}
 
 \begin{Shaded}
@@ -256,7 +256,7 @@ different names.
 \end{Shaded}
 
 \begin{verbatim}
-## Italy COVID-19 data up to 2020-05-06 17:00:00 successfully retrived!
+## Italy COVID-19 data up to 2020-05-11 17:00:00 successfully retrived!
 \end{verbatim}
 
 \begin{Shaded}
@@ -280,7 +280,7 @@ reported in the table below {[}table \ref{tab:tab_dat}{]}.
   \hline
  & getus\_all & getit\_all \\ 
   \hline
-columns & 329 & 62 \\ 
+columns & 337 & 64 \\ 
   counties-regions & 3225 & 21 \\ 
   sources & 7 & 4 \\ 
   from & 2020-01-21 & 2020-02-24 \\ 
@@ -351,7 +351,7 @@ hypertension) in the model.
 
 \begin{verbatim}
 ## Computational iterations: 9 
-## Computational time: 0.004 minutes
+## Computational time: 0.016 minutes
 \end{verbatim}
 
 Results {[}table \ref{tab:tab_coef}{]} indicates, as in Wu et
@@ -364,25 +364,25 @@ on COVID-19 mortality.
   \hline
  & Value & Std.Error & DF & t-value & p-value \\ 
   \hline
-(Intercept) & -12.21 & 1.15 & 199.00 & -10.63 & 0.00 \\ 
-  $\mu_g/m^3$ & 0.28 & 0.12 & 199.00 & 2.35 & 0.02 \\ 
-  median income & -0.01 & 0.13 & 199.00 & -0.04 & 0.97 \\ 
-  college education & -0.27 & 0.11 & 199.00 & -2.47 & 0.01 \\ 
-  hispanic or latinos & 0.04 & 0.12 & 199.00 & 0.37 & 0.71 \\ 
-  black or afroamerican & 0.03 & 0.15 & 199.00 & 0.20 & 0.84 \\ 
-  age 65 and over & 0.21 & 0.21 & 199.00 & 0.98 & 0.33 \\ 
-  number of tests & -0.20 & 0.50 & 3.00 & -0.40 & 0.72 \\ 
-  hospital beds & -0.13 & 0.20 & 199.00 & -0.65 & 0.51 \\ 
-  obesity & 0.21 & 0.12 & 199.00 & 1.72 & 0.09 \\ 
-  hypertension & 0.24 & 0.21 & 199.00 & 1.11 & 0.27 \\ 
-  tabacco use & -0.27 & 0.15 & 199.00 & -1.77 & 0.08 \\ 
-  summer temperature & -0.10 & 0.42 & 199.00 & -0.24 & 0.81 \\ 
-  winter temperature & 0.29 & 0.62 & 199.00 & 0.47 & 0.64 \\ 
-  summer humidity & -0.02 & 0.25 & 199.00 & -0.10 & 0.92 \\ 
-  winter humidity & 0.04 & 0.26 & 199.00 & 0.17 & 0.87 \\ 
+(Intercept) & -11.79 & 1.14 & 199.00 & -10.32 & 0.00 \\ 
+  $\mu_g/m^3$ & 0.23 & 0.12 & 199.00 & 1.84 & 0.07 \\ 
+  median income & 0.13 & 0.14 & 199.00 & 0.97 & 0.33 \\ 
+  college education & -0.35 & 0.12 & 199.00 & -3.05 & 0.00 \\ 
+  hispanic or latinos & 0.14 & 0.13 & 199.00 & 1.11 & 0.27 \\ 
+  black or afroamerican & 0.02 & 0.16 & 199.00 & 0.14 & 0.89 \\ 
+  age 65 and over & 0.34 & 0.24 & 199.00 & 1.44 & 0.15 \\ 
+  number of tests & 0.46 & 0.24 & 3.00 & 1.89 & 0.16 \\ 
+  hospital beds & -0.24 & 0.23 & 199.00 & -1.06 & 0.29 \\ 
+  obesity & 0.19 & 0.13 & 199.00 & 1.50 & 0.14 \\ 
+  hypertension & 0.53 & 0.22 & 199.00 & 2.41 & 0.02 \\ 
+  tabacco use & -0.16 & 0.15 & 199.00 & -1.03 & 0.30 \\ 
+  summer temperature & -0.39 & 0.43 & 199.00 & -0.91 & 0.36 \\ 
+  winter temperature & -0.30 & 0.52 & 199.00 & -0.57 & 0.57 \\ 
+  summer humidity & -0.11 & 0.25 & 199.00 & -0.44 & 0.66 \\ 
+  winter humidity & -0.21 & 0.20 & 199.00 & -1.05 & 0.30 \\ 
    \hline
 \end{tabular}
-\caption{Coefficients of the model. A zero-inflated negative binomial mixed model was fitted of data of U.S counties (2020-05-06)} 
+\caption{Coefficients of the model. A zero-inflated negative binomial mixed model was fitted of data of U.S counties (2020-05-10)} 
 \label{tab:tab_coef}
 \end{table}
 
@@ -393,8 +393,8 @@ The \texttt{R} package \texttt{covid19census} extracts and integrates
 epidemiological COVID-19 data (Italy and U.S at the regional and county
 level, respectively) with several other demographic and health related
 indexes. Currently, the dataframes returned by the main functions
-\texttt{getus\_all} and \texttt{getit\_all}, consist of 329 variables
-per 3225 U.S counties, and of 62 variables per 21 Italy regions (19
+\texttt{getus\_all} and \texttt{getit\_all}, consist of 337 variables
+per 3225 U.S counties, and of 64 variables per 21 Italy regions (19
 regions and autonomous provinces), respectively. By combining data form
 different sources, the package is aimed at promoting and simplifying the
 analysis and modeling of COVID-19 data by the scientific community.

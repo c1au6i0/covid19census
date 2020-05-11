@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #' influenza vaccination 65 or older
 #'
 #' Percentage of fee-for-service (FFS) Medicare enrollees that had an annual flu vaccination. Collected in 2017.
@@ -9,8 +8,6 @@
 #' @usage data(us_fl65)
 "us_fl65"
 
-=======
->>>>>>> public
 #' hospital beds
 #'
 #' beds of each hospital by county (2019).
