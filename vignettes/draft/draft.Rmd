@@ -34,6 +34,9 @@ keywords:
 #  - endnotes
 bibliography: mybibfile.bib
 output: rticles::oup_article
+header-includes:
+ \usepackage{float}
+  \floatplacement{figure}{H}
 ---
 
 ```{r setup, include=FALSE}
@@ -146,7 +149,7 @@ print(
 
 Data exploration and modeling  can be conveniently performed on a (single) dataframe that contains COVID-19 as well as many other metrics retrieved from multiple sources.  In the following example, the package `covid19census` was employed to replicate the findings of Wu et al. [-@wu2020m]. In that study, the authors investigated the  impact of fine particulate matter on COVID-19 mortality rates in U.S, using a model that took in account several possible confounding factors. 
 
-In the current example, an additional confounder, percentage of people suffering of hypertension, was added to the model. Update data of deaths, cases and tests as well as other demographic indexes were retrieved with the function `getus_all`, processed. A total of 19 variables were selected for analysis. Figure \ref{fig:fig_corr} displays a correlation analysis of pairs of selected variables.
+In the current example, an additional confounder, percentage of people with cancer, was added to the model. Update data of deaths, cases and tests as well as other demographic indexes were retrieved with the function `getus_all`. A total of 19 variables were selected for analysis. Figure \ref{fig:fig_corr} displays a correlation analysis of pairs of selected variables.
 
 ```{r warning=FALSE, message=FALSE}
 library(dplyr)
@@ -178,7 +181,7 @@ us_last <-
     age65_over,
     total_tests,
     perc_obesity,
-    perc_hypertension,
+    perc_cancer_all,
     perc_tobacco_use,
     total_beds,
     summer_temp,
@@ -207,7 +210,7 @@ us_last %>%
     "age 65 and over" =  age65_over,
     "number of tests" =  total_tests,
     "obesity" =  perc_obesity,
-    "hypertension" =  perc_hypertension,
+    "cancer" =  perc_cancer_all,
     "tabacco use" = perc_tobacco_use,
     "hospital beds" = total_beds,
     "summer temperature" = summer_temp,
@@ -224,7 +227,7 @@ us_last %>%
   scale_x_discrete(labels = c("pm2.5" = new_name))
 ```
 
-The main analysis of Wu et al. [-@wu2020m], a zero-inflated negative binomial mixed models, was replicated using updated U.S data and by including an additional factor (percent of people suffering of hypertension) in the model.
+The main analysis of Wu et al. [-@wu2020m], a zero-inflated negative binomial mixed models, was replicated using updated U.S data and by including an additional factor (percent of people with cancer) in the model.
 
 
 ```{r message=FALSE, warning=FALSE, echo=TRUE}
@@ -242,7 +245,7 @@ pm2.5_model <- glmm.zinb(
       scale(total_tests) +
       scale(total_beds) +
       scale(perc_obesity) +
-      scale(perc_hypertension) +
+      scale(perc_cancer_all) +
       scale(perc_tobacco_use) +
       scale(summer_temp) +
       scale(winter_temp) +
@@ -271,7 +274,7 @@ row.names(tab2) <- c(
   "number of tests",
   "hospital beds",
   "obesity",
-  "hypertension",
+  "cancer",
   "tabacco use",
   "summer temperature",
   "winter temperature",
@@ -295,8 +298,6 @@ print(
   sanitize.rownames.function = identity
 )
 ```
-
-
 
 # Conclusions
 

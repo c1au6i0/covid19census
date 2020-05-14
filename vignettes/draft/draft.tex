@@ -62,6 +62,7 @@
 % Part for setting citation format package: biblatex
 
 % Pandoc header
+\usepackage{float} \floatplacement{figure}{H}
 
 \begin{document}
 
@@ -238,15 +239,15 @@ different names.
 \end{Shaded}
 
 \begin{verbatim}
-## US COVID-19 data up to 2020-05-10 successfully retrived from JHU repository!
+## US COVID-19 data up to 2020-05-13 successfully retrived from JHU repository!
 \end{verbatim}
 
 \begin{verbatim}
-## US mobility data up to 2020-05-04 successfully retrived!
+## US mobility data up to 2020-05-06 successfully retrived!
 \end{verbatim}
 
 \begin{verbatim}
-## US test data up to 2020-05-10 successfully retrived!
+## US test data up to 2020-05-13 successfully retrived!
 \end{verbatim}
 
 \begin{Shaded}
@@ -256,7 +257,7 @@ different names.
 \end{Shaded}
 
 \begin{verbatim}
-## Italy COVID-19 data up to 2020-05-11 17:00:00 successfully retrived!
+## Italy COVID-19 data up to 2020-05-14 17:00:00 successfully retrived!
 \end{verbatim}
 
 \begin{Shaded}
@@ -305,11 +306,11 @@ impact of fine particulate matter on COVID-19 mortality rates in U.S,
 using a model that took in account several possible confounding factors.
 
 In the current example, an additional confounder, percentage of people
-suffering of hypertension, was added to the model. Update data of
-deaths, cases and tests as well as other demographic indexes were
-retrieved with the function \texttt{getus\_all}, processed. A total of
-19 variables were selected for analysis. Figure \ref{fig:fig_corr}
-displays a correlation analysis of pairs of selected variables.
+with cancer, was added to the model. Update data of deaths, cases and
+tests as well as other demographic indexes were retrieved with the
+function \texttt{getus\_all}. A total of 19 variables were selected for
+analysis. Figure \ref{fig:fig_corr} displays a correlation analysis of
+pairs of selected variables.
 
 \begin{figure}[p]
 \includegraphics[width=1\linewidth]{draft_files/figure-latex/fig_corr-1} \caption{Correlation Matrix of selected U.S metrics. An example of exploratory analysis on data returned by the function `getus\_all`. Colours indicates Pearson's correlation between pairs of variables.}\label{fig:fig_corr}
@@ -317,8 +318,8 @@ displays a correlation analysis of pairs of selected variables.
 
 The main analysis of Wu et al.~\citeyearpar{wu2020m}, a zero-inflated
 negative binomial mixed models, was replicated using updated U.S data
-and by including an additional factor (percent of people suffering of
-hypertension) in the model.
+and by including an additional factor (percent of people with cancer) in
+the model.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -336,7 +337,7 @@ hypertension) in the model.
 \StringTok{      }\KeywordTok{scale}\NormalTok{(total_tests) }\OperatorTok{+}
 \StringTok{      }\KeywordTok{scale}\NormalTok{(total_beds) }\OperatorTok{+}
 \StringTok{      }\KeywordTok{scale}\NormalTok{(perc_obesity) }\OperatorTok{+}
-\StringTok{      }\KeywordTok{scale}\NormalTok{(perc_hypertension) }\OperatorTok{+}
+\StringTok{      }\KeywordTok{scale}\NormalTok{(perc_cancer_all) }\OperatorTok{+}
 \StringTok{      }\KeywordTok{scale}\NormalTok{(perc_tobacco_use) }\OperatorTok{+}
 \StringTok{      }\KeywordTok{scale}\NormalTok{(summer_temp) }\OperatorTok{+}
 \StringTok{      }\KeywordTok{scale}\NormalTok{(winter_temp) }\OperatorTok{+}
@@ -351,7 +352,7 @@ hypertension) in the model.
 
 \begin{verbatim}
 ## Computational iterations: 9 
-## Computational time: 0.016 minutes
+## Computational time: 0.006 minutes
 \end{verbatim}
 
 Results {[}table \ref{tab:tab_coef}{]} indicates, as in Wu et
@@ -364,25 +365,25 @@ on COVID-19 mortality.
   \hline
  & Value & Std.Error & DF & t-value & p-value \\ 
   \hline
-(Intercept) & -11.79 & 1.14 & 199.00 & -10.32 & 0.00 \\ 
-  $\mu_g/m^3$ & 0.23 & 0.12 & 199.00 & 1.84 & 0.07 \\ 
-  median income & 0.13 & 0.14 & 199.00 & 0.97 & 0.33 \\ 
-  college education & -0.35 & 0.12 & 199.00 & -3.05 & 0.00 \\ 
-  hispanic or latinos & 0.14 & 0.13 & 199.00 & 1.11 & 0.27 \\ 
-  black or afroamerican & 0.02 & 0.16 & 199.00 & 0.14 & 0.89 \\ 
-  age 65 and over & 0.34 & 0.24 & 199.00 & 1.44 & 0.15 \\ 
-  number of tests & 0.46 & 0.24 & 3.00 & 1.89 & 0.16 \\ 
-  hospital beds & -0.24 & 0.23 & 199.00 & -1.06 & 0.29 \\ 
-  obesity & 0.19 & 0.13 & 199.00 & 1.50 & 0.14 \\ 
-  hypertension & 0.53 & 0.22 & 199.00 & 2.41 & 0.02 \\ 
-  tabacco use & -0.16 & 0.15 & 199.00 & -1.03 & 0.30 \\ 
-  summer temperature & -0.39 & 0.43 & 199.00 & -0.91 & 0.36 \\ 
-  winter temperature & -0.30 & 0.52 & 199.00 & -0.57 & 0.57 \\ 
-  summer humidity & -0.11 & 0.25 & 199.00 & -0.44 & 0.66 \\ 
-  winter humidity & -0.21 & 0.20 & 199.00 & -1.05 & 0.30 \\ 
+(Intercept) & -12.52 & 1.20 & 179.00 & -10.48 & 0.00 \\ 
+  $\mu_g/m^3$ & 0.29 & 0.13 & 179.00 & 2.15 & 0.03 \\ 
+  median income & 0.02 & 0.15 & 179.00 & 0.11 & 0.92 \\ 
+  college education & -0.30 & 0.12 & 179.00 & -2.47 & 0.01 \\ 
+  hispanic or latinos & -0.00 & 0.16 & 179.00 & -0.02 & 0.98 \\ 
+  black or afroamerican & -0.09 & 0.18 & 179.00 & -0.50 & 0.62 \\ 
+  age 65 and over & 0.20 & 0.28 & 179.00 & 0.69 & 0.49 \\ 
+  number of tests & -1.10 & 0.47 & 2.00 & -2.36 & 0.14 \\ 
+  hospital beds & -0.09 & 0.27 & 179.00 & -0.35 & 0.73 \\ 
+  obesity & 0.15 & 0.15 & 179.00 & 1.05 & 0.29 \\ 
+  cancer & 0.05 & 0.19 & 179.00 & 0.26 & 0.79 \\ 
+  tabacco use & 0.03 & 0.18 & 179.00 & 0.16 & 0.87 \\ 
+  summer temperature & 0.33 & 0.53 & 179.00 & 0.63 & 0.53 \\ 
+  winter temperature & 0.81 & 0.72 & 179.00 & 1.12 & 0.27 \\ 
+  summer humidity & -0.07 & 0.28 & 179.00 & -0.26 & 0.80 \\ 
+  winter humidity & 0.33 & 0.24 & 179.00 & 1.41 & 0.16 \\ 
    \hline
 \end{tabular}
-\caption{Coefficients of the model. A zero-inflated negative binomial mixed model was fitted of data of U.S counties (2020-05-10)} 
+\caption{Coefficients of the model. A zero-inflated negative binomial mixed model was fitted of data of U.S counties (2020-05-13)} 
 \label{tab:tab_coef}
 \end{table}
 
