@@ -113,14 +113,14 @@ at the county level}}
 \item{old_age_dependency}{the old-age dependency ratio is derived by dividing the population 65 years and over by the 18-to-64 population and multiplying by 100}
 \item{child_dependency}{the child dependency ratio is derived by dividing the population under 18 years by the 18-to-64 population, and multiplying by 100}
 \item{\strong{POPULATION AND RACE}}{---------------}
-\item{white}{total white}
-\item{black_afroamerican}{total black or afroamerican}
-\item{native}{total native}
-\item{asian}{total asian}
-\item{pacific_islander}{total hawaian and pacific islander}
-\item{other_race}{other races}
-\item{two_more_races}{two or more races}
-\item{latino}{total hispanic or latinos}
+\item{total_white}{total white}
+\item{total_black}{total black or afroamerican}
+\item{total_native}{total native}
+\item{total_asian}{total asian}
+\item{total_pacific_islander}{total hawaian and pacific islander}
+\item{total_other_race}{other races}
+\item{total_two_more_races}{two or more races}
+\item{total_latino}{total hispanic or latino}
 \item{\strong{MEDICAL AND VACCINES}}{---------------}
 \item{perc_imm65}{percentage of fee-for-service (FFS) Medicare enrollees that had an annual flu vaccination.}
 \item{total_beds}{total number of hospital beds}
