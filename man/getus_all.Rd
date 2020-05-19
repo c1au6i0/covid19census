@@ -113,26 +113,14 @@ at the county level}}
 \item{old_age_dependency}{the old-age dependency ratio is derived by dividing the population 65 years and over by the 18-to-64 population and multiplying by 100}
 \item{child_dependency}{the child dependency ratio is derived by dividing the population under 18 years by the 18-to-64 population, and multiplying by 100}
 \item{\strong{POPULATION AND RACE}}{---------------}
-\item{total_nlat}{total not hispanic or latinos. It can be normalized using total_population}
-\item{total_nlat_white_alone}{total white in that category}
-\item{total_nlat_blackaa_alone}{total black or african american}
-\item{total_nlat_native_alone}{total american indian and alaska native}
-\item{total_nlat_asian_alone}{total asian}
-\item{total_nlat_island_alone}{total native hawaiaian and other pacific islander}
-\item{total_nlat_other_race}{total other race}
-\item{total_nlat_2ormore}{total 2 or more race}
-\item{total_nlat2ormore_io}{total 2 or more race including other races}
-\item{total_nlat_3ormore_io}{total 3 or more race including other races}
-\item{total_lat}{total hispanic or latinos. It can be normalized using total_population}
-\item{total_lat_white_alone}{total white in that category}
-\item{total_lat_blackaa_alone}{total black or african american}
-\item{total_lat_native_alone}{total american indian and alaska native}
-\item{total_lat_asian_alone}{total asian}
-\item{total_lat_island_alone}{total native hawaiaian and other pacific islander}
-\item{total_lat_other_race}{total other race}
-\item{total_lat_2ormore}{total 2 or more race}
-\item{total_lat2ormore_io}{total 2 or more race including other races}
-\item{total_lat_3ormore_io}{total 3 or more race including other races}
+\item{white}{total white}
+\item{black_afroamerican}{total black or afroamerican}
+\item{native}{total native}
+\item{asian}{total asian}
+\item{pacific_islander}{total hawaian and pacific islander}
+\item{other_race}{other races}
+\item{two_more_races}{two or more races}
+\item{latino}{total hispanic or latinos}
 \item{\strong{MEDICAL AND VACCINES}}{---------------}
 \item{perc_imm65}{percentage of fee-for-service (FFS) Medicare enrollees that had an annual flu vaccination.}
 \item{total_beds}{total number of hospital beds}

@@ -275,10 +275,11 @@ state_abbr <- readxl::read_xlsx("data-raw/it_us/us/state_abbr.xlsx")
 # us_race ------------
 to_select_race <- readxl::read_xlsx("data-raw/it_us/us/american_comunity_survey_2018/race/to_select_race.xlsx")
 
-race_all_us <- vroom("data-raw/it_us/us/american_comunity_survey_2018/race/ACSDT5Y2018.B03002_data_with_overlays_2020-04-28T232845.csv",
-  col_types = cols(.default = "c"), skip = 1
+race_all_us <- vroom("data-raw/it_us/us/american_comunity_survey_2018/race/ACSDP5Y2018.DP05_data_with_overlays_2020-05-17T212836.csv",
+                     col_types = cols(.default = "c"), skip = 1
 ) %>%
   clean_names() %>%
+  select(id, geographic_area_name, starts_with("estimate")) %>%
   select(!!to_select_race$old_names)
 
 names(race_all_us) <- to_select_race$new_names

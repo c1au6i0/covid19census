@@ -5,7 +5,7 @@
 \alias{us_race}
 \title{race}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 3220 rows and 23 columns.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 3220 rows and 11 columns.
 }
 \source{
 \href{https://data.census.gov/cedsci/table?q=United\%20States}{American Community Survey tables}
