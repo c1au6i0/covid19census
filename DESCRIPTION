@@ -14,7 +14,7 @@ RoxygenNote: 7.1.0
 Imports: 
     vroom (>= 1.2.0),
     magrittr (>= 1.5),
-    rlang (>= 0.4.5),
+    rlang (>= 0.4.5),   
     dplyr (>= 0.8.5),
     tidyr (>= 1.0.2),
     plyr (>= 1.8.6),
