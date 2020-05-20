@@ -414,32 +414,32 @@ getus_tests <- function() {
 #'     \item{\strong{MEDICAL AND VACCINES}}{---------------}
 #'     \item{perc_imm65}{percentage of fee-for-service (FFS) Medicare enrollees that had an annual flu vaccination.}
 #'     \item{total_beds}{total number of hospital beds}
-#'     \item{acute_myocardial_infarction}{percent medicare with acute myocardial infarction}
-#'     \item{alzheimer_dementia}{percent medicare with Alzheimer’s Disease, Related Disorders, or Senile Dementia}
-#'     \item{asthma}{percent medicare with asthma}
-#'     \item{atrial_fibrillation}{percent medicare with Atrial Fibrillation}
-#'     \item{cancer_breast}{percent medicare with Breast Cancer}
-#'     \item{cancer_colorectal}{percent medicare with Colorectal Cancer}
-#'     \item{cancer_lung}{percent medicare withLung Cancer}
-#'     \item{cancer_all}{percent medicare with Cancer (breast, colorectal, lung, and/or prostate)}
-#'     \item{ch_obstructive_pulm}{percent medicare with Chronic Obstructive Pulmonary Disease (COPD)}
-#'     \item{chronic_kidney_disease}{percent medicare with Chronic Kidney Disease}
-#'     \item{depression}{percent medicare with Depression}
-#'     \item{diabetes}{percent  medicare beneficiaries with Diabetes}
-#'     \item{hypertension}{percent  medicare beneficiaries with Hypertension}
-#'     \item{ischemic_heart_disease}{percent  medicare beneficiaries with Ischemic Heart Disease}
-#'     \item{obesity}{percent  medicare beneficiaries with Obesity}
-#'     \item{osteoporosis}{percent  medicare beneficiaries with Osteoporosis}
-#'     \item{rheumatoid_arthritis}{percent  medicare beneficiaries with Rheumatoid Arthritis}
-#'     \item{schizophrenia_psychotic_dis}{percent  medicare beneficiaries with Schizophrenia/Other Psychotic Disorders}
-#'     \item{stroke}{percent  medicare beneficiaries with Stroke Transient Ischemic Attack }
-#'     \item{tobacco_use}{}
-#'     \item{urgent_admission}{urgent care admission rate}
-#'     \item{annual_wellness_visit}{number of annual wellness visits}
+#'     \item{perc_acute_myocardial_infarction}{percent medicare with acute myocardial infarction}
+#'     \item{perc_alzheimer_dementia}{percent medicare with Alzheimer’s Disease, Related Disorders, or Senile Dementia}
+#'     \item{perc_asthma}{percent medicare with asthma}
+#'     \item{perc_atrial_fibrillation}{percent medicare with Atrial Fibrillation}
+#'     \item{perc_cancer_breast}{percent medicare with Breast Cancer}
+#'     \item{perc_cancer_colorectal}{percent medicare with Colorectal Cancer}
+#'     \item{perc_cancer_lung}{percent medicare withLung Cancer}
+#'     \item{perc_cancer_all}{percent medicare with Cancer (breast, colorectal, lung, and/or prostate)}
+#'     \item{perc_ch_obstructive_pulm}{percent medicare with Chronic Obstructive Pulmonary Disease (COPD)}
+#'     \item{perc_chronic_kidney_disease}{percent medicare with Chronic Kidney Disease}
+#'     \item{perc_depression}{percent medicare with Depression}
+#'     \item{perc_diabetes}{percent  medicare beneficiaries with Diabetes}
+#'     \item{perc_hypertension}{percent  medicare beneficiaries with Hypertension}
+#'     \item{perc_ischemic_heart_disease}{percent  medicare beneficiaries with Ischemic Heart Disease}
+#'     \item{perc_obesity}{percent  medicare beneficiaries with Obesity}
+#'     \item{perc_osteoporosis}{percent  medicare beneficiaries with Osteoporosis}
+#'     \item{perc_rheumatoid_arthritis}{percent  medicare beneficiaries with Rheumatoid Arthritis}
+#'     \item{perc_schizophrenia_psychotic_dis}{percent  medicare beneficiaries with Schizophrenia/Other Psychotic Disorders}
+#'     \item{perc_stroke}{percent  medicare beneficiaries with Stroke Transient Ischemic Attack }
+#'     \item{perc_tobacco_use}{}
+#'     \item{perc_urgent_admission}{urgent care admission rate}
+#'     \item{perc_annual_wellness_visit}{number of annual wellness visits}
 #'     \item{elective_admission}{elective admission rate}
 #'     \item{emergent_admission}{ER admission rate}
 #'     \item{other_admission}{other admission rates}
-#'     \item{pneumococcal_vaccine}{percent pneumococcal vaccine }
+#'     \item{perc_pneumococcal_vaccine}{percent pneumococcal vaccine }
 #'     \item{\strong{POVERTY}}{---------------}
 #'     \item{total_poverty_determination}{number of people evaluated for poverty}
 #'     \item{total_poverty}{total people that met the definition of below poverty level}
