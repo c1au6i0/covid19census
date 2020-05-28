@@ -3,6 +3,12 @@
 language: R
 cache: packages
 
+branches:
+  only:
+  - master
+  - dev
+
+
 r_packages:
   - covr
 
