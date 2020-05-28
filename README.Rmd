@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
-[![Travis build status](https://travis-ci.com/c1au6i0/covid19census.svg?branch=master)](https://travis-ci.com/c1au6i0/covid19census_dev)
+[![Travis build status](https://travis-ci.com/c1au6i0/covid19census_dev.svg?token=PM6d4w2yt4HVWw7s2Jgy&branch=dev)
 [![Codecov test coverage](https://codecov.io/gh/c1au6i0/covid19census/branch/master/graph/badge.svg)](https://codecov.io/gh/c1au6i0/covid19census?branch=master)
 <!-- badges: end -->
 

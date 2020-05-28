@@ -26,6 +26,18 @@
       "Repository": "CRAN",
       "Hash": "db75371846625725e221470b310da1d5"
     },
+    "BiocStyle": {
+      "Package": "BiocStyle",
+      "Version": "2.16.0",
+      "Source": "Bioconductor",
+      "Hash": "7dba8ba80463cb90215ac9ddd7e7935f"
+    },
+    "BiocVersion": {
+      "Package": "BiocVersion",
+      "Version": "3.11.1",
+      "Source": "Bioconductor",
+      "Hash": "2331d61d077a7a0a5afe8c907ea9106b"
+    },
     "DBI": {
       "Package": "DBI",
       "Version": "1.1.0",
@@ -131,6 +143,13 @@
       "Repository": "CRAN",
       "Hash": "0b118d5900596bae6c4d4865374536a6"
     },
+    "bookdown": {
+      "Package": "bookdown",
+      "Version": "0.19",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "4f669b7b4f236538e6afc311f32d2c93"
+    },
     "brew": {
       "Package": "brew",
       "Version": "1.0-6",
@@ -172,6 +191,20 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "08cf4045c149a0f0eaf405324c7495bd"
+    },
+    "cluster": {
+      "Package": "cluster",
+      "Version": "2.1.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "db63a44aab5aadcb6bf2f129751d129a"
+    },
+    "codetools": {
+      "Package": "codetools",
+      "Version": "0.2-16",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "89cf4b8207269ccf82fbeb6473fd662b"
     },
     "colorspace": {
       "Package": "colorspace",
@@ -284,6 +317,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "1cb4279e697650f0bd78cd3601ee7576"
+    },
+    "foreign": {
+      "Package": "foreign",
+      "Version": "0.8-79",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "910ad5e5ce9aae0d0f57186ca9a12e1e"
     },
     "fs": {
       "Package": "fs",
@@ -558,6 +598,13 @@
       "Repository": "CRAN",
       "Hash": "dd4a1423f1472a2a8e05dd2c8945c3af"
     },
+    "nnet": {
+      "Package": "nnet",
+      "Version": "7.3-14",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "0d87e50e11394a7151a28873637d799a"
+    },
     "openssl": {
       "Package": "openssl",
       "Version": "1.4.1",
@@ -715,7 +762,9 @@
     "renv": {
       "Package": "renv",
       "Version": "0.10.0",
-      "Source": "Repository"
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "0d3f1c2b63e70b3d918246b4e2ca59b7"
     },
     "reprex": {
       "Package": "reprex",
@@ -758,6 +807,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "f173062c04dc8e91d7376d914df6efee"
+    },
+    "rpart": {
+      "Package": "rpart",
+      "Version": "4.1-15",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "9787c1fcb680e655d062e7611cadf78e"
     },
     "rprojroot": {
       "Package": "rprojroot",
@@ -849,6 +905,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "0759e6b6c0957edb1311028a49a35e76"
+    },
+    "survival": {
+      "Package": "survival",
+      "Version": "3.1-12",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "1c5bb53bd428f3c42a25b7aeb983d8c7"
     },
     "sys": {
       "Package": "sys",
@@ -978,10 +1041,10 @@
     },
     "xfun": {
       "Package": "xfun",
-      "Version": "0.13",
+      "Version": "0.14",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "3c1eeacd705ff1695db94bfd443b8a84"
+      "Hash": "60e146e3aba37a547e12306dc3da77a6"
     },
     "xml2": {
       "Package": "xml2",
