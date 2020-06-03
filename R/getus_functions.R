@@ -336,7 +336,7 @@ getus_tests <- function() {
 #'     \item{\strong{HOUSEHOLDS MARITAL STATUS AND COMPOSITION}}{---------------}
 #'     \item{total_households}{total number of households (occupy a housing unit) in that county. People not living in households are classified as living in group quarters}
 #'     \item{perc_families}{percent of households that are defined as family. A family consists of a householder and one or more other people living in the same household who are related to the householder by birth, marriage, or adoption}
-#'     \item{perc_families_18childereen}{percentfamilies with at least a child <= 18 years old}
+#'     \item{perc_families_18childereen}{percent families with at least a child <= 18 years old}
 #'     \item{perc_married_couples}{percent families consisting of married couples}
 #'     \item{perc_married_couples_u18ychildreen}{percent families consisting of married couples at least a child 18 years old or less}
 #'     \item{perc_families_only_male}{percent of family with a male householder and no spouse of householder present}
@@ -458,10 +458,10 @@ getus_tests <- function() {
 #'     \item{dex_a}{activity index}
 #'     \item{\strong{POLLUTIONS AND TEMPERATURE}}{---------------}
 #'     \item{pm2.5}{pm2.5 in  micro g per m3}
-#'     \item{summer_temp}{mean temperature in summer, F}
+#'     \item{summer_temp}{mean temperature in summer, %}
 #'     \item{summer_hum}{mean humity in summer, mixing ratio}
-#'     \item{winter_temp}{mean temperature in winter, F}
-#'     \item{winter_hum}{mean humity in winter, mixing ratio}
+#'     \item{winter_temp}{mean temperature in winter, K}
+#'     \item{winter_hum}{mean humity in winter, %}
 #'     \item{\strong{STATE LEVEL TESTS AND HOSPITALIZATIONS}}{---------------}
 #'     \item{positive}{total cumulative positive test results}
 #'     \item{negative}{total cumulative negative test results}

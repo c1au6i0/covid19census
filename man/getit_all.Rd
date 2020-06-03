@@ -18,12 +18,12 @@ a dataframe with following 64 variables:
 \item{region}{full name of region}
 \item{lat}{lat}
 \item{long}{long}
-\item{imm}{influenza vaccination coverage in the general population}
-\item{imm65}{influenza vaccination coverage in people age 65 or older}
+\item{perc_imm}{influenza vaccination coverage in the general population}
+\item{perc_imm65}{influenza vaccination coverage in people age 65 or older}
 \item{cmr}{case-mortality rate for that region and that date (deaths/total_cases * 100)}
-\item{total_cases}{number of COVID-19 positive cases detected}
+\item{ases}{number of COVID-19 positive cases detected}
 \item{deaths}{number of deaths}
-\item{tests}{number of tests performed}
+\item{total_tests}{number of tests performed}
 \item{hospitalized_with_symptoms}{number of people hospitalized with symptoms, that day}
 \item{intensive_care_unit}{number of people in intensive care units, that day}
 \item{total_hospitalized}{hospitalized_with_symptoms + intensive_care_unit}
@@ -40,16 +40,16 @@ a dataframe with following 64 variables:
 \item{female_65m}{percent of females age 65 years old or more}
 \item{male_65m}{percent of males age 65 years old or more}
 \item{chronic_ \emph{type}}{percent of population with that chronic condistion}
-\item{cancer_\emph{type}}{percent of population with that type of cancer}
-\item{bweight_\emph{type}}{percent of people underweight, normalweight, overweight or obese}
+\item{perc_cancer_\emph{type}}{percent of population with that type of cancer}
+\item{perc_bweight_\emph{type}}{percent of people underweight, normalweight, overweight or obese}
 \item{first_aid}{number of peple using first aid in 3 months preceding the survey}
 \item{medical_guard}{number of people using medical guard in 3 months preceding the survey}
 \item{bed_acute}{inpatient hospital beds per 1000 people in acure care}
 \item{bed_long}{inpatient hospital beds per 1000 people in long care}
 \item{bed_rehab}{inpatient hospital beds per 1000 people in rehabilitation}
-\item{bed_tot}{inpatient hospital beds per 1000 people, total}
+\item{total_bed}{inpatient hospital beds per 1000 people, total}
 \item{netinc}{median net annual households income, in euros}
-\item{pm2.5}{emission of pm2.5 in tons per region, 2017}
+\item{pm2.5}{emission of pm2.5 in tons per region, mean values 2000 to 2016}
 }
 }
 \description{

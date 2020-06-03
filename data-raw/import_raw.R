@@ -910,7 +910,7 @@ usethis::use_data(
 #
 
 
-# they take the mean of all the different years, we do the same
+# they take the mean of all the different years, we do the same -----
 us_pm2.5 <-
   us_pm2.5 %>%
   group_by(fips) %>%
