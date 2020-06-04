@@ -52,7 +52,7 @@ test_that("sum smoking is < 100 ", {
   expect_equal(
     sum(!unique(
       apply(
-        y[, names(y)[str_detect(names(y), "smoking")]],
+        y[, names(y)[str_detect(names(y), "perc_smoking")]],
         1, sum
       )
     ) <= 100),

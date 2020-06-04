@@ -30,6 +30,7 @@ getus_covid_jhu <- function() {
       dplyr::select(
         .data$date, .data$combined_key, .data$fips, .data$value
       ) %>%
+      dplyr::ungroup() %>%
       tidyr::separate(.data$combined_key,
         sep = ", ",
         into = c("county", "state", "country"),
