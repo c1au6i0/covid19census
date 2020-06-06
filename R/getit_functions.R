@@ -233,7 +233,7 @@ getit_all <- function() {
   suppressWarnings(
     all_dat <- dat2 %>%
       dplyr::mutate_at(vars(.data$chronic_osteo:.data$bweight_obese), list(~ (. / .data$pop_tot * 100))) %>%
-      dplyr::rename_at(vars(.data$chronic_osteo:.data$bweight_obese),  ~ paste0("perc_", .)) %>%
+      dplyr::rename_at(vars(.data$chronic_osteo:.data$bweight_obese), ~ paste0("perc_", .)) %>%
       dplyr::rename(cases = total_cases, total_bed = bed_tot, total_tests = people_tested) %>%
       dplyr::mutate(date = as.Date(.data$date, "%Y-%m-%d"))
   )
@@ -241,37 +241,3 @@ getit_all <- function() {
 
   all_dat
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

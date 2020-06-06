@@ -12,7 +12,6 @@
 #' @keywords internal
 getus_covid_jhu <- function() {
   url_base <- "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_"
-
   metric_files <- list("confirmed", "deaths")
 
   # JHU has 2 files with date in long format (confirmed and deaths)...whatever
@@ -23,23 +22,37 @@ getus_covid_jhu <- function() {
       stop("Something wrong with the repository or your internet connection!")
     }
 
-    dat <- vroom(url_full, col_types = c(.default = "?"), progress = FALSE) %>%
+    dat <-
+      vroom(url_full, col_types = c(.default = "?"), progress = FALSE) %>%
       tidyr::pivot_longer(cols = dplyr::matches("[0-9]{1,}/"), names_to = "date", values_to = "value") %>%
       janitor::clean_names() %>%
       dplyr::filter(.data$country_region == "US") %>%
       dplyr::select(
         .data$date, .data$combined_key, .data$fips, .data$value
       ) %>%
-      dplyr::ungroup() %>%
-      tidyr::separate(.data$combined_key,
-        sep = ", ",
-        into = c("county", "state", "country"),
-        fill = "left"
-      ) %>%
+
+      # this is to separte the column (tidyr::separate occasionally trows error)
+      dplyr::mutate("county_state" = gsub(",(.)?US$", "", .data$combined_key, perl = TRUE)) %>%
+      dplyr::mutate("state" = ifelse(
+        grepl(",", .data$county_state) == FALSE,
+        .data$county_state,
+        gsub(".*,(\\s)?", "", .data$county_state, perl = TRUE)
+      )) %>%
+      dplyr::mutate("county" = ifelse(
+        grepl(",", .data$county_state) == FALSE,
+        NA,
+        gsub(",.*", "", .data$county_state, perl = TRUE)
+      )) %>%
+      # tidyr::separate(.data$combined_key,
+      #   sep = ", ",
+      #   into = c("county", "state", "country"),
+      #   fill = "left"
+      # )
+
       # JHU has unincorporated U.S territories and the cruises data
       # that ends up to be NA because they have not counties in the dataframe
       dplyr::filter(!is.na(.data$county), !is.na(.data$fips)) %>%
-      dplyr::select(-.data$country)
+      dplyr::select(-.data$county_state)
 
     names(dat)[names(dat) == "value"] <- x
 
