@@ -183,7 +183,7 @@ getit_covid <- function() {
 #' @importFrom stats na.omit
 #' @export
 #' @seealso for details regarding  the methodology of specific datasets check  \code{\link{it_bweight}}, \code{\link{it_cancer}},
-#' \code{\link{it_chronic}}, \code{\link{it_dem}}, \code{\link{it_firstaid}}, \code{\link{it_fl}}, \code{\link{it_fl65}},\code{\link{it_fl}},
+#' \code{\link{it_chronic}}, \code{\link{it_dem}}, \code{\link{it_firstaid}}, \code{\link{it_fl}}, \code{\link{it_fl65}},
 #' \code{\link{it_hospbed}}, \code{\link{it_house}}, \code{\link{it_pm2.5}}
 getit_all <- function() {
   cmr_it <- getit_covid()
@@ -234,10 +234,40 @@ getit_all <- function() {
     all_dat <- dat2 %>%
       dplyr::mutate_at(vars(.data$chronic_osteo:.data$bweight_obese), list(~ (. / .data$pop_tot * 100))) %>%
       dplyr::rename_at(vars(.data$chronic_osteo:.data$bweight_obese), ~ paste0("perc_", .)) %>%
-      dplyr::rename(cases = total_cases, total_bed = bed_tot, total_tests = people_tested) %>%
+      dplyr::rename("cases" = .data$total_cases,  "total_bed" = .data$bed_tot, "total_tests" = .data$people_tested) %>%
       dplyr::mutate(date = as.Date(.data$date, "%Y-%m-%d"))
   )
 
 
   all_dat
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

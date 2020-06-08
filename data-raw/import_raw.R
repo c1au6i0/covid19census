@@ -3,6 +3,7 @@ library(tidyverse)
 library(janitor)
 library(reshape2)
 library(tabulizer)
+library(stringr)
 
 # Unpackit_us.zip and run the script
 
@@ -427,7 +428,7 @@ it_cancer <- cancer_tab %>%
   )) %>%
   filter(region != "Trentino Alto Adige") %>%
   # in italy . used as , in numbers
-  mutate_if(is.double, ~ . * 1000)
+  mutate_if(is.double, ~ as.numeric(str_remove(as.character(.), "[[:punct:]]")))
 
 # no data on those  but we want to include them anyway for the join
 it_cancer[20, "region"] <- "P.A. Bolzano"
@@ -908,6 +909,12 @@ usethis::use_data(
   overwrite = TRUE
 )
 #
+
+
+
+
+
+
 
 
 # they take the mean of all the different years, we do the same -----

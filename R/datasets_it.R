@@ -1,3 +1,25 @@
+#' influenza vaccination coverage, general population, time series
+#'
+#' Influenza vaccination coverage in Italy in the \strong{general population} from 1999 to 2019. Data are percent of region population
+#' @docType data
+#' @source \href{http://www.salute.gov.it/imgs/C_17_tavole_19_allegati_iitemAllegati_0_fileAllegati_itemFile_3_file.pdf}{Ministero della Salute}
+#' @usage data(it_fl)
+"it_fl"
+
+#' influenza vaccination coverage 2019
+#'
+#' Influenza vaccination coverage in Italy for 2018-2019 season for population age 65 or more from 1999 to 2019. Data are percent of region population
+#' @docType data
+#' @source \href{http://www.salute.gov.it/imgs/C_17_tavole_19_allegati_iitemAllegati_0_fileAllegati_itemFile_3_file.pdf}{Ministero della Salute}
+#' @usage data(it_fl65)
+#' @return a tibble with following columns:
+#' \describe{
+#'      \item{region}{region}
+#'      \item{perc_imm65}{percent of population age 65 or more that received influenza vaccination}
+#'      \item{perc}{percent of general population that received influenza vaccination}
+#'      }
+"it_fl65"
+
 #' body-mass index
 #'
 #' Body mass index in regions of Italy, in the general population.

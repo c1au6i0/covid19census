@@ -67,6 +67,6 @@ region population esitmates of 2019. Data of particulate 2.5 (2017) comes from t
 }
 \seealso{
 for details regarding  the methodology of specific datasets check  \code{\link{it_bweight}}, \code{\link{it_cancer}},
-\code{\link{it_chronic}}, \code{\link{it_dem}}, \code{\link{it_firstaid}}, \code{\link{it_fl}}, \code{\link{it_fl65}},\code{\link{it_fl}},
+\code{\link{it_chronic}}, \code{\link{it_dem}}, \code{\link{it_firstaid}}, \code{\link{it_fl}}, \code{\link{it_fl65}},
 \code{\link{it_hospbed}}, \code{\link{it_house}}, \code{\link{it_pm2.5}}
 }
