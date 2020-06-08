@@ -5,12 +5,11 @@
 
 <!-- badges: start -->
 
-[![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![](https://img.shields.io/badge/devel%20version-0.0.0.9600-blue.svg)](https://codecov.io/gh/c1au6i0/covid19census?branch=dev)
 \[![Travis build
 status](https://travis-ci.com/c1au6i0/covid19census_dev.svg?token=PM6d4w2yt4HVWw7s2Jgy&branch=dev)
 [![Codecov test
-coverage](https://codecov.io/gh/c1au6i0/covid19census/branch/master/graph/badge.svg)](https://codecov.io/gh/c1au6i0/covid19census?branch=master)
+coverage](https://codecov.io/gh/c1au6i0/covid19census/branch/master/graph/badge.svg)](https://codecov.io/gh/c1au6i0/covid19census?branch=dev)
 <!-- badges: end -->
 
 ## Overview
@@ -32,7 +31,7 @@ devtools::install_local("path_to_package")
 Alternatively, you can install it directly from github.
 
 ``` r
-# the repo at the moment private so you need to be authorized 
+# the repo at the moment is private so you need to be authorized 
 # don't share the token
 library(devtools)
 
