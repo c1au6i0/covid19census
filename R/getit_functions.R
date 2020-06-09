@@ -158,8 +158,11 @@ getit_covid <- function() {
 #'      \item{female_65m}{percent of females age 65 years old or more}
 #'      \item{male_65m}{percent of males age 65 years old or more}
 #'      \item{chronic_ \emph{type}}{percent of population with that chronic condistion}
-#'      \item{perc_cancer_\emph{type}}{percent of population with that type of cancer}
-#'      \item{perc_bweight_\emph{type}}{percent of people underweight, normalweight, overweight or obese}
+#'      \item{perc_cancer_\emph{type}}{percent of population with that type of cancer.
+#'          Info regarding Trento and Bolzano were not present.}
+#'      \item{perc_bweight_\emph{type}}{percent of people underweight, normalweight, overweight or obese.
+#'          This is percent calculated over the total population even if the mesure has been taken only people 18 of age or more.
+#'          This is the reason why their total is not 100}
 #'      \item{first_aid}{number of peple using first aid in 3 months preceding the survey}
 #'      \item{medical_guard}{number of people using medical guard in 3 months preceding the survey}
 #'      \item{bed_acute}{inpatient hospital beds per 1000 people in acure care}
