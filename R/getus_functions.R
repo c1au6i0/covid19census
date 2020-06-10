@@ -43,11 +43,6 @@ getus_covid_jhu <- function() {
         NA,
         gsub(",.*", "", .data$county_state, perl = TRUE)
       )) %>%
-      # tidyr::separate(.data$combined_key,
-      #   sep = ", ",
-      #   into = c("county", "state", "country"),
-      #   fill = "left"
-      # )
 
       # JHU has unincorporated U.S territories and the cruises data
       # that ends up to be NA because they have not counties in the dataframe

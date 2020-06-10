@@ -1,17 +1,5 @@
 library(dplyr)
 
-
-y_jhu <- getus_all(repo = "jhu")
-
-x_jhu <- getus_covid(repo = "jhu")
-
-test_that("get_all_jhu and get_covid have same fips", {
-  expect_equal(length(unique(y_jhu$fips)), length(unique(x_jhu$fips)))
-})
-
-##################################
-
-
 expected_states <- structure(list(state = c(
   "Alaska", "Alabama", "Arizona", "Arkansas",
   "California", "Colorado", "Connecticut", "District of Columbia",
@@ -30,7 +18,28 @@ expected_states <- structure(list(state = c(
   "MO", "MS", "MT", "NC", "ND", "NE", "NH", "NJ", "NM", "NV", "NY",
   "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VA",
   "VT", "WA", "WI", "WV", "WY"
-)), class = c("tbl_df", "tbl", "data.frame"), row.names = c(NA, -51L))
+)), class = c("tbl_df", "tbl", "data.frame"), row.names = c(NA, -51L)) %>%
+  arrange(state)
+
+
+
+
+y_jhu <- getus_all(repo = "jhu")
+
+x_jhu <- getus_covid(repo = "jhu")
+
+
+test_that("get_all_jhu and get_covid have same fips", {
+  expect_equal(length(unique(y_jhu$fips)), length(unique(x_jhu$fips)))
+})
+
+test_that("getus_jhu states abbr ", {
+  expect_equal(unique(y_jhu$state), expected_states$state)
+})
+
+
+##################################
+
 
 test_that("getus_test executes", {
   expect_error(getus_tests(), NA)
@@ -38,8 +47,9 @@ test_that("getus_test executes", {
 
 tests <- getus_tests() %>%
   select(state, abbr) %>%
-  distinct()
+  distinct() %>%
+  arrange(state)
 
 test_that("getus_tests states abbr ", {
-  expect_equal(tests, expected_states)
+    expect_equal(tests, expected_states)
 })
