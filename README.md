@@ -16,9 +16,12 @@ coverage](https://codecov.io/gh/c1au6i0/covid19census/branch/master/graph/badge.
 
 The package `covid19census` provides functions to extract COVID-19
 cases, deaths, hospitalizations and test of U.S. and Italy at the county
-and regional level, respectively, and then combine them with other
+and regional level, respectively, and then combines them with other
 population metrics (age, sex, prevalence of chronic conditions, income
 indexes, access to health services and many others).
+
+*Note that the package has not been made by, and is not part of the
+covid19.cesus.gov website.*
 
 ## Installation
 
