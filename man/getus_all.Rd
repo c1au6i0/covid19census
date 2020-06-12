@@ -38,7 +38,7 @@ ANCESTRY, COMPUTER OR INTERNET, POPULATION AND SEX, POPULATION AND RACE, MEDICAL
 Unknown fips are coded as 00000. \strong{Note that in the nyt repository a lot of deaths
 and confirmed cases are no categorized
 at the county level}}
-\item{urban}{urban or rural (not sure about the  definition)}
+\item{urban}{urban or rural (see \href{https://www.census.gov/programs-surveys/geography/guidance/geo-areas/urban-rural.html}{cenus})}
 \item{\strong{COVID-19 VARS}}{---------------}
 \item{cases}{confirmed COVID-19 cases (cumulates with date)}
 \item{deaths}{number of deaths attributed to COVID-19}
