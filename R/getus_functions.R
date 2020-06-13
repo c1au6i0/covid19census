@@ -51,7 +51,7 @@ getus_covid_jhu <- function() {
 
     names(dat)[names(dat) == "value"] <- x
 
-    dat
+     dat
   })
 
   names(dat_l) <- metric_files
@@ -144,7 +144,7 @@ getus_covid <- function(repo = "jhu") {
     dat <- getus_covid_jhu()
   }
 
-  dat
+  as.data.frame(dat)
 }
 
 
@@ -260,7 +260,7 @@ getus_tests <- function() {
       onVentilatorCumulative = col_double(),
       recovered = col_double(),
       hash = col_character(),
-      dateChecked = col_datetime(format = ""),
+      dateChecked = col_skip(),
       death = col_double(),
       hospitalized = col_double(),
       total = col_double(),
@@ -291,7 +291,7 @@ getus_tests <- function() {
     "date", "state", "abbr", "positive", "negative", "pending", "hospitalized_currently",
     "hospitalized_cumulative", "in_icu_currently", "in_icu_cumulative",
     "on_ventilator_currently", "on_ventilator_cumulative", "recovered",
-    "hash", "date_checked", "death", "fips", "death_increase", "hospitalized_increase",
+    "hash", "death", "fips", "death_increase", "hospitalized_increase",
     "negative_increase", "positive_increase", "total_test_results_increase"
   )]
 
@@ -299,7 +299,7 @@ getus_tests <- function() {
     "date", "state", "abbr", "positive", "negative", "pending", "hospitalized_curr",
     "hospitalized_cumul", "icu_curr", "icu_cumul",
     "ventilator_curr", "ventilator_cumul", "recovered",
-    "hash", "date_checked", "death", "fips", "death_increase", "hospitalized_increase",
+    "hash", "death", "fips", "death_increase", "hospitalized_increase",
     "negative_increase", "positive_increase", "total_test_increase"
   )
   dat2
@@ -521,5 +521,5 @@ getus_all <- function(repo = "jhu") {
 
   names(dat2) <- stringr::str_replace(names(dat2), "tot_", "total_")
 
-  as.data.frame(dat2)
+  dat2
 }
