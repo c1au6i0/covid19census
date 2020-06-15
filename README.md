@@ -7,7 +7,11 @@
 
 [![](https://img.shields.io/badge/devel%20version-0.0.0.9800-blue.svg)](https://codecov.io/gh/c1au6i0/covid19census?branch=master)
 [![Travis build
+<<<<<<< HEAD
 status](https://travis-ci.com/c1au6i0/covid19census.svg?branch=master)](https://travis-ci.com/c1au6i0/covid19census)
+=======
+status](https://travis-ci.com/c1au6i0/covid19census.svg?token=PM6d4w2yt4HVWw7s2Jgy&branch=master)](https://travis-ci.com/c1au6i0/covid19census)
+>>>>>>> 62534caf68b69d23995d1e5a8f7ad38353939a4c
 [![Codecov test
 coverage](https://codecov.io/gh/c1au6i0/covid19census/branch/master/graph/badge.svg)](https://codecov.io/gh/c1au6i0/covid19census?branch=master)
 
