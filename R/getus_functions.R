@@ -240,9 +240,9 @@ getus_dex <- function() {
 getus_tests <- function() {
   url_data <- "https://covidtracking.com/api/v1/states/daily.csv"
 
-  if (RCurl::url.exists(url_data) == FALSE) {
-    stop("Something wrong with the repository or your internet connection!")
-  }
+  # if (RCurl::url.exists(url_data) == FALSE) {
+  #   stop("Something wrong with the repository or your internet connection!")
+  # }
 
 
   dat <- vroom::vroom(url_data,
