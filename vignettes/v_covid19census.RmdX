@@ -65,7 +65,6 @@ dim(dat_it)
 
 ## Accessing Specific Datasets
 
-
 Static U.S and Italy datasets can be accessed directly.
 
 ```{r data}
