@@ -5,8 +5,8 @@
 
 <!-- badges: start -->
 [![](https://img.shields.io/badge/devel%20version-0.0.0.9800-blue.svg)](https://codecov.io/gh/c1au6i0/covid19census?branch=master)
-[![Travis build
-status](https://travis-ci.com/c1au6i0/covid19census.svg?branch=master)](https://travis-ci.com/c1au6i0/covid19census.svg?token=PM6d4w2yt4HVWw7s2Jgy&branch=master)
+[![Build
+Status](https://travis-ci.com/c1au6i0/covid19census.svg?branch=master)](https://travis-ci.com/c1au6i0/covid19census)
 [![Codecov test
 coverage](https://codecov.io/gh/c1au6i0/covid19census/branch/master/graph/badge.svg)](https://codecov.io/gh/c1au6i0/covid19census?branch=master)
 
@@ -34,11 +34,9 @@ devtools::install_local("path_to_package")
 Alternatively, you can install it directly from github.
 
 ``` r
-# the repo at the moment is private so you need to be authorized 
-# don't share the token
 library(devtools)
 
-devtools::install_github("c1au6i0/covid19census_dev", auth_token = "8ca5cd2bb556a45f1ffeb2e9b44c90d4fbef6cf2", ref = "dev")
+devtools::install_github("c1au6i0/covid19census")
 ```
 
 ## Usage
