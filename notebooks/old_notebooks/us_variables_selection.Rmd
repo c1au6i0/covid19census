@@ -1,0 +1,755 @@
+---
+title: "Select Var"
+output:
+  html_document:
+    df_print: kable
+    toc: true
+    theme: journal
+---
+
+Analysis based on GP example.
+
+# Data transformation
+
+Summary of the data transformation :
+
+  * `all_dat` = all data.
+  * `all_dat2` = calculated some percentage and days from first case
+  * `all_data3` = selected variables (excluded totals and absolute values) and empty, and last date
+  * `all_data4` = percentages multiplied by 100, **filtered death >= 1**
+
+then based on GP analysis,the dataframe is spitted in:
+
+  * `XX` = all independent variables/confounders excluding `perc_imm65`
+  * `ZZ` = `perc_imm65`
+  * `logitZZ` =  `perc_imm65` predicted probability: log[p/(1 − p)]
+  * `YY` = dependent variable `deaths`
+  * `NC` = number of cases: `cases`
+  * `NP` = population: `total_pop`
+  * `PP` = fitted values of propensity score linear model
+  
+
+```{r libs, message=FALSE, warning=FALSE}
+# devtools::install_github("c1au6i0/covid19census_dev",  auth_token = "8ca5cd2bb556a45f1ffeb2e9b44c90d4fbef6cf2")
+library(covid19census)
+library(tidyverse)
+library(ggcorrplot)
+library(caret)
+library(GGally)
+library(ggcorrplot)
+library(ggdendro)
+library(broom)
+```
+
+
+Get the data, compute some percentage, and the number of days since the first case in each county.
+
+```{r all_dat2, warning=FALSE, message=FALSE}
+all_dat <- getus_all()
+
+all_dat2 <-
+  all_dat %>%  
+  # get 65 and over
+  mutate(age65_over = rowSums(dplyr::select(., matches("perc_[6][5-9]|[7|8][0-9]")))) %>% 
+  mutate(urban = if_else(urban == "Urban", 1, 0)) %>% 
+  mutate(perc_black = total_nlat_blackaa_alone/total_pop * 100) %>% 
+  mutate(perc_white = total_nlat_white_alone/total_pop * 100) %>% 
+  mutate(perc_lat = total_lat/total_pop * 100) %>% 
+  mutate(total_tests = positive + negative) %>% 
+  mutate(f_date = case_when(cases >= 1 ~ date)) %>% 
+  group_by(fips) %>% 
+  mutate(f_date = min(f_date, na.rm = TRUE), days_f0 = as.numeric(date - f_date)) %>% 
+  ungroup() 
+```
+
+
+
+
+List of variables to select for analysis. Totals (e.s total respondents for a specific question, age bins), and  variables with too many `NA` are not included.
+
+```{r to_select}
+to_select <- c(
+  "date",
+  "county",
+  "state",
+  "fips",
+  "cases",
+  "deaths",
+  "perc_families",
+  "perc_familes_18childreen",
+  "perc_married_couples",
+  "perc_married_couples_u18ychildreen",
+  "perc_families_only_male",
+  "perc_families_only_male__18ychildreen",
+  "perc_families_only_female",
+  "perc_families_only_female__18ychildreen",
+  "perc_non_families_alone",
+  "perc_non_families_alone65y",
+  "perc_non_families_u18y",
+  "perc_non_families_65y",
+  "perc_relationship_householder",
+  "perc_relationship_spouse",
+  "perc_relationship_child",
+  "perc_relationship_other_relatives",
+  "perc_relationship_other_nonrelatives",
+  "perc_relationship_other_unmaried_part",
+  "perc_marital_status_male_nevermaried",
+  "perc_marital_status_male_maried",
+  "perc_marital_status_male_separated",
+  "perc_marital_status_male_widowed",
+  "perc_marital_status_male_divorced",
+  "perc_marital_status_female_nevermaried",
+  "perc_marital_status_female_maried",
+  "perc_marital_status_female_separated",
+  "perc_marital_status_female_widowed",
+  "perc_marital_status_female_divorced",
+  "perc_enrolled_preschool",
+  "perc_enrolled_kindergarden",
+  "perc_enrolled_elementary",
+  "perc_enrolled_highschool",
+  "perc_enrolled_college",
+  "perc_edu_9grade",
+  "perc_edu_nodiploma",
+  "perc_edu_highshool",
+  "perc_edu_somecollege",
+  "perc_edu_associate",
+  "perc_edu_bachelor",
+  "perc_edu_gradprofess",
+  "perc_edu_highshool_higher",
+  "perc_edu_batchelor_higher",
+  "perc_american",
+  "perc_arab",
+  "perc_czech",
+  "perc_danish",
+  "perc_dutch",
+  "perc_english",
+  "perc_french_except_basque",
+  "perc_french_canadian",
+  "perc_german",
+  "perc_greek",
+  "perc_hungarian",
+  "perc_irish",
+  "perc_italian",
+  "perc_lithuanian",
+  "perc_norwegian",
+  "perc_polish",
+  "perc_portuguese",
+  "perc_russian",
+  "perc_scotch_irish",
+  "perc_scottish",
+  "perc_slovak",
+  "perc_subsaharan_african",
+  "perc_swedish",
+  "perc_swiss",
+  "perc_ukrainian",
+  "perc_welsh",
+  "perc_west_indian_excluding_hispanic_origin_groups",
+  "perc_withcomputer",
+  "perc_withinternet",
+  "total_pop",
+  "perc_imm65",
+  "total_beds",
+  "urban",
+  "perc_acute_myocardial_infarction",
+  "perc_alzheimer_dementia",
+  "perc_asthma",
+  "perc_atrial_fibrillation",
+  "perc_cancer_breast",
+  "perc_cancer_colorectal",
+  "perc_cancer_lung",
+  "perc_cancer_all",
+  "perc_ch_obstructive_pulm",
+  "perc_chronic_kidney_disease",
+  "perc_depression",
+  "perc_diabetes",
+  "perc_heart_failure",
+  "perc_hypertension",
+  "perc_ischemic_heart_disease",
+  "perc_obesity",
+  "perc_osteoporosis",
+  "perc_rheumatoid_arthritis",
+  "perc_schizophrenia_psychotic_dis",
+  "perc_stroke",
+  "perc_tobacco_use",
+  # to many NA for these:
+  # "urgent_admission",
+  # "annual_wellness_visit",
+  # "elective_admission",
+  # "emergent_admission",
+  # "other_admission",
+  "perc_pneumococcal_vaccine",
+  "perc_poverty",
+  "median_income",
+  "pm2.5",
+  "summer_temp",
+  "summer_hum",
+  "winter_temp",
+  "winter_hum",
+  "age65_over",
+  "median_age",
+  "median_age_male", 
+  "median_age_female", 
+  "sex_ratio",
+  "age_dependency",                                   
+  "old_age_dependency",                              
+  "child_dependency",
+  "perc_black",
+  "perc_lat",
+  "perc_white",
+  "total_tests",
+   "days_f0"
+)
+
+```
+
+
+We filter the dataframe based on that vector.
+
+```{r all_dat3}
+all_dat3 <- all_dat2 %>% 
+  select(!!to_select) %>% 
+  filter(date == max(date)) %>% 
+   mutate(days_f0 = if_else(is.finite(days_f0), days_f0, NA_real_))
+```
+
+We check the total `NAs` for each variable.
+
+```{r tot_na}
+all_na <- as.data.frame(apply(all_dat3, 2, function(x) sum(is.na(x))))
+names(all_na) <- "tot_na"
+
+all_na[, "var"] <- row.names(all_na)
+all_na %>% 
+  arrange(desc(tot_na))
+```
+
+It seems that we miss a lot of values for `total beds` (and admission related variables, that have been excluded).
+
+
+No variable has near zero variance.
+
+```{r zerovar}
+library(caret)
+nearZeroVar(all_dat3[8:ncol(all_dat3)])
+```
+
+
+We finally divide by 100 all the variables that were percentage.
+
+** We also need to remove the 0 because we are doing a logist regression*
+
+```{r all_dat4}
+all_dat4 <-  all_dat3 %>% 
+  mutate_at(vars(starts_with("perc")), function(x) x / 100) %>% 
+  mutate(age65_over = age65_over / 100) %>% 
+  ungroup() %>% 
+  na.omit() %>% 
+  filter(deaths >= 1)
+```
+
+# Dimensionality reduction
+
+## CORRELATIONS
+
+```{r XX, warning=FALSE, message=FALSE}
+XX <- all_dat4[, !names(all_dat4) %in% c(
+    "date",
+    "county",
+    "fips",
+    "state",
+    "cases",
+    "deaths",
+    "total_pop",
+    "perc_imm65"
+  )] %>% 
+  mutate_all(as.numeric)
+
+```
+
+
+```{r fam, fig.height=12, fig.width=12}
+XX %>% 
+  dplyr::select(
+    "perc_families", "perc_familes_18childreen", "perc_married_couples", 
+"perc_married_couples_u18ychildreen", "perc_families_only_male", 
+"perc_families_only_male__18ychildreen", "perc_families_only_female", 
+"perc_families_only_female__18ychildreen", "perc_non_families_alone", 
+"perc_non_families_alone65y", "perc_non_families_u18y", "perc_non_families_65y", 
+"perc_relationship_householder", "perc_relationship_spouse", 
+"perc_relationship_child", "perc_relationship_other_relatives", 
+"perc_relationship_other_nonrelatives", "perc_relationship_other_unmaried_part", 
+"perc_marital_status_male_nevermaried", "perc_marital_status_male_maried", 
+"perc_marital_status_male_separated", "perc_marital_status_male_widowed", 
+"perc_marital_status_male_divorced", "perc_marital_status_female_nevermaried", 
+"perc_marital_status_female_maried", "perc_marital_status_female_separated", 
+"perc_marital_status_female_widowed", "perc_marital_status_female_divorced"
+  ) %>% 
+  cor() %>% 
+  ggcorrplot(hc.order = TRUE, tl.cex = 15) 
+
+```
+
+```{r edu, fig.height=12, fig.width=12}
+XX %>% 
+  dplyr::select(
+  "perc_enrolled_preschool",
+  "perc_enrolled_kindergarden",
+  "perc_enrolled_elementary",
+  "perc_enrolled_highschool",
+  "perc_enrolled_college",
+  "perc_edu_9grade",
+  "perc_edu_nodiploma",
+  "perc_edu_highshool",
+  "perc_edu_somecollege",
+  "perc_edu_associate",
+  "perc_edu_bachelor",
+  "perc_edu_gradprofess",
+  "perc_edu_highshool_higher",
+  "perc_edu_batchelor_higher"
+  ) %>% 
+  cor() %>% 
+  ggcorrplot(hc.order = TRUE, tl.cex = 15) 
+
+```
+```{r anchestry, fig.height=12, fig.width=12}
+XX %>% 
+  dplyr::select(
+  "perc_american",
+  "perc_arab",
+  "perc_czech",
+  "perc_danish",
+  "perc_dutch",
+  "perc_english",
+  "perc_french_except_basque",
+  "perc_french_canadian",
+  "perc_german",
+  "perc_greek",
+  "perc_hungarian",
+  "perc_irish",
+  "perc_italian",
+  "perc_lithuanian",
+  "perc_norwegian",
+  "perc_polish",
+  "perc_portuguese",
+  "perc_russian",
+  "perc_scotch_irish",
+  "perc_scottish",
+  "perc_slovak",
+  "perc_subsaharan_african",
+  "perc_swedish",
+  "perc_swiss",
+  "perc_ukrainian",
+  "perc_welsh",
+  "perc_west_indian_excluding_hispanic_origin_groups"
+  ) %>% 
+  cor() %>% 
+  ggcorrplot(hc.order = TRUE, tl.cex = 15) 
+
+```
+```{r anchestry, fig.height=12, fig.width=12}
+XX %>% 
+  dplyr::select(
+"perc_acute_myocardial_infarction",
+  "perc_alzheimer_dementia",
+  "perc_asthma",
+  "perc_atrial_fibrillation",
+  "perc_cancer_breast",
+  "perc_cancer_colorectal",
+  "perc_cancer_lung",
+  "perc_cancer_all",
+  "perc_ch_obstructive_pulm",
+  "perc_chronic_kidney_disease",
+  "perc_depression",
+  "perc_diabetes",
+  "perc_heart_failure",
+  "perc_hypertension",
+  "perc_ischemic_heart_disease",
+  "perc_obesity",
+  "perc_osteoporosis",
+  "perc_rheumatoid_arthritis",
+  "perc_schizophrenia_psychotic_dis",
+  "perc_stroke",
+  "perc_tobacco_use"
+  ) %>% 
+  cor() %>% 
+  ggcorrplot(hc.order = TRUE, tl.cex = 15) 
+
+```
+```{r to_select2}
+to_select2 <- c(
+  "perc_families",
+  "perc_familes_18childreen",
+  "perc_married_couples",
+  # "perc_married_couples_u18ychildreen",
+  "perc_families_only_male",
+  # "perc_families_only_male__18ychildreen",
+  "perc_families_only_female",
+  # "perc_families_only_female__18ychildreen",
+  # "perc_non_families_alone",
+  # "perc_non_families_alone65y",
+  # "perc_non_families_u18y",
+  # "perc_non_families_65y",
+  # "perc_relationship_householder",
+  # "perc_relationship_spouse",
+  # "perc_relationship_child",
+  # "perc_relationship_other_relatives",
+  # "perc_relationship_other_nonrelatives",
+  # "perc_relationship_other_unmaried_part",
+  # "perc_marital_status_male_nevermaried",
+  # "perc_marital_status_male_maried",
+  # "perc_marital_status_male_separated",
+  # "perc_marital_status_male_widowed",
+  # "perc_marital_status_male_divorced",
+  # "perc_marital_status_female_nevermaried",
+  # "perc_marital_status_female_maried",
+  # "perc_marital_status_female_separated",
+  # "perc_marital_status_female_widowed",
+  # "perc_marital_status_female_divorced",
+  "perc_enrolled_preschool",
+  "perc_enrolled_kindergarden",
+  "perc_enrolled_elementary",
+  "perc_enrolled_highschool",
+  "perc_enrolled_college",
+  # "perc_edu_9grade",
+  # "perc_edu_nodiploma",
+  # "perc_edu_highshool",
+  "perc_edu_somecollege",
+  "perc_edu_associate",
+  "perc_edu_bachelor",
+  # "perc_edu_gradprofess",
+  # "perc_edu_highshool_higher",
+  # "perc_edu_batchelor_higher",
+  "perc_american",
+  "perc_arab",
+  "perc_czech",
+  "perc_danish",
+  "perc_dutch",
+  "perc_english",
+  "perc_french_except_basque",
+  "perc_french_canadian",
+  "perc_german",
+  "perc_greek",
+  "perc_hungarian",
+  "perc_irish",
+  "perc_italian",
+  "perc_lithuanian",
+  "perc_norwegian",
+  "perc_polish",
+  "perc_portuguese",
+  "perc_russian",
+  "perc_scotch_irish",
+  "perc_scottish",
+  "perc_slovak",
+  "perc_subsaharan_african",
+  "perc_swedish",
+  "perc_swiss",
+  "perc_ukrainian",
+  "perc_welsh",
+  "perc_west_indian_excluding_hispanic_origin_groups",
+  # "perc_withcomputer",
+  "perc_withinternet",
+  # "total_pop",
+  # "perc_imm65",
+  "total_beds",
+  "urban",
+  "perc_acute_myocardial_infarction",
+  "perc_alzheimer_dementia",
+  "perc_asthma",
+  "perc_atrial_fibrillation",
+  "perc_cancer_breast",
+  "perc_cancer_colorectal",
+  "perc_cancer_lung",
+  "perc_cancer_all",
+  "perc_ch_obstructive_pulm",
+  "perc_chronic_kidney_disease",
+  "perc_depression",
+  "perc_diabetes",
+  "perc_heart_failure",
+  "perc_hypertension",
+  "perc_ischemic_heart_disease",
+  "perc_obesity",
+  "perc_osteoporosis",
+  "perc_rheumatoid_arthritis",
+  "perc_schizophrenia_psychotic_dis",
+  "perc_stroke",
+  "perc_tobacco_use",
+  # to many NA for these:
+  # "urgent_admission",
+  # "annual_wellness_visit",
+  # "elective_admission",
+  # "emergent_admission",
+  # "other_admission",
+  "perc_pneumococcal_vaccine",
+  # "perc_poverty",
+  "median_income",
+  "pm2.5",
+  "summer_temp",
+  "summer_hum",
+  "winter_temp",
+  "winter_hum",
+  "age65_over",
+  "median_age",
+  # "median_age_male", 
+  # "median_age_female", 
+  "sex_ratio",
+  # "age_dependency",                                   
+  # "old_age_dependency",                              
+  "child_dependency",
+  "perc_black",
+  "perc_lat",
+  "perc_white",
+  "total_tests",
+  "days_f0"
+)
+```
+
+
+
+```{r corr, warning=FALSE}
+
+M <- XX %>% 
+  dplyr::select(!!to_select2) %>% 
+  cor(use ="pairwise.complete.obs")
+
+M[upper.tri(M, diag = TRUE)] <- NA
+
+M_tidy <- tidy(M) %>% 
+  pivot_longer(cols = -.rownames, values_to = "cor", names_to = "var2") %>% 
+  na.omit() %>% 
+  rename(var1 = .rownames) %>% 
+  filter(var1 != var2) %>% 
+  filter(cor >= 0.8 | cor <= -0.8) %>% 
+  arrange(desc(var2)) %>% 
+  distinct(cor, .keep_all = TRUE) 
+M_tidy
+```
+
+
+
+We have 22 variables that are can potentially eliminated.
+
+
+# Cast of characters
+
+```{r to_select2_b}
+to_select2 <- c(
+  "perc_families",
+  "perc_familes_18childreen",
+  "perc_married_couples",
+  # "perc_married_couples_u18ychildreen",
+  "perc_families_only_male",
+  # "perc_families_only_male__18ychildreen",
+  "perc_families_only_female",
+  # "perc_families_only_female__18ychildreen",
+  # "perc_non_families_alone",
+  # "perc_non_families_alone65y",
+  # "perc_non_families_u18y",
+  # "perc_non_families_65y",
+  # "perc_relationship_householder",
+  # "perc_relationship_spouse",
+  # "perc_relationship_child",
+  # "perc_relationship_other_relatives",
+  # "perc_relationship_other_nonrelatives",
+  # "perc_relationship_other_unmaried_part",
+  # "perc_marital_status_male_nevermaried",
+  # "perc_marital_status_male_maried",
+  # "perc_marital_status_male_separated",
+  # "perc_marital_status_male_widowed",
+  # "perc_marital_status_male_divorced",
+  # "perc_marital_status_female_nevermaried",
+  # "perc_marital_status_female_maried",
+  # "perc_marital_status_female_separated",
+  # "perc_marital_status_female_widowed",
+  # "perc_marital_status_female_divorced",
+  "perc_enrolled_preschool",
+  "perc_enrolled_kindergarden",
+  "perc_enrolled_elementary",
+  "perc_enrolled_highschool",
+  "perc_enrolled_college",
+  # "perc_edu_9grade",
+  # "perc_edu_nodiploma",
+  # "perc_edu_highshool",
+  "perc_edu_somecollege",
+  "perc_edu_associate",
+  "perc_edu_bachelor",
+  # "perc_edu_gradprofess",
+  # "perc_edu_highshool_higher",
+  # "perc_edu_batchelor_higher",
+  "perc_american",
+  "perc_arab",
+  "perc_czech",
+  "perc_danish",
+  "perc_dutch",
+  "perc_english",
+  "perc_french_except_basque",
+  "perc_french_canadian",
+  "perc_german",
+  "perc_greek",
+  "perc_hungarian",
+  "perc_irish",
+  "perc_italian",
+  "perc_lithuanian",
+  "perc_norwegian",
+  "perc_polish",
+  "perc_portuguese",
+  "perc_russian",
+  "perc_scotch_irish",
+  "perc_scottish",
+  "perc_slovak",
+  "perc_subsaharan_african",
+  "perc_swedish",
+  "perc_swiss",
+  "perc_ukrainian",
+  "perc_welsh",
+  "perc_west_indian_excluding_hispanic_origin_groups",
+  # "perc_withcomputer",
+  "perc_withinternet",
+  # "total_pop",
+  # "perc_imm65",
+  "total_beds",
+  "urban",
+  "perc_acute_myocardial_infarction",
+  "perc_alzheimer_dementia",
+  "perc_asthma",
+  "perc_atrial_fibrillation",
+  "perc_cancer_breast",
+  "perc_cancer_colorectal",
+  "perc_cancer_lung",
+  "perc_cancer_all",
+  "perc_ch_obstructive_pulm",
+  "perc_chronic_kidney_disease",
+  "perc_depression",
+  "perc_diabetes",
+  "perc_heart_failure",
+  "perc_hypertension",
+  "perc_ischemic_heart_disease",
+  "perc_obesity",
+  "perc_osteoporosis",
+  "perc_rheumatoid_arthritis",
+  "perc_schizophrenia_psychotic_dis",
+  "perc_stroke",
+  "perc_tobacco_use",
+  # to many NA for these:
+  # "urgent_admission",
+  # "annual_wellness_visit",
+  # "elective_admission",
+  # "emergent_admission",
+  # "other_admission",
+  "perc_pneumococcal_vaccine",
+  # "perc_poverty",
+  "median_income",
+  "pm2.5",
+  "summer_temp",
+  "summer_hum",
+  "winter_temp",
+  "winter_hum",
+  "age65_over",
+  "median_age",
+  # "median_age_male", 
+  # "median_age_female", 
+  "sex_ratio",
+  # "age_dependency",                                   
+  # "old_age_dependency",                              
+  "child_dependency",
+  "perc_black",
+  "perc_lat",
+  "perc_white",
+  "total_tests",
+  "days_f0"
+)
+```
+
+
+
+```{r}
+XX <- all_dat4[, names(all_dat4) %in% to_select2] %>% 
+  mutate_all(as.numeric)
+
+# x <-  lapply(names(XX), function(x) XX[[x]]) 
+# XX <- do.call(rbind, x)
+
+logitZZ <- log(all_dat4$perc_imm65) - log(1-all_dat4$perc_imm65)
+
+ZZ <- all_dat4$perc_imm65
+
+YY <-  all_dat4$deaths
+
+NC <-  all_dat4$cases
+
+NP <-  all_dat4$total_pop
+```
+
+# Visualization
+
+Some correlations are computed. Giving the large number of variables is hard to see something. 
+** I had to use `na.omit`*
+
+```{r fig.height=12, fig.width=12}
+M <- cor(cbind(logitZZ, XX),  use ="pairwise.complete.obs")
+
+
+ggcorrplot(M, hc.order = TRUE, tl.cex = 7)
+```
+
+
+## adjusted v unadjusted regression analysis
+
+As far as I understand this, the adjust regression includes also other factors than `imm65`. Offset is set to `NC` number of cases or `NP` population.
+
+### Cases
+
+```{r cases_unadjusted}
+OutcomeGLM_cases_u = glm( YY ~ ZZ, family = quasipoisson(link="log"), offset = log(NC))
+summary(OutcomeGLM_cases_u)
+```
+
+```{r cases_adjusted}
+OutcomeGLM_cases_a = glm ( YY ~ ZZ + as.matrix(XX), family = quasipoisson(link="log"), offset = log(NC))
+
+tidy(OutcomeGLM_cases_a) %>% 
+  mutate(term = stringr::str_remove_all(term, "as\\.matrix\\(XX\\)")) %>% 
+  filter(p.value < 0.05) 
+
+# %>% 
+#   mutate(degrees = round((atan(estimate) *180 / pi), digit = 0))
+```
+
+```{r}
+sign_factors <- tidy(OutcomeGLM_cases_a) %>% 
+  filter(p.value < 0.05) %>% 
+  filter(!term %in% c("ZZ", "(Intercept)")) %>% 
+  select(term) %>% 
+  mutate(term = stringr::str_remove_all(term, "as\\.matrix\\(XX\\)")) 
+```
+
+
+
+### Interactions Cases
+
+```{r}
+library(dplyr)
+library(tidyr)
+library(purrr)
+library(broom)
+
+lin_mod <- function(formula) {
+    x <-   glm(formula, offset = log(NC), family = quasipoisson(link="log"))
+    tidy(x)
+}
+
+ 
+base_formula <- "YY ~ ZZ + as.matrix(XX)"
+
+all_formulas <- paste0(base_formula, " + ZZ * XX$", unlist(sign_factors))
+
+names(all_formulas) <- all_formulas
+
+all_interactions <- map_dfr(all_formulas, lin_mod, .id = "formula")
+
+all_interactions %>% 
+  # filter(str_detect(term, "ZZ")) %>% 
+  filter(term == "ZZ") %>% 
+  select(formula, term, estimate, p.value) %>% 
+  filter(p.value < 0.05) 
+```
+

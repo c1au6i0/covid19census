@@ -1,0 +1,114 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+
+```{r}
+
+library(devtools)
+
+# devtools::install_github("c1au6i0/covid19census")
+library(kableExtra)
+library(covid19census)
+
+ff <- getus_all()
+
+ff <- ff[1:50, 1:50]  
+
+
+names(ff) <- paste0("x", 1:50)
+
+
+```
+
+```{r}
+library(dplyr)
+ff %>% 
+  kable(escape = F, align = "c") %>% 
+  column_spec(1:50, bold = T, border_right = T) %>%
+  kable_styling(latex_options = c("striped", "scale_down"), full_width = FALSE, font_size = 5) 
+  
+```
+
+```{r}
+library(dplyr)
+it <- getit_all()
+glimpse(it)
+```
+
+
+
+
+
+
+
+```{r}
+library(showtext)
+library(hexSticker)
+library(ggplot2)
+library(png)
+library(grid)
+imgurl <- readPNG("/Users/heverz/Desktop/logo.png")
+imgurl <- rasterGrob(imgurl, interpolate=TRUE)
+
+font_add_google("Gloria Hallelujah", "gloria")
+showtext_auto()
+
+p <- sticker(imgurl,
+          package="covid19census", p_size=5, p_y = 1.5, s_x = 1.1, s_y = 0.7, s_width=2.3, s_height=2.3, p_color = "#FF6A6A", p_family = "gochi",
+          filename="hexsticker.png", h_color = "#FF6A6A", h_fill="white")
+p
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
