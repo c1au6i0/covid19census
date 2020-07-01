@@ -30,7 +30,7 @@ getus_covid_jhu <- function() {
       dplyr::select(
         .data$date, .data$combined_key, .data$fips, .data$value
       ) %>%
-
+      dplyr::mutate(fips = as.numeric(fips)) %>%
       # this is to separte the column (tidyr::separate occasionally trows error)
       dplyr::mutate("county_state" = gsub(",(.)?US$", "", .data$combined_key, perl = TRUE)) %>%
       dplyr::mutate("state" = ifelse(

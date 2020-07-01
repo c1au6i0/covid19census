@@ -1,0 +1,735 @@
+---
+title: "Intersection COVID-19: Explore data"
+date: "`r Sys.time()`"
+categories:
+  - covid-19
+tags: 
+  - covid-19
+  - Italy
+lastmod: "`r Sys.time()`"all
+keywords: []
+description: ''
+output:
+  html_document:
+    df_print: kable
+    toc: true
+    theme: journal
+---
+
+# Objective
+
+```{r}
+library(facetscales)
+library(covid19census)
+library(tidyverse)
+library(ggcorrplot)
+library(GGally)
+library(gganimate)
+library(ggcorrplot)
+library(broom)
+library(purrr)
+library(knitr)
+library(kableExtra)
+library(htmlwidgets)
+library(plotly)
+library(stringr)
+library(ggridges)
+library(xtable)
+theme_set(theme_bw())
+```
+
+
+# Italy Table
+
+## flu block
+```{r}
+data_it <- getit_all()
+
+today_it <- 
+  data_it %>% 
+    filter(date == max(date))
+
+
+new_order_it <- c("n", "deaths", "pop_km2", "lat", "chronic_diab", "chronic_bronc", "chronic_hyp") 
+
+
+tab_it_flu <- 
+  today_it %>% 
+  select(region, deaths, lat, imm65, pop_km2, chronic_diab, chronic_bronc, chronic_hyp, pop_tot) %>% 
+  mutate_if(is.numeric, round, 1) %>% 
+  # 53 is median value
+  mutate(imm65= if_else(imm65 > 50, "high53", "low53")) %>% 
+  mutate( deaths = deaths/pop_tot * 100000) %>% 
+  group_by(imm65) %>% 
+  mutate(n = n()) %>% 
+  summarise_if(is.numeric, funs(mean, sd)) %>% 
+  pivot_longer(-imm65) %>% 
+  separate(name, c("var", "metric"), "_(?=(mean)|(sd))") %>% 
+  unite(imm65, imm65, metric ) %>% 
+  pivot_wider(names_from = imm65, values_from = value) %>% 
+  mutate_if(is.numeric, round,1)  %>% 
+  mutate(
+     "<53% (St.Dev.)"= paste(low53_mean,"(", low53_sd, ")"),
+     ">53% (St.Dev.)"= paste(high53_mean,"(",high53_sd, ")")) %>% 
+  select(var, "<53% (St.Dev.)", ">53% (St.Dev.)") %>% 
+  filter(var != "pop_tot") %>%
+  arrange(match(var, !!new_order_it)) %>% 
+  mutate(var = recode(var,
+    "n" = "Number of counties",
+    "deaths" = "COVID-19 death rate (per 100,000 people)",
+    "lat" = "Latitude",
+    "chronic_diab" = "% chronic diabetes",
+    "chronic_bronc" =  "% chronic bronchitis",
+    "chronic_hyp" = "% chronic hypertension",
+    "pop_km2" = "Population density (people per squared km)"
+    ))
+
+
+```
+
+### tot
+
+```{r}
+new_order_it <- c("n", "deaths", "pop_km2", "lat", "chronic_diab", "chronic_bronc", "chronic_hyp") 
+
+tab_it_tot <- 
+  today_it %>% 
+  select(region, deaths, lat, imm65, pop_km2, chronic_diab, chronic_bronc, chronic_hyp, pop_tot) %>% 
+  mutate_if(is.numeric, round, 1) %>% 
+  # 53 is median value
+  mutate( deaths = deaths/pop_tot * 100000,
+          all_d = "all") %>% 
+  group_by(all_d) %>% 
+  mutate(n = n()) %>% 
+  summarise_if(is.numeric, funs(mean, sd)) %>% 
+  pivot_longer(-all_d) %>% 
+  separate(name, c("var", "metric"), "_(?=(mean)|(sd))") %>% 
+  unite(all_d, all_d, metric ) %>% 
+  pivot_wider(names_from = all_d, values_from = value) %>% 
+  mutate_if(is.numeric, round, 1)  %>% 
+  
+  mutate(
+     "All (St.Dev.)" = paste(all_mean,"(", all_sd, ")")) %>% 
+  select(var, "All (St.Dev.)") %>% 
+  filter(!var %in% c("pop_tot", "imm65"))%>%
+  arrange(match(var, !!new_order_it)) %>% 
+  mutate(var = recode(var,
+    "n" = "Number of counties",
+    "deaths" = "COVID-19 death rate (per 100,000 people)",
+    "lat" = "Latitude",
+    "chronic_diab" = "% chronic diabetes",
+    "chronic_bronc" =  "% chronic bronchitis",
+    "chronic_hyp" = "% chronic hypertension",
+    "pop_km2" = "Population density (people per squared km)"
+    ))
+
+  
+tab_it_all <- inner_join(tab_it_tot, tab_it_flu, by = "var")
+
+
+
+print(
+  xtable(
+    tab_it_all
+  ),
+  include.rownames=FALSE,
+  comment = FALSE,
+  align = rep("c", ncol(tab_it))
+)
+
+```
+
+# US Table
+
+```{r warning=FALSE}
+
+logit = function(p){ log(p) - log(1-p) }
+
+# Thi are the variable that are initially selected from the dataframe
+# var new to select -------
+to_select<- c("date", "county", "state", "fips", "cases", "deaths", "perc_families", 
+"perc_family_only_onep", "perc_edu_bachelor", 
+"perc_withinternet", "total_pop", "perc_imm65", "total_imm65", 
+"total_beds", "ratio_beds", "urban",  
+"perc_alzheimer_dementia", "perc_asthma", "perc_atrial_fibrillation", 
+"perc_cancer_breast", "perc_cancer_colorectal", "perc_cancer_lung", 
+"perc_ch_obstructive_pulm", "perc_chronic_kidney_disease", "perc_depression", 
+"perc_diabetes", "perc_heart_failure", "perc_hypertension", "perc_ischemic_heart_disease", "perc_obesity", "perc_osteoporosis", "perc_rheumatoid_arthritis", 
+ "perc_stroke", "perc_tobacco_use", 
+"median_income", "pm2.5", "summer_temp", "summer_hum", "winter_temp", 
+"winter_hum", "age65_over", "median_age", "sex_ratio", "child_dependency", 
+"perc_black", "perc_lat", "perc_white", "perc_asian", "perc_island", 
+"perc_other", "perc_two_more_races", "total_tests", "days_f0"
+)
+
+# df1   -----------------------------
+df1 <- getus_all()
+
+# df2 ------------------------------
+df2 <-
+  df1 %>%
+  # calculate age65_over and perc_black, white and latinos, total tests
+  mutate(age65_over = rowSums(dplyr::select(., matches("perc_[6][5-9]|[7|8][0-9]")))) %>%
+  mutate(urban = if_else(urban == "Urban", 1, 0)) %>%
+  mutate(perc_black = total_black / total_pop * 100) %>%
+  mutate(perc_white = total_white / total_pop * 100) %>%
+  mutate(perc_lat = total_latino / total_pop * 100) %>%
+  mutate(total_tests = positive + negative) %>%
+
+  # calculate day since first case
+  mutate(f_date = case_when(cases >= 1 ~ date)) %>%
+  group_by(fips) %>%
+  mutate(f_date = min(f_date, na.rm = TRUE), days_f0 = as.numeric(date - f_date)) %>%
+  ungroup() %>%
+  mutate(days_f0 = if_else(is.finite(days_f0), days_f0, NA_real_)) %>%
+  
+  # newly calculated-----------------------------------  
+  # total beds in ratio
+  mutate(ratio_beds = total_beds/total_pop) %>% 
+  # asian are here
+  mutate(perc_asian = total_asian / total_pop * 100) %>%
+  mutate(perc_island = total_pacific_islander / total_pop * 100) %>%
+  mutate(perc_native = total_native / total_pop * 100) %>%
+  mutate(perc_other = total_other_race / total_pop * 100) %>%
+  mutate(perc_two_more_races = total_two_more_races / total_pop * 100) %>%
+  
+  
+  # family with one parent together
+  mutate(perc_family_only_onep = perc_families_only_female + perc_families_only_male) %>% 
+  mutate(total_imm65 = age65_over/100 *perc_imm65) %>% 
+   
+  # select variables ----------
+  dplyr::select(!!to_select) %>%
+
+  # perc divided by 100
+  mutate_at(vars(starts_with("perc")), function(x) x / 100) %>%
+  mutate(age65_over = age65_over / 100) %>%
+
+  # we remove NAs
+  na.omit() %>%
+
+  # at least 1 death
+  filter(deaths >= 1)
+
+
+# all_dat -------------
+all_dat <- df2 %>%
+  # make variables numeric
+  mutate_at(vars(
+    -date, -county, -state, -fips), 
+     as.numeric
+  ) %>%
+  # rename
+  # add XX_ to all the variables excepts those
+  rename_at(
+    vars(
+      -date, -county, -state, -fips, -cases, -deaths,
+      -perc_imm65, -cases, -total_pop, -total_imm65
+    ),
+    ~ paste0("XX_", .)
+  ) %>%
+  rename_at(vars(perc_imm65, total_imm65), ~ paste0("ZZ_", .)) %>%
+  rename_at(vars(deaths), ~ paste0("YY_", .)) %>%
+  rename_at(vars(cases), ~ paste0("NC_", .)) %>%
+  rename_at(vars(total_pop), ~ paste0("NP_", .)) %>%
+  # calculate logitZZ
+  mutate(logitZZ_perc_imm65 = logit(ZZ_perc_imm65)) 
+  # mutate(logitZZ_total_imm65 = log(ZZ_total_imm65) - log(1 - ZZ_total_imm65))
+  
+
+# today_dat ------------------------------
+today_dat <- all_dat %>%
+  filter(date == max(date))
+```
+
+```{r}
+new_order <- c(
+  "n",
+  "death_rate",
+  "XX_perc_families",
+  "XX_perc_family_only_onep",
+  "XX_perc_edu_bachelor",
+  "XX_perc_withinternet",
+  "XX_ratio_beds",
+  "XX_urban",
+  "XX_perc_alzheimer_dementia",
+  "XX_perc_asthma",
+  "XX_perc_atrial_fibrillation",
+  "XX_perc_cancer_breast",
+  "XX_perc_cancer_colorectal",
+  "XX_perc_cancer_lung",
+  "XX_perc_ch_obstructive_pulm",
+  "XX_perc_chronic_kidney_disease",
+  "XX_perc_depression",
+  "XX_perc_diabetes",
+  "XX_perc_heart_failure",
+  "XX_perc_hypertension",
+  "XX_perc_ischemic_heart_disease",
+  "XX_perc_obesity",
+  "XX_perc_osteoporosis",
+  "XX_perc_rheumatoid_arthritis",
+  "XX_perc_stroke",
+  "XX_perc_tobacco_use",
+  "XX_median_income",
+  "XX_pm2.5",
+  "XX_summer_temp",
+  "XX_summer_hum",
+  "XX_winter_temp",
+  "XX_winter_hum",
+  "XX_median_age",
+  "XX_age65_over",
+  "XX_sex_ratio",
+  "XX_child_dependency",
+  "XX_perc_black",
+  "XX_perc_lat",
+  "XX_perc_white",
+  "XX_perc_asian",
+  "XX_perc_island",
+  "XX_perc_other",
+  "XX_perc_two_more_races",
+  "XX_days_f0"
+)
+```
+
+## flu blocks
+
+```{r}
+
+# RATIO BEDS X THOUSANDS
+pm2.5_name <- expression("% average PM2.5(" ~ mu ~ g / m^3 ~ ")")
+
+tab_us_flu <- today_dat %>% 
+   mutate(median = median(ZZ_perc_imm65)) %>% 
+   select(matches("ZZ|XX|YY|NP")) %>% 
+   select(
+     -ZZ_total_imm65,
+     -logitZZ_perc_imm65,
+     -XX_total_tests,
+     -XX_total_tests,
+     -XX_total_beds
+     
+     ) %>% 
+   mutate_at(vars(matches("perc")), ~ . * 100) %>% 
+   mutate(ZZ_perc_imm65 = if_else(ZZ_perc_imm65 > 46, "high46", "low46")) %>%  
+  
+   mutate(
+     death_rate = YY_deaths / NP_total_pop * 100000,
+     XX_urban = XX_urban * 100,
+     XX_ratio_beds = XX_ratio_beds * 1000,
+     XX_median_income	= XX_median_income / 1000,
+     XX_sex_ratio = XX_sex_ratio * 100,
+     XX_child_dependency = XX_sex_ratio * 100,
+     ) %>%  
+  
+   group_by(ZZ_perc_imm65) %>% 
+   mutate(n = n()) %>% 
+   summarize_if(is.numeric, funs(mean, sd)) %>% 
+   
+   pivot_longer(-ZZ_perc_imm65) %>% 
+   separate(name, c("var", "metric"), "_(?=(mean)|(sd))") %>% 
+   unite(imm65, ZZ_perc_imm65, metric ) %>% 
+
+   pivot_wider(names_from = imm65, values_from = value) %>% 
+   mutate_if(is.numeric, round,1)  %>% 
+   mutate(
+     "<46% (St.Dev.)"= paste(low46_mean,"(", low46_sd, ")"),
+     ">46% (St.Dev.)"= paste(high46_mean,"(",high46_sd, ")")) %>% 
+  select(var, "<46% (St.Dev.)", ">46% (St.Dev.)") %>%
+  filter(!var %in% c("NP_total_pop", "YY_deaths")) %>% 
+  arrange(match(var, !!new_order)) %>% 
+  mutate(var = recode(var,
+    "n" = "Number of counties",
+    "death_rate" = "COVID-19 death rate (per 100,000 people)",
+    "XX_perc_families" = "% families",
+    "XX_perc_family_only_onep" = "% families with only one parent",
+    "XX_perc_edu_bachelor" =   "% with bachelor",
+    "XX_perc_withinternet" = "% with Internet",
+    "XX_ratio_beds" = "Rate of hospital beds (per 100,000 people)",
+    "XX_urban" = "% urban counties",
+    "XX_perc_alzheimer_dementia" = "% with Alzheimer's disease",
+    "XX_perc_asthma" = "% with asthma",
+    "XX_perc_atrial_fibrillation" = "% with atrial fibrillation",
+    "XX_perc_cancer_breast" = "% with breast cancer",
+    "XX_perc_cancer_colorectal" = "% with colorectal cancer",
+    "XX_perc_cancer_lung" = "% with lung cancer",
+    "XX_perc_ch_obstructive_pulm" = "% with obstructive pulmonary disease",
+    "XX_perc_chronic_kidney_disease" = "% with chronic kidney disease",
+    "XX_perc_depression" = "% with depression",
+    "XX_perc_diabetes" = "% with diabetes",
+    "XX_perc_heart_failure" = "% with heart failure",
+    "XX_perc_hypertension" = "% with hypertension",
+    "XX_perc_ischemic_heart_disease" = "% with ischemic heart disease",
+    "XX_perc_obesity" = "% with obesity",
+    "XX_perc_osteoporosis" = "% with osteoporosis",
+    "XX_perc_rheumatoid_arthritis" = "% with rheumatoid arthritis", 
+    "XX_perc_stroke" = "% stroke transient ischemic attack",
+    "XX_perc_tobacco_use" =  "% using tobacco",
+    "XX_median_income" = "% median income ($1,000)",
+    "XX_pm2.5" = "% average PM2.5(microg/m3)",
+    "XX_summer_temp" = "Summer temperature (K)",
+    "XX_summer_hum" =  "Summer humidity (mixing ratio)", 
+    "XX_winter_temp" = "Winter temperature (K)",
+    "XX_winter_hum" = "Winter humidity (mixing ratio)",
+    "XX_median_age" = "% median age",
+    "XX_age65_over" = "Number 65 years of age",
+    "XX_sex_ratio" = "Sex ratio",
+    "XX_child_dependency" = "Child dependency ratio",
+    "XX_perc_black" =   "% black",
+    "XX_perc_lat" =  "% latino",
+    "XX_perc_white" = "% white",
+    "XX_perc_asian" = "% asian",
+    "XX_perc_island" = "% island native",
+    "XX_perc_other" =   "% other",
+    "XX_perc_two_more_races" = "% two more races",
+    "XX_days_f0" =  "Number of days since first case"
+    
+  )
+  )
+
+
+
+# total test need to be added after
+```
+
+## tot
+
+```{r US_ALL}
+tab_us_tot <-
+  today_dat %>% 
+   mutate(median = median(ZZ_perc_imm65)) %>% 
+   select(matches("ZZ|XX|YY|NP")) %>% 
+   select(
+     -ZZ_total_imm65,
+     -logitZZ_perc_imm65,
+     -XX_total_tests,
+     -XX_total_tests,
+     -XX_total_beds
+     
+     ) %>% 
+   mutate_at(vars(matches("perc")), ~ . * 100) %>% 
+   mutate(ZZ_perc_imm65 = if_else(ZZ_perc_imm65 > 46, "high46", "low46")) %>%  
+  
+   mutate(
+     death_rate = YY_deaths / NP_total_pop * 100000,
+     XX_urban = XX_urban * 100,
+     XX_ratio_beds = XX_ratio_beds * 1000,
+     XX_median_income	= XX_median_income / 1000,
+     XX_sex_ratio = XX_sex_ratio * 100,
+     XX_child_dependency = XX_sex_ratio * 100,
+     ) %>%  
+  
+   group_by(all_d) %>% 
+   mutate(n = n()) %>% 
+   summarize_if(is.numeric, funs(mean, sd)) %>% 
+   
+   pivot_longer(-all_d) %>% 
+   separate(name, c("var", "metric"), "_(?=(mean)|(sd))") %>% 
+   unite(all_d, all_d, metric ) %>% 
+   pivot_wider(names_from = all_d, values_from = value) %>% 
+    mutate_if(is.numeric, round, 1)  %>%
+  mutate(
+     "All (St.Dev.)" = paste(all_d_mean,"(", all_d_sd, ")")) %>% 
+  select(var, "All (St.Dev.)") %>% 
+  mutate_if(is.numeric, round, 1)  %>% 
+  filter(!var %in% c("NP_total_pop", "YY_deaths")) %>% 
+  arrange(match(var, !!new_order)) %>% 
+ mutate(var = recode(var,
+    "n" = "Number of counties",
+    "death_rate" = "COVID-19 death rate (per 100,000 people)",
+    "XX_perc_families" = "% families",
+    "XX_perc_family_only_onep" = "% families with only one parent",
+    "XX_perc_edu_bachelor" =   "% with bachelor",
+    "XX_perc_withinternet" = "% with Internet",
+    "XX_ratio_beds" = "Rate of hospital beds (per 100,000 people)",
+    "XX_urban" = "% urban counties",
+    "XX_perc_alzheimer_dementia" = "% with Alzheimer's disease",
+    "XX_perc_asthma" = "% with asthma",
+    "XX_perc_atrial_fibrillation" = "% with atrial fibrillation",
+    "XX_perc_cancer_breast" = "% with breast cancer",
+    "XX_perc_cancer_colorectal" = "% with colorectal cancer",
+    "XX_perc_cancer_lung" = "% with lung cancer",
+    "XX_perc_ch_obstructive_pulm" = "% with obstructive pulmonary disease",
+    "XX_perc_chronic_kidney_disease" = "% with chronic kidney disease",
+    "XX_perc_depression" = "% with depression",
+    "XX_perc_diabetes" = "% with diabetes",
+    "XX_perc_heart_failure" = "% with heart failure",
+    "XX_perc_hypertension" = "% with hypertension",
+    "XX_perc_ischemic_heart_disease" = "% with ischemic heart disease",
+    "XX_perc_obesity" = "% with obesity",
+    "XX_perc_osteoporosis" = "% with osteoporosis",
+    "XX_perc_rheumatoid_arthritis" = "% with rheumatoid arthritis", 
+    "XX_perc_stroke" = "% stroke transient ischemic attack",
+    "XX_perc_tobacco_use" =  "% using tobacco",
+    "XX_median_income" = "% median income ($1,000)",
+    "XX_pm2.5" = "% average PM2.5(microg/m3)",
+    "XX_summer_temp" = "Summer temperature (K)",
+    "XX_summer_hum" =  "Summer humidity (mixing ratio)", 
+    "XX_winter_temp" = "Winter temperature (K)",
+    "XX_winter_hum" = "Winter humidity (mixing ratio)",
+    "XX_median_age" = "% median age",
+    "XX_age65_over" = "Number 65 years of age",
+    "XX_sex_ratio" = "Sex ratio",
+    "XX_child_dependency" = "Child dependency ratio",
+    "XX_perc_black" =   "% black",
+    "XX_perc_lat" =  "% latino",
+    "XX_perc_white" = "% white",
+    "XX_perc_asian" = "% asian",
+    "XX_perc_island" = "% island native",
+    "XX_perc_other" =   "% other",
+    "XX_perc_two_more_races" = "% two more races",
+    "XX_days_f0" =  "Number of days since first case"
+  )
+  )
+
+
+tab_us_all <- inner_join(tab_us_tot, tab_us_flu, by = "var")
+
+
+print(
+  xtable(
+    tab_us_all
+  ),
+  include.rownames=FALSE,
+  comment = FALSE,
+  align = rep("c", ncol(tab_it))
+)
+
+```
+
+
+# Some figures US
+
+
+```{r fig.width=12, fig.height=12}
+library(ggcorrplot)
+M <-   
+  today_dat %>% 
+  select_if(is.numeric) %>% 
+  cor( use ="pairwise.complete.obs")
+ggcorrplot(M,
+           hc.order = TRUE
+           # pch.cex = 30,
+           # tl.cex = 30
+)
+```
+
+```{r fig.width=4, fig.height=12, message=FALSE, warning=FALSE}
+ordered_levels <-   
+  today_dat %>% 
+  group_by(state) %>% 
+  mutate(mean_z = mean(ZZ_perc_imm65)) %>%
+  arrange(mean_z) %>% 
+  ungroup() %>%
+  select(state) %>% 
+  unique() %>% 
+  unlist()
+   
+today_dat %>% 
+  mutate(state = factor(state, levels = ordered_levels)) %>% 
+  mutate(urban = factor(recode(XX_urban,
+                        `0` = "rural",
+                         `1` = "urban"
+                        ))
+         ) %>% 
+        
+  ggplot(aes(ZZ_perc_imm65, state, fill = urban)) +
+      geom_density_ridges2(alpha = 0.5, scale = 1.1) +
+      labs(x = "influenza vaccination in 65 and older (percent)",
+           y = NULL
+           ) +
+  theme(legend.title = element_blank(),
+        legend.position="top")
+```
+```{r}
+today_dat %>% 
+  mutate(state = factor(state, levels = ordered_levels)) %>% 
+  mutate(urban = factor(recode(XX_urban,
+                        `0` = "rural",
+                         `1` = "urban"
+                        ))
+         ) %>% 
+        
+  ggplot(aes(ZZ_perc_imm65, fill = urban)) +
+      geom_density(alpha = 0.5) +
+      labs(x = "influenza vaccination in 65 and older (percent)",
+           y = NULL
+           ) +
+  theme(legend.title = element_blank(),
+        legend.position="top")
+```
+
+
+
+
+
+```{r fig.width=4, fig.height=12, message=FALSE, warning=FALSE}
+ordered_levels <-   
+  today_dat %>% 
+  group_by(state) %>% 
+  mutate(mean_z = mean(YY_deaths)) %>%
+  arrange(mean_z) %>% 
+  ungroup() %>%
+  select(state) %>% 
+  unique() %>% 
+  unlist()
+today_dat %>% 
+  mutate(state = factor(state, levels = ordered_levels)) %>% 
+  mutate(state = factor(state, levels = ordered_levels)) %>% 
+  mutate(urban = factor(recode(XX_urban,
+                        `0` = "rural",
+                        `1` = "urban"
+                        ))
+         ) %>% 
+  ggplot(aes(log(YY_deaths), state, fill = urban)) +
+      geom_density_ridges2(alpha = 0.5) +
+      labs(x = "number of deaths (log2)") +
+     theme(legend.title = element_blank(),
+           legend.position="top") 
+
+linbrary(G)
+```
+
+
+```{r}
+today_dat %>% 
+   group_by(state) %>% 
+   summarize(deaths  = sum(YY_deaths)) %>% 
+   
+   ggplot(aes(reorder(state, deaths), deaths)) +
+     geom_col() +
+     scale_x_discrete(guide = guide_axis(check.overlap = TRUE, angle = 45)) +
+     labs(y = NULL)
+    
+```
+
+
+
+```{r}
+today_dat %>% 
+   group_by(date) %>% 
+   mutate(tot = sum(YY_deaths)) %>% 
+   group_by(state) %>%
+   summarize(perc_death = round((sum(YY_deaths)/first(tot) * 100), 2)) %>% 
+   arrange(desc(perc_death))
+```
+
+```{r}
+today_dat %>% 
+   group_by(date) %>% 
+   mutate(tot = sum(NC_cases)) %>% 
+   group_by(state) %>%
+   summarize(perc_cases = round((sum(NC_cases)/first(tot) * 100),2)) %>% 
+   arrange(desc(perc_cases))
+```
+
+
+
+
+
+```{r}
+options(scipen = 999)
+today_dat %>% 
+   group_by(state) %>% 
+   summarize(cases  = sum(NC_cases)) %>% 
+   
+   ggplot(aes(reorder(state, cases), cases)) +
+     geom_col() +
+     scale_x_discrete(guide = guide_axis(check.overlap = TRUE, angle = 45)) +
+    labs(y = NULL)
+    
+```
+
+
+
+```{r fig.width=4, fig.height=9}
+today_dat %>% 
+  group_by(state) %>% 
+  summarize(temp_winter = mean(XX_winter_hum, na.rm = TRUE),
+            n = n()
+            ) %>% 
+  
+  ggplot(aes(reorder(state, temp_winter), temp_winter)) +
+    geom_col() +
+   # scale_x_discrete(guide = guide_axis(check.overlap = TRUE, angle = 90)) +
+   geom_label(aes(label = n,  y = 25)) +
+   coord_flip()
+    
+```
+
+```{r fig.width=4, fig.height=9}
+today_dat %>% 
+  group_by(state) %>% 
+  summarize(temp_summer = mean(XX_summer_hum, na.rm = TRUE),
+            n = n()
+            ) %>% 
+  
+  ggplot(aes(reorder(state, temp_summer), temp_summer)) +
+    geom_col() +
+   # scale_x_discrete(guide = guide_axis(check.overlap = TRUE, angle = 90)) +
+   geom_label(aes(label = n,  y = 25)) +
+   coord_flip()
+    
+```
+
+```{r}
+today_dat %>% 
+  group_by(state) %>% 
+  summarize(temp_summer = mean(XX_summer_hum, na.rm = TRUE),
+            n = n()) %>% 
+  
+  ggplot(aes(reorder(state, temp_summer), temp_summer)) +
+    geom_col() +
+   scale_x_discrete(guide = guide_axis(check.overlap = TRUE, angle = 90)) 
+    
+  
+```
+
+```{r}
+today_dat %>% 
+  filter(state == "Oregon") %>% 
+  select(fips, XX_summer_hum) %>% 
+  dput()
+```
+
+
+
+```{r}
+today_dat %>% 
+  group_by(state) %>% 
+  rename(temp_winter = XX_winter_hum) %>% 
+  
+  ggplot(aes(reorder(state, temp_winter), temp_winter, color = state)) +
+    geom_jitter() +
+   scale_x_discrete(guide = guide_axis(check.overlap = TRUE, angle = 90)) +
+   theme(legend.position = "none") 
+    
+```
+
+
+```{r}
+library(vroom)
+us_season <- vroom("https://raw.githubusercontent.com/wxwx1993/PM_COVID/master/Data/temp_seasonal_county.csv",
+  col_types = cols(.default = "d")
+)
+
+
+summary(us_season$winter_rmax)
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
