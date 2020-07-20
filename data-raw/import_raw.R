@@ -189,7 +189,7 @@ us_mmd <- mmd_all_us %>%
     other_admission,
     pneumococcal_vaccine
   )
-names(us_mmd) <-
+  names(us_mmd) <-
   c(
     "year",
     "fips",
@@ -909,9 +909,6 @@ usethis::use_data(
   overwrite = TRUE
 )
 #
-
-
-
 
 
 
