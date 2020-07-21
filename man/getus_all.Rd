@@ -85,12 +85,12 @@ at the county level}}
 \item{total_edu}{total number of people 25 years old or more that responded to the question regarding education (?)}
 \item{perc_edu_9grade}{percent that went up to 9th grade}
 \item{perc_edu_nodiploma}{percent that went up to 9th grade}
-\item{perc_edu_highshool}{percent with highschool}
+\item{perc_edu_highschool}{percent with highschool}
 \item{perc_edu_somecollege}{percent with some college}
 \item{perc_edu_associate}{percent that obtaibed an associate degree}
-\item{perc_edu_bachelor}{percent with batchelor}
+\item{perc_edu_bachelor}{percent with bachelor}
 \item{perc_edu_gradprofess}{percent that graduated or with a professional degree}
-\item{perc_edu_batchelor_higher}{percent with batchelor or higher}
+\item{perc_edu_bachelor_higher}{percent with bachelor or higher}
 \item{\strong{ANCESTRY}}{---------------}
 \item{total_ancestry}{total population}
 \item{perc_ \emph{anchestry}}{percent estimated specific ancestry (27)}
@@ -144,8 +144,8 @@ at the county level}}
 \item{perc_schizophrenia_psychotic_dis}{percent  medicare beneficiaries with Schizophrenia/Other Psychotic Disorders}
 \item{perc_stroke}{percent  medicare beneficiaries with Stroke Transient Ischemic Attack }
 \item{perc_tobacco_use}{}
-\item{perc_urgent_admission}{urgent care admission rate}
-\item{perc_annual_wellness_visit}{number of annual wellness visits}
+\item{urgent_admission}{urgent care admission rate}
+\item{annual_wellness_visit}{number of annual wellness visits}
 \item{elective_admission}{elective admission rate}
 \item{emergent_admission}{ER admission rate}
 \item{other_admission}{other admission rates}
