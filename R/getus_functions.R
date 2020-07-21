@@ -47,6 +47,7 @@ getus_covid_jhu <- function() {
       # JHU has unincorporated U.S territories and the cruises data
       # that ends up to be NA because they have not counties in the dataframe
       dplyr::filter(!is.na(.data$county), !is.na(.data$fips)) %>%
+      dplyr::filter(.data$state != "Puerto Rico") %>%
       dplyr::select(-.data$county_state)
 
     names(dat)[names(dat) == "value"] <- x
