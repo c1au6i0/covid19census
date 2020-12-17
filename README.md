@@ -5,7 +5,7 @@
 
 <!-- badges: start -->
 
-[![](https://img.shields.io/badge/devel%20version-0.0.1.200-blue.svg)](https://codecov.io/gh/c1au6i0/covid19census?branch=master)
+[![](https://img.shields.io/badge/devel%20version-0.0.1.300-blue.svg)](https://codecov.io/gh/c1au6i0/covid19census?branch=master)
 [![Build
 Status](https://travis-ci.com/c1au6i0/covid19census.svg?branch=master)](https://travis-ci.com/c1au6i0/covid19census)
 [![Codecov test
@@ -78,31 +78,31 @@ Disparities](https://data.cms.gov/mapping-medicare-disparities), and
 indexes](https://github.com/COVIDExposureIndices/COVIDExposureIndices)
 calculated by Victor Couture, Jonathan Dingel, Allison Green, Jessie
 Handbury, and Kevin Williams based on smartphone movement data provided
-by `PlaceIQ`. Emissions of pm2.5 in micro g/m3 (2016) were reported by 
-and \#’ aggregate by 
+by `PlaceIQ`. Emissions of pm2.5 in micro g/m3 (2016) were reported by
+and \#’ aggregate by
 
 This is a list of U.S. datasets that can be accessed directly or in a
 `dataframe` containing also COVID-19 metrics:
 
-  - `us_acm_househ`: several metric regarding household composition,
+-   `us_acm_househ`: several metric regarding household composition,
     including poverty, education, ancestry (2018).
-  - `us_age_sex`: age and sex distribution (2018).
-  - `us_fl65`: percentage of fee-for-service (FFS) Medicare enrollees
+-   `us_age_sex`: age and sex distribution (2018).
+-   `us_fl65`: percentage of fee-for-service (FFS) Medicare enrollees
     that had an annual flu vaccination (2017)
-  - `us_hospbeds`: total hospital beds in each county (2019).
-  - `us_netinc`: median househould income (2018).
-  - `us_mmd`: data of 2017 regarding the prevalence found in medicare
+-   `us_hospbeds`: total hospital beds in each county (2019).
+-   `us_netinc`: median househould income (2018).
+-   `us_mmd`: data of 2017 regarding the prevalence found in medicare
     beneficiaries of
-      - many medical and chronic conditions (Alzheimer, chronic kidney,
+    -   many medical and chronic conditions (Alzheimer, chronic kidney,
         obesity, depression, obstructive pulmonary, disease, arthritis,
         diabetes, osteoporosis, asthma, atrial fibrillation, ischemic
         hearth, myocardial infarction, hypertension).
-      - several type of cancer.
-      - emergency, medical admissions and annual visits.
-      - pneumoccocal vaccine.
-      - tobacco use.
-  - `us_pm2.5`: Emissions of pm2.5 in micro g/m3
-  - `us_race`: estimated races in population (2018).
+    -   several type of cancer.
+    -   emergency, medical admissions and annual visits.
+    -   pneumoccocal vaccine.
+    -   tobacco use.
+-   `us_pm2.5`: Emissions of pm2.5 in micro g/m3
+-   `us_race`: estimated races in population (2018).
 
 *Note that* info for some counties are missing in some datasets. For
 example, `hospbeds` contains info on 2545 counties, `fl65` has 3224
@@ -124,27 +124,27 @@ Ambientale](https://annuario.isprambiente.it/pon/basic/14)
 This is a list of Italy datasets that can be accessed directly or in a
 `dataframe` containing also COVID-19 metrics:
 
-  - `it_bweight`: Body mass index in regions of Italy, in the general
+-   `it_bweight`: Body mass index in regions of Italy, in the general
     population.
-  - `it_cancer`: Number of cancer patients in each region by type.
-  - `it_chronic`: Number of people suffering of chronic conditions by
+-   `it_cancer`: Number of cancer patients in each region by type.
+-   `it_chronic`: Number of people suffering of chronic conditions by
     region and type.
-  - `it_dem`: Number of people by region, sex, age.
-  - `it_firstaid`: Number of people using first aid or medical guard (3
+-   `it_dem`: Number of people by region, sex, age.
+-   `it_firstaid`: Number of people using first aid or medical guard (3
     months).
-  - `it_fl`: Influenza vaccination coverage in Italy for 2009-2019
+-   `it_fl`: Influenza vaccination coverage in Italy for 2009-2019
     season for general population and aged 65 and more.
-  - `it_fl_2019`: Influenza vaccination coverage in Italy for 2018-2019
+-   `it_fl_2019`: Influenza vaccination coverage in Italy for 2018-2019
     season for general population and 65 and more.
-  - `it_hospbed`: Inpatient hospital beds per 1000 people.
-  - `it_house`: household crowding index from 2014 to 2018 in each
+-   `it_hospbed`: Inpatient hospital beds per 1000 people.
+-   `it_house`: household crowding index from 2014 to 2018 in each
     region.
-  - `it_netinc`: median net annual households income (including imputed
+-   `it_netinc`: median net annual households income (including imputed
     rents, in euros).
-  - `it_pm2.5`: emission of particulate 2.5 in tons per region.
-  - `it_regions`: Area in square meters of each region. Used to
+-   `it_pm2.5`: emission of particulate 2.5 in tons per region.
+-   `it_regions`: Area in square meters of each region. Used to
     calculate density per region.
-  - `it_smoking`: Number of people aged 14 years and over that
+-   `it_smoking`: Number of people aged 14 years and over that
     self-referred as smoker, non smoker, or past smoker by region.
 
 ## Raw Data and other Scripts

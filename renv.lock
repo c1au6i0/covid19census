@@ -1,6 +1,6 @@
 {
   "R": {
-    "Version": "4.0.0",
+    "Version": "4.0.3",
     "Repositories": [
       {
         "Name": "CRAN",
@@ -201,10 +201,10 @@
     },
     "codetools": {
       "Package": "codetools",
-      "Version": "0.2-16",
+      "Version": "0.2-18",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "89cf4b8207269ccf82fbeb6473fd662b"
+      "Hash": "019388fc48e48b3da0d3a76ff94608a8"
     },
     "colorspace": {
       "Package": "colorspace",
@@ -334,10 +334,10 @@
     },
     "foreign": {
       "Package": "foreign",
-      "Version": "0.8-79",
+      "Version": "0.8-80",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "910ad5e5ce9aae0d0f57186ca9a12e1e"
+      "Hash": "ae1b1e15cc6ccb2bc61c0ac33e86d35f"
     },
     "fs": {
       "Package": "fs",
@@ -586,10 +586,10 @@
     },
     "mgcv": {
       "Package": "mgcv",
-      "Version": "1.8-31",
+      "Version": "1.8-33",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "4bb7e0c4f3557583e1e8d3c9ffb8ba5c"
+      "Hash": "eb7b6439bc6d812eed2cddba5edc6be3"
     },
     "mime": {
       "Package": "mime",
@@ -621,10 +621,10 @@
     },
     "nlme": {
       "Package": "nlme",
-      "Version": "3.1-147",
+      "Version": "3.1-150",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "dd4a1423f1472a2a8e05dd2c8945c3af"
+      "Hash": "82e52d2c6e674764ffb122d084afa96b"
     },
     "nnet": {
       "Package": "nnet",
@@ -817,10 +817,10 @@
     },
     "rmarkdown": {
       "Package": "rmarkdown",
-      "Version": "2.1",
+      "Version": "2.6",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "9d1c61d476c448350c482d6664e1b28b"
+      "Hash": "bc4bac38960b446c183957bfd563e763"
     },
     "roxygen2": {
       "Package": "roxygen2",
@@ -943,10 +943,10 @@
     },
     "survival": {
       "Package": "survival",
-      "Version": "3.1-12",
+      "Version": "3.2-7",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "1c5bb53bd428f3c42a25b7aeb983d8c7"
+      "Hash": "39c4ac6d22dad33db0ee37b40810ea12"
     },
     "sys": {
       "Package": "sys",
@@ -1076,10 +1076,10 @@
     },
     "xfun": {
       "Package": "xfun",
-      "Version": "0.14",
+      "Version": "0.19",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "60e146e3aba37a547e12306dc3da77a6"
+      "Hash": "a42372606cb76f34da9d090326e9f955"
     },
     "xml2": {
       "Package": "xml2",

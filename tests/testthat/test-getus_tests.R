@@ -20,35 +20,13 @@ expected_states <- structure(list(state = c(
 )), class = c("data.frame"), row.names = c(NA, -51L))
 
 expected_states <- sort(expected_states$state)
-#
-#
-# y_jhu <- getus_all()
-#
-#
-x_jhu <- getus_covid(repo = "jhu")
-# #
-# #
-# # test_that("get_all_jhu and get_covid have same fips", {
-# #   expect_equal(length(unique(y_jhu$fips)), length(unique(x_jhu$fips)))
-# # })
-# # #
-#
-test_that("getus_jhu states abbr ", {
-  expect_equal(sort(unique(x_jhu$state)), expected_states )
+
+tests <- getus_tests() %>%
+  select(state, abbr) %>%
+  distinct() %>%
+  arrange(state) %>%
+  pull(state)
+
+test_that("getus_tests states abbr ", {
+    expect_equal(tests, expected_states)
 })
-
-# # ##################################
-
-# test_that("getus_test executes", {
-#   expect_error(getus_tests(), NA)
-# })
-#
-# tests <- getus_tests() %>%
-#   select(state, abbr) %>%
-#   distinct() %>%
-#   arrange(state) %>%
-#   pull(state)
-#
-# test_that("getus_tests states abbr ", {
-#     expect_equal(tests, expected_states)
-# })

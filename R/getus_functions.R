@@ -3,8 +3,6 @@
 #' extracts time series from the git repository of the \href{ https://github.com/CSSEGISandData }{JHU}
 #'
 #' @return a dataframe
-#' @importFrom rlang .data
-#' @importFrom magrittr %>%
 #' @import vroom
 #' @details `cases` represents the number of confirmed cases, while `cmr` the case-mortality rate (deaths / confirmed_case * 100).
 #' A good description of pitfalls and caveats associated with the use of case-mortality rate metric has been made on
@@ -22,37 +20,51 @@ getus_covid_jhu <- function() {
       stop("Something wrong with the repository or your internet connection!")
     }
 
-    dat <-
-      vroom(url_full, col_types = c(.default = "?"), progress = FALSE) %>%
-      tidyr::pivot_longer(cols = dplyr::matches("[0-9]{1,}/"), names_to = "date", values_to = "value") %>%
-      janitor::clean_names() %>%
-      dplyr::filter(.data$country_region == "US") %>%
-      dplyr::select(
-        .data$date, .data$combined_key, .data$fips, .data$value
-      ) %>%
-      dplyr::mutate("fips" = as.numeric(.data$fips)) %>%
-      # this is to separte the column (tidyr::separate occasionally trows error)
-      dplyr::mutate("county_state" = gsub(",(.)?US$", "", .data$combined_key, perl = TRUE)) %>%
-      dplyr::mutate("state" = ifelse(
-        grepl(",", .data$county_state) == FALSE,
-        .data$county_state,
-        gsub(".*,(\\s)?", "", .data$county_state, perl = TRUE)
-      )) %>%
-      dplyr::mutate("county" = ifelse(
-        grepl(",", .data$county_state) == FALSE,
-        NA,
-        gsub(",.*", "", .data$county_state, perl = TRUE)
-      )) %>%
+    dat <- vroom(url_full, col_types = c(.default = "?"), progress = FALSE)
 
-      # JHU has unincorporated U.S territories and the cruises data
-      # that ends up to be NA because they have not counties in the dataframe
-      dplyr::filter(!is.na(.data$county), !is.na(.data$fips)) %>%
-      dplyr::filter(.data$state != "Puerto Rico") %>%
-      dplyr::select(-.data$county_state)
+    col_to_long <- grep("[0-9]{1,}/", names(dat), value = TRUE, perl = TRUE)
 
-    names(dat)[names(dat) == "value"] <- x
+    dat_long <- reshape2::melt(dat, measure.vars = col_to_long,
+                     variable.name = "date",
+                     value.name = "value")
 
-     dat
+    dat_long <- janitor::clean_names(dat_long)
+
+    dat_long_filt <- dat_long[dat_long$country_region == "US",
+                              c("date", "combined_key", "fips", "value")]
+
+    dat_long_filt$fips <- as.numeric(dat_long_filt$fips)
+
+    dat_long_filt[, "county_state"] <- gsub(",(.)?US$", "", dat_long_filt$combined_key, perl = TRUE)
+
+    dat_long_filt$state <- ifelse(
+      grepl(",", dat_long_filt$county_state) == FALSE,
+      dat_long_filt$county_state,
+      gsub(".*,(\\s)?", "", dat_long_filt$county_state, perl = TRUE)
+    )
+
+    dat_long_filt$county <- ifelse(
+      grepl(",", dat_long_filt$county_state) == FALSE,
+      NA,
+      gsub(",.*", "", dat_long_filt$county_state, perl = TRUE)
+    )
+
+    dat_long_filt <- dat_long_filt[!is.na(dat_long_filt$county) &
+                    !is.na(dat_long_filt$fips) &
+                    dat_long_filt$state != "Puerto Rico",]
+
+    dat_long_filt <- dat_long_filt[, names(dat_long_filt) != "county_state"]
+
+    # JHU has unincorporated U.S territories and the cruises data
+    # that ends up to be NA because they have not counties in the dataframe
+    # dplyr::filter(!is.na(.data$county), !is.na(.data$fips)) %>%
+    #   dplyr::filter(.data$state != "Puerto Rico") %>%
+    #   dplyr::select(-.data$county_state)
+
+    names(dat_long_filt)[names(dat_long_filt) == "value"] <- x
+
+    dat_long_filt
+
   })
 
   names(dat_l) <- metric_files
@@ -61,20 +73,21 @@ getus_covid_jhu <- function() {
 
   # funny things is that there are unassigned county (confirmed 90049),
   # that in the same file have a county
-  dat_w <-
-    dat_l$confirmed %>%
-    dplyr::select(.data$date, .data$fips, .data$confirmed) %>%
-    dplyr::inner_join(dat_l$deaths, by = c("date", "fips")) %>%
-    dplyr::rename("cases" = "confirmed") %>%
-    dplyr::mutate(
-      date = as.Date(.data$date, format = "%m/%d/%y"),
-      cmr = .data$deaths / .data$cases * 100
-    ) %>%
-    dplyr::select(.data$date, .data$county, .data$state, .data$fips, .data$cases, .data$deaths, .data$cmr)
 
-  message(paste0("US COVID-19 data up to ", max(dat_w$date), " successfully retrived from JHU repository!"))
+  dat_w <- dat_l$confirmed[, c("date", "fips", "confirmed")]
 
-  dat_w
+  dat_w_j <- merge(dat_w, dat_l$deaths, by = c("date", "fips"))
+
+  names(dat_w_j)[names(dat_w_j) == "confirmed"] <- "cases"
+
+  dat_w_j$date <-  as.Date(dat_w_j$date, format = "%m/%d/%y")
+  dat_w_j$cmr <- dat_w_j$deaths / dat_w_j$cases * 100
+
+  dat_out <- dat_w_j[, c("date", "county", "state", "fips", "cases", "deaths", "cmr")]
+
+  message(paste0("US COVID-19 data up to ", max(dat_out$date), " successfully retrived from JHU repository!"))
+
+  dat_out
 }
 
 
