@@ -5,6 +5,7 @@ library(reshape2)
 library(tabulizer)
 library(stringr)
 
+
 # Unpackit_us.zip and run the script
 
 # xxxxxxxxxxxxxxxx-------------------
@@ -597,7 +598,6 @@ it_firstaid <- vroom("data-raw/it_us/it/first_aid.csv",
   )
 
 # it_fl_2019 ---------
-web_page <- "http://www.salute.gov.it/imgs/C_17_tavole_19_allegati_iitemAllegati_0_fileAllegati_itemFile_3_file.pdf"
 
 area_sel <- c(
   top = 92.6606873324687, left = 49.819066386841, bottom = 436.401946791649,
@@ -606,7 +606,7 @@ area_sel <- c(
 
 suppressWarnings(
   fl_tab <- extract_tables(
-    web_page,
+    "data-raw/it_us/it/flu_italy_to2018.pdf",
     output = "data.frame",
     pages = 1,
     area =  list(area_sel),
@@ -646,7 +646,7 @@ area_sel2 <- c(
 
 suppressWarnings(
   fl65_tab <- extract_tables(
-    web_page,
+    "data-raw/it_us/it/flu_italy_to2018.pdf",
     output = "data.frame",
     pages = 3,
     area =  list(area_sel2),
@@ -949,7 +949,7 @@ usethis::use_data(
   dem_65bin_fm,
   it_dem,
   it_firstaid,
-  # it_fl,
+  it_fl,
   it_fl_2019,
   it_hospbed,
   it_house,
