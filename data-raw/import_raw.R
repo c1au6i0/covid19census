@@ -35,7 +35,7 @@ us_age_sex <- us_age_sex %>%
 
 
 # us_fl65 ----------
-us_fl65_all <- vroom("data-raw/it_us/us/flu_us.csv",
+us_fl65_all <- vroom("data-raw/it_us/us/data_cms/flu_us.csv",
   col_types = cols(
     year = col_double(),
     geography = col_character(),
