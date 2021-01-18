@@ -149,7 +149,8 @@ us_mmd <- mmd_all_us %>%
         "Cancer, Colorectal, Breast, Prostate, Lung" = "cancer_all",
         "Chronic obstructive pulmonary disease" = "ch_obstructive_pulm",
         "Stroke/Transient Ischemic Attack" = "stroke",
-        "Schizophrenia and other psychotic disorders" = "schizophrenia_psychotic_dis"
+        "Schizophrenia and other psychotic disorders" = "schizophrenia_psychotic_dis",
+        "1 of the claims-based conditions" = "at_least_1_chronic"
       )
   ) %>%
   # pivot_longer and spread crash as a bitch
@@ -162,6 +163,7 @@ us_mmd <- mmd_all_us %>%
     county,
     state,
     urban,
+    at_least_1_chronic,
     acute_myocardial_infarction,
     alzheimer_dementia,
     asthma,
@@ -197,6 +199,7 @@ us_mmd <- mmd_all_us %>%
     "county",
     "state",
     "urban",
+    "perc_at_least_1_chronic",
     "perc_acute_myocardial_infarction",
     "perc_alzheimer_dementia",
     "perc_asthma",

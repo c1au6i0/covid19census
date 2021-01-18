@@ -5,7 +5,7 @@
 \alias{us_fl65}
 \title{influenza vaccination 65 or older}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 3224 rows and 4 columns.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 3223 rows and 4 columns.
 }
 \source{
 \href{https://data.cms.gov/mapping-medicare-disparities}{Data.CMS.gov}
