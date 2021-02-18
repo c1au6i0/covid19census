@@ -5,7 +5,7 @@
 \alias{us_mmd}
 \title{mapping medicare disparities}
 \format{
-An object of class \code{data.frame} with 3239 rows and 32 columns.
+An object of class \code{data.frame} with 3238 rows and 33 columns.
 }
 \source{
 \href{https://data.cms.gov/mapping-medicare-disparities}{Mapping Medicare Disparities}

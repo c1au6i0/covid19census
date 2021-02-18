@@ -109,9 +109,9 @@ at the county level}}
 \item{median_age_female}{median age in years of females}
 \item{sex_ratio}{males per 100 females}
 \item{age_dependency}{the age dependency ratio is derived by dividing the combined under
-18 years and 65 years and over populations by the 18-to-64 population and multiplying by 100}
+18  and 65-more year populations by the 18-to-64 population and multiplying the result by 100}
 \item{old_age_dependency}{the old-age dependency ratio is derived by dividing the population 65 years and over by the 18-to-64 population and multiplying by 100}
-\item{child_dependency}{the child dependency ratio is derived by dividing the population under 18 years by the 18-to-64 population, and multiplying by 100}
+\item{child_dependency}{the child dependency ratio is calculated dividing the population under 18 years by the 18-to-64 population, and multiplying the result by 100}
 \item{\strong{POPULATION AND RACE}}{---------------}
 \item{total_white}{total white}
 \item{total_black}{total black or afroamerican}
@@ -124,6 +124,7 @@ at the county level}}
 \item{\strong{MEDICAL AND VACCINES}}{---------------}
 \item{perc_imm65}{percentage of fee-for-service (FFS) Medicare enrollees that had an annual flu vaccination.}
 \item{total_beds}{total number of hospital beds}
+\item{perc_at_least_1_chronic}{percent medicare with at least a chronic condition}
 \item{perc_acute_myocardial_infarction}{percent medicare with acute myocardial infarction}
 \item{perc_alzheimer_dementia}{percent medicare with Alzheimer’s Disease, Related Disorders, or Senile Dementia}
 \item{perc_asthma}{percent medicare with asthma}

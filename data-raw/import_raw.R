@@ -5,6 +5,7 @@ library(reshape2)
 library(tabulizer)
 library(stringr)
 
+
 # Unpackit_us.zip and run the script
 
 # xxxxxxxxxxxxxxxx-------------------
@@ -34,7 +35,7 @@ us_age_sex <- us_age_sex %>%
 
 
 # us_fl65 ----------
-us_fl65_all <- vroom("data-raw/it_us/us/flu_us.csv",
+us_fl65_all <- vroom("data-raw/it_us/us/data_cms/flu_us.csv",
   col_types = cols(
     year = col_double(),
     geography = col_character(),
@@ -148,7 +149,8 @@ us_mmd <- mmd_all_us %>%
         "Cancer, Colorectal, Breast, Prostate, Lung" = "cancer_all",
         "Chronic obstructive pulmonary disease" = "ch_obstructive_pulm",
         "Stroke/Transient Ischemic Attack" = "stroke",
-        "Schizophrenia and other psychotic disorders" = "schizophrenia_psychotic_dis"
+        "Schizophrenia and other psychotic disorders" = "schizophrenia_psychotic_dis",
+        "1 of the claims-based conditions" = "at_least_1_chronic"
       )
   ) %>%
   # pivot_longer and spread crash as a bitch
@@ -161,6 +163,7 @@ us_mmd <- mmd_all_us %>%
     county,
     state,
     urban,
+    at_least_1_chronic,
     acute_myocardial_infarction,
     alzheimer_dementia,
     asthma,
@@ -196,6 +199,7 @@ us_mmd <- mmd_all_us %>%
     "county",
     "state",
     "urban",
+    "perc_at_least_1_chronic",
     "perc_acute_myocardial_infarction",
     "perc_alzheimer_dementia",
     "perc_asthma",
@@ -597,7 +601,6 @@ it_firstaid <- vroom("data-raw/it_us/it/first_aid.csv",
   )
 
 # it_fl_2019 ---------
-web_page <- "http://www.salute.gov.it/imgs/C_17_tavole_19_allegati_iitemAllegati_0_fileAllegati_itemFile_3_file.pdf"
 
 area_sel <- c(
   top = 92.6606873324687, left = 49.819066386841, bottom = 436.401946791649,
@@ -606,7 +609,7 @@ area_sel <- c(
 
 suppressWarnings(
   fl_tab <- extract_tables(
-    web_page,
+    "data-raw/it_us/it/flu_italy_to2018.pdf",
     output = "data.frame",
     pages = 1,
     area =  list(area_sel),
@@ -646,7 +649,7 @@ area_sel2 <- c(
 
 suppressWarnings(
   fl65_tab <- extract_tables(
-    web_page,
+    "data-raw/it_us/it/flu_italy_to2018.pdf",
     output = "data.frame",
     pages = 3,
     area =  list(area_sel2),
@@ -949,7 +952,7 @@ usethis::use_data(
   dem_65bin_fm,
   it_dem,
   it_firstaid,
-  # it_fl,
+  it_fl,
   it_fl_2019,
   it_hospbed,
   it_house,
