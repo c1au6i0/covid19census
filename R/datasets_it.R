@@ -132,7 +132,7 @@
 #' Emission of pm2.5 in tons per region from 1990 to 2017
 #' @docType data
 #' @usage data("it_pm2.5")
-#' @source \href{https://annuario.isprambiente.it/pon/basic/14}{Istituto Superiore Per La protexione Ambientale}
+#' @source \href{https://annuario.isprambiente.it/pon/basic/14}{Istituto Superiore Per La protezione Ambientale}
 #' @details \href{http://siqual.istat.it/SIQual/visualizza.do?id=5000170&refresh=true&language=EN}{methodology}
 #' @return a tibble
 "it_pm2.5"
