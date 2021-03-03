@@ -68,15 +68,15 @@ getus_covid_jhu <- function() {
   })
 
   names(dat_l) <- metric_files
+  dat_l <- lapply(dat_l, data.table::as.data.table)
 
-  # diff_dat <- dat_w[which(dat_w$county.y != dat_w$county.x),]
 
   # funny things is that there are unassigned county (confirmed 90049),
   # that in the same file have a county
 
   dat_w <- dat_l$confirmed[, c("date", "fips", "confirmed")]
 
-  dat_w_j <- merge(dat_w, dat_l$deaths, by = c("date", "fips"))
+  dat_w_j <- data.table::merge.data.table(dat_w, dat_l$deaths, by = c("date", "fips"))
 
   names(dat_w_j)[names(dat_w_j) == "confirmed"] <- "cases"
 
@@ -87,7 +87,7 @@ getus_covid_jhu <- function() {
 
   message(paste0("US COVID-19 data up to ", max(dat_out$date), " successfully retrived from JHU repository!"))
 
-  dat_out
+  as.data.frame(dat_out)
 }
 
 
@@ -506,35 +506,52 @@ getus_tests <- function() {
 #' @details For details regarding some specific datasets refer to: \href{https://www2.census.gov/programs-surveys/acs/tech_docs/subject_definitions/2018_ACSSubjectDefinitions.pdf?#}{Subject Definitions of the American Community Survey},
 #'  \href{https://www.cms.gov/About-CMS/Agency-Information/OMH/Downloads/Mapping-Technical-Documentation.pdf}{Medicare and Medicaid Medical Services Technical Documentation},
 #'  \href{https://github.com/COVIDExposureIndices/COVIDExposureIndices}{COVIDExposureIndices}
-#' @importFrom rlang .data
-#' @importFrom magrittr %>%
 #' @import vroom
 #' @seealso \code{\link{getus_covid}},\code{\link{getus_tests}}, \code{\link{getus_dex}},
 #' @export
 getus_all <- function(repo = "jhu") {
   covid19_us <- getus_covid(repo = repo)
-  dex_us <- getus_dex() %>%
-    dplyr::select(.data$fips, .data$date, .data$dex_a)
+  dex_us <- getus_dex()
+  dex_us_sel <- dex_us[, c("fips", "date", "dex_a")]
 
-  tests_us <- getus_tests() %>%
-    dplyr::select(-.data$death, -.data$death_increase, -.data$abbr, -.data$hash, -.data$fips)
+
+  tests_us <- getus_tests()
+  tests_us_sel <-  tests_us[, !names(tests_us) %in% c("death", "death_increase", "abbr", "hash", "fips")]
+
+  list_dat <-  list(us_acm_househ,
+                    us_age_sex,
+                    us_race,
+                    us_fl65,
+                    us_hospbeds,
+                    us_mmd,
+                    us_poverty,
+                    us_netinc,
+                    us_pm2.5,
+                    us_season)
 
   # we keep only fips and vars
-  to_join <- lapply(list(us_acm_househ, us_age_sex, us_race, us_fl65, us_hospbeds, us_mmd, us_poverty, us_netinc, us_pm2.5, us_season), function(x) {
-    x[, !names(x) %in% c("state_county", "county", "state", "year", "abbr")]
+  to_join <- lapply(list_dat, function(x) {
+    data.table::as.data.table(x[, !names(x) %in% c("state_county", "county", "state", "year", "abbr")])
   })
 
-
-  dem_metrics <- plyr::join_all(to_join,
-    by = "fips", type = "full"
-  )
+  dem_metrics <- Reduce(function(x, y) data.table::merge.data.table(x = x, y = y, by = "fips", all = TRUE),
+         to_join)
 
 
-  dat <- dplyr::left_join(covid19_us, dem_metrics, by = "fips")
-  dat2 <- dplyr::left_join(dat, dex_us, by = c("fips", "date"))
-  dat2 <- dplyr::left_join(dat2, tests_us, by = c("state", "date"))
 
-  names(dat2) <- stringr::str_replace(names(dat2), "tot_", "total_")
+  dat <- data.table::merge.data.table(covid19_us, dem_metrics, by = "fips", all.x = TRUE)
+  dat2 <- data.table::merge.data.table(dat, dex_us_sel, by = c("fips", "date"), all.x = TRUE)
+  dat_all <- data.table::merge.data.table(dat2, tests_us_sel, by = c("state", "date"), all.x = TRUE)
 
-  dat2
+  names(dat_all) <- stringr::str_replace(names(dat_all), "tot_", "total_")
+
+  as.data.frame(dat_all)
 }
+
+
+
+
+
+
+
+
