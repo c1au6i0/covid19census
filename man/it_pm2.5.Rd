@@ -8,7 +8,7 @@
 An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 21 rows and 2 columns.
 }
 \source{
-\href{https://annuario.isprambiente.it/pon/basic/14}{Istituto Superiore Per La protexione Ambientale}
+\href{https://annuario.isprambiente.it/pon/basic/14}{Istituto Superiore Per La protezione Ambientale}
 }
 \usage{
 data("it_pm2.5")
@@ -20,6 +20,6 @@ a tibble
 Emission of pm2.5 in tons per region from 1990 to 2017
 }
 \details{
-\href{http://siqual.istat.it/SIQual/visualizza.do?id=5000170&refresh=true&language=EN}{methodology}
+\href{https://annuario.isprambiente.it/pon/basic/14}{methodology}
 }
 \keyword{datasets}
