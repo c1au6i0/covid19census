@@ -1,7 +1,7 @@
 Package: covid19census
 Type: Package
 Title: Extracts Covid-19 and other demographic metrics regarding U.S.A and Italy
-Version: 0.0.1.5000
+Version: 0.0.1.6000
 Author: Claudio Zanettini
 Maintainer: claudio_zanettini <claudio.zanettini@gmail.com>
 Description: Package with functions to scrape data regarding COVID-19 epidemic 
