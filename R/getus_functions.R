@@ -12,6 +12,8 @@ getus_covid_jhu <- function() {
   url_base <- "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_"
   metric_files <- list("confirmed", "deaths")
 
+  message("Retriving data...please wait!")
+
   # JHU has 2 files with date in long format (confirmed and deaths)...whatever
   dat_l <- lapply(metric_files, function(x) {
     url_full <- paste0(url_base, x, "_US.csv")
@@ -105,6 +107,8 @@ getus_covid_jhu <- function() {
 #' @keywords internal
 getus_covid_nyt <- function() {
   url_data <- "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv"
+
+  message("Retriving data...please wait...!")
 
   if (RCurl::url.exists(url_data) == FALSE) {
     stop("Something wrong with the repository or your internet connection!")
