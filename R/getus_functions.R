@@ -22,7 +22,7 @@ getus_covid_jhu <- function() {
       stop("Something wrong with the repository or your internet connection!")
     }
 
-    dat <- vroom(url_full, col_types = c(.default = "?"), progress = FALSE)
+    dat <- vroom(url_full, col_types = c(.default = "?"), progress = TRUE)
 
     col_to_long <- grep("[0-9]{1,}/", names(dat), value = TRUE, perl = TRUE)
 
@@ -123,7 +123,8 @@ getus_covid_nyt <- function() {
       fips = col_double(),
       cases = col_double(),
       deaths = col_double()
-    )
+    ),
+    progress = TRUE
   ) %>%
     dplyr::mutate(cmr = .data$deaths / .data$cases * 100) %>%
     dplyr::filter(.data$state %in% state_abbr$state)
