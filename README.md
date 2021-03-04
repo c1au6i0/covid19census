@@ -5,7 +5,7 @@
 
 <!-- badges: start -->
 
-[![](https://img.shields.io/badge/devel%20version-0.0.1.500-blue.svg)](https://codecov.io/gh/c1au6i0/covid19census?branch=master)
+[![](https://img.shields.io/badge/devel%20version-0.0.1.600-blue.svg)](https://codecov.io/gh/c1au6i0/covid19census?branch=master)
 [![Build
 Status](https://travis-ci.com/c1au6i0/covid19census.svg?branch=master)](https://travis-ci.com/c1au6i0/covid19census)
 [![Codecov test
