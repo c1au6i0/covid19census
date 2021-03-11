@@ -9,6 +9,7 @@
 #' \href{ https://ourworldindata.org/covid-mortality-risk }{Our World in Data}.
 #' @keywords internal
 getus_covid_jhu <- function() {
+
   url_base <- "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_"
   metric_files <- list("confirmed", "deaths")
 
@@ -113,7 +114,6 @@ getus_covid_nyt <- function() {
   if (RCurl::url.exists(url_data) == FALSE) {
     stop("Something wrong with the repository or your internet connection!")
   }
-
 
   dat <- vroom(url_data,
     col_types = cols(
