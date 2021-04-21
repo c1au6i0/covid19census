@@ -5,7 +5,7 @@
 \alias{us_mmd}
 \title{mapping medicare disparities}
 \format{
-An object of class \code{data.frame} with 3238 rows and 33 columns.
+An object of class \code{data.frame} with 3235 rows and 33 columns.
 }
 \source{
 \href{https://data.cms.gov/mapping-medicare-disparities}{Mapping Medicare Disparities}
@@ -17,7 +17,7 @@ data(us_mmd)
 a tibble
 }
 \description{
-Prevalence of many  medical and chronic conditions, 2017. From relative documentation listed below: "Prevalence rates are calculated by searching for certain diagnosis codes in Medicare
+Prevalence of many  medical and chronic conditions, 2019. From relative documentation listed below: "Prevalence rates are calculated by searching for certain diagnosis codes in Medicare
 beneficiaries’ claims. The prevalence rate of a condition for a specific sub-population
 (e.g., all beneficiaries in a county) is the proportion of beneficiaries who are found to have the condition. The admission rate by admission type is the frequency of a specific type of inpatient admission
 per 1,000 inpatient admissions in a year."

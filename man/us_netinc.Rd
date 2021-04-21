@@ -8,8 +8,6 @@
 An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 3220 rows and 4 columns.
 }
 \source{
-\href{http://fizz.phys.dal.ca/~atmos/martin/?page_id=140#V4.NA.02.MAPLE}{Atmoshpheric Composition Analysis Group},
-
 \href{https://data.census.gov/cedsci/table?q=United\%20States}{American Community Survey tables}
 }
 \usage{
