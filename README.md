@@ -5,7 +5,7 @@
 
 <!-- badges: start -->
 
-[![](https://img.shields.io/badge/devel%20version-0.0.1.600-blue.svg)](https://codecov.io/gh/c1au6i0/covid19census?branch=master)
+[![](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://codecov.io/gh/c1au6i0/covid19census?branch=master)
 [![Build
 Status](https://travis-ci.com/c1au6i0/covid19census.svg?branch=master)](https://travis-ci.com/c1au6i0/covid19census)
 [![Codecov test
@@ -88,10 +88,10 @@ This is a list of U.S. datasets that can be accessed directly or in a
     including poverty, education, ancestry (2018).
 -   `us_age_sex`: age and sex distribution (2018).
 -   `us_fl65`: percentage of fee-for-service (FFS) Medicare enrollees
-    that had an annual flu vaccination (2017)
+    that had an annual flu vaccination (2019)
 -   `us_hospbeds`: total hospital beds in each county (2019).
 -   `us_netinc`: median househould income (2018).
--   `us_mmd`: data of 2017 regarding the prevalence found in medicare
+-   `us_mmd`: data of 2019 regarding the prevalence found in medicare
     beneficiaries of
     -   many medical and chronic conditions (Alzheimer, chronic kidney,
         obesity, depression, obstructive pulmonary, disease, arthritis,
