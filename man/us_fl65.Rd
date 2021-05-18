@@ -5,7 +5,7 @@
 \alias{us_fl65}
 \title{influenza vaccination 65 or older}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 3223 rows and 4 columns.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 3220 rows and 4 columns.
 }
 \source{
 \href{https://data.cms.gov/mapping-medicare-disparities}{Data.CMS.gov}
@@ -17,7 +17,7 @@ data(us_fl65)
 tibble wotj \code{fl_65} indicating the percentage of fee-for-service (FFS) Medicare enrollees that had an annual flu vaccination
 }
 \description{
-Percentage of fee-for-service (FFS) Medicare enrollees that had an annual flu vaccination. Collected in 2017.
+Percentage of fee-for-service (FFS) Medicare enrollees that had an annual flu vaccination. Collected in 2019.
 }
 \details{
 \href{https://www.cms.gov/About-CMS/Agency-Information/OMH/Downloads/Mapping-Technical-Documentation.pdf}{Center for Medicare and Medicaid Services} and NORC at the University of Chicago.

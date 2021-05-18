@@ -1,6 +1,6 @@
 #' influenza vaccination 65 or older
 #'
-#' Percentage of fee-for-service (FFS) Medicare enrollees that had an annual flu vaccination. Collected in 2017.
+#' Percentage of fee-for-service (FFS) Medicare enrollees that had an annual flu vaccination. Collected in 2019.
 #' @docType data
 #' @source \href{https://data.cms.gov/mapping-medicare-disparities}{Data.CMS.gov}
 #' @details \href{https://www.cms.gov/About-CMS/Agency-Information/OMH/Downloads/Mapping-Technical-Documentation.pdf}{Center for Medicare and Medicaid Services} and NORC at the University of Chicago.
@@ -49,7 +49,7 @@
 
 #' mapping medicare disparities
 #'
-#' Prevalence of many  medical and chronic conditions, 2017. From relative documentation listed below: "Prevalence rates are calculated by searching for certain diagnosis codes in Medicare
+#' Prevalence of many  medical and chronic conditions, 2019. From relative documentation listed below: "Prevalence rates are calculated by searching for certain diagnosis codes in Medicare
 #' beneficiaries’ claims. The prevalence rate of a condition for a specific sub-population
 #' (e.g., all beneficiaries in a county) is the proportion of beneficiaries who are found to have the condition. The admission rate by admission type is the frequency of a specific type of inpatient admission
 #' per 1,000 inpatient admissions in a year."
@@ -108,7 +108,6 @@
 #'
 #' Median Household income, 2018
 #' @docType data
-#' @source \href{http://fizz.phys.dal.ca/~atmos/martin/?page_id=140#V4.NA.02.MAPLE}{Atmoshpheric Composition Analysis Group},
 #' @source \href{https://data.census.gov/cedsci/table?q=United%20States}{American Community Survey tables}
 #' @details \href{https://www2.census.gov/programs-surveys/acs/tech_docs/subject_definitions/2018_ACSSubjectDefinitions.pdf?#}{Subject Definitions of the American Community Survey}
 #' @return  a tibble

@@ -9,10 +9,11 @@
 #' \href{ https://ourworldindata.org/covid-mortality-risk }{Our World in Data}.
 #' @keywords internal
 getus_covid_jhu <- function() {
+
   url_base <- "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_"
   metric_files <- list("confirmed", "deaths")
 
-  message("Retriving data...please wait!")
+  message("Retrieving data...please wait!")
 
   # JHU has 2 files with date in long format (confirmed and deaths)...whatever
   dat_l <- lapply(metric_files, function(x) {
@@ -108,12 +109,11 @@ getus_covid_jhu <- function() {
 getus_covid_nyt <- function() {
   url_data <- "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv"
 
-  message("Retriving data...please wait...!")
+  message("Retrieving data...please wait...!")
 
   if (RCurl::url.exists(url_data) == FALSE) {
     stop("Something wrong with the repository or your internet connection!")
   }
-
 
   dat <- vroom(url_data,
     col_types = cols(
