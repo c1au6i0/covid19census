@@ -1,6 +1,6 @@
 #' influenza vaccination 65 or older
 #'
-#' Percentage of fee-for-service (FFS) Medicare enrollees that had an annual flu vaccination. Collected in 2017.
+#' Percentage of fee-for-service (FFS) Medicare enrollees that had an annual flu vaccination. Collected in 2019.
 #' @docType data
 #' @source \href{https://data.cms.gov/mapping-medicare-disparities}{Data.CMS.gov}
 #' @details \href{https://www.cms.gov/About-CMS/Agency-Information/OMH/Downloads/Mapping-Technical-Documentation.pdf}{Center for Medicare and Medicaid Services} and NORC at the University of Chicago.
